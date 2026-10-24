@@ -1213,3 +1213,16 @@ python scripts/build_ecdict_supplement.py   # 第 4 层（需先有 vendor/ecdic
   改动渲染样式前先看「黑色横杠」一节，`check_render.py` 的正/反向断言会把它们拦下。
 
 详见 [docs/开源复用方案.md](docs/开源复用方案.md) 与 [docs/智能英语学习应用-开发文档.md](docs/智能英语学习应用-开发文档.md)。
+
+---
+
+## 许可证
+
+本项目原创代码与文档采用 **MIT** 许可，见 [LICENSE](LICENSE)。
+
+`vendor/` 下的第三方数据源**不在**本许可范围内，遵循各自上游许可：
+`english-vocabulary-master`、`ecdict`、`google-10000-english-master`、`ai-dokkai-main` 均为 MIT；
+`handwriting-web-main` 与 `gh_exam` 的上游许可待确认。
+
+词典数据的分层来源与许可说明见 [`data/dict/NOTICE.md`](data/dict/NOTICE.md)。
+**项目不含柯林斯词典内容**：Collins COBUILD 是 HarperCollins 的商业版权产品，没有可用的免费许可。

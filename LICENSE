@@ -1,0 +1,39 @@
+MIT License
+
+Copyright (c) 2026 Marvel-er
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+本许可仅覆盖 StudyPad 的原创代码与文档。
+
+`vendor/` 目录下的第三方数据源遵循各自的上游许可，不在此 MIT 许可范围内。
+已知：
+
+- `vendor/english-vocabulary-master` — MIT
+- `vendor/ecdict` — MIT
+- `vendor/google-10000-english-master` — MIT
+- `vendor/ai-dokkai-main` — MIT
+- `vendor/handwriting-web-main` — 上游许可待确认
+- `vendor/gh_exam` — 抓取的考试词表数据，许可待确认
+
+词典数据的分层与许可说明另见 `data/dict/NOTICE.md`。
+项目不含柯林斯（Collins）词典内容：Collins COBUILD 是 HarperCollins 的商业版权产品，
+没有可用的免费许可。

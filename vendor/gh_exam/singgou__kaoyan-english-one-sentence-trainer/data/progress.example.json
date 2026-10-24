@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "current_difficulty": 3,
+  "trained_sentence_ids": [],
+  "recent_sentence_ids": [],
+  "assigned_sentence_ids": [],
+  "recent_years": [],
+  "session_count": 0,
+  "score_total": 0,
+  "average_score": 0,
+  "recent_scores": [],
+  "sentence_scores": {},
+  "error_counts": {}
+}

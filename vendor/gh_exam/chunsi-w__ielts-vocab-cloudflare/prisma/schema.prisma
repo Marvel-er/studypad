@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 频率分组 (e.g., "出现100次以上", "出现40~99次")
+model WordGroup {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // 出现100次以上
+  rank        Int      @unique // 1, 2, 3...
+  minOccur    Int      // 100
+  maxOccur    Int      // 99999
+  words       Word[]
+}
+
+// 单词
+model Word {
+  id                 Int            @id @default(autoincrement())
+  word               String         @unique
+  translation        String
+  phonetic           String?
+  exampleEn          String?
+  exampleZh          String?
+  audioUk            String?
+  audioUs            String?
+  englishDefinition  String?
+  mnemonic           String?
+  occurrences        Int            @default(0)
+  groupId            Int
+  group              WordGroup      @relation(fields: [groupId], references: [id])
+  firstLetter        String         // A-Z or "#" for non-alpha
+  length             Int
+  testSentences      TestSentence[]
+
+  @@index([groupId])
+  @@index([firstLetter])
+  @@index([occurrences])
+}
+
+// 真题例句
+model TestSentence {
+  id          Int      @id @default(autoincrement())
+  wordId      Int
+  word        Word     @relation(fields: [wordId], references: [id], onDelete: Cascade)
+  form        String   // 词形 (debate, debated, debates, debating)
+  sentence    String
+  source      String   // 剑10, 机经 6...
+  location    String   // Test 2 Part 2, passage 3...
+  translation String
+
+  @@index([wordId])
+  @@index([source])
+}

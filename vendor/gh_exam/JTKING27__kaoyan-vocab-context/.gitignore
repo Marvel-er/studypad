@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 运行时数据（SQLite 索引库、查询结果缓存、词频表——由语料重建，不入库）
+data/
+
+# 语料收集时的临时原始下载
+corpus/_raw/
+
+# 打包产物
+build/
+dist/
+*.spec

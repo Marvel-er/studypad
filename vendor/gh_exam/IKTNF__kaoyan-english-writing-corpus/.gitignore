@@ -1,0 +1,20 @@
+# 依赖 / 构建产物（本项目零依赖，这里只为保险）
+node_modules/
+package-lock.json
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件
+*.tmp
+*.log
+src/_*.png
+src/_*.html
+data/*.part*.json
+
+# 真题考据的中间产物（抓取的网页原文 + 范文分片，已合并进 data/00-index.json）
+data/_research/

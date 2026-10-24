@@ -1,0 +1,83 @@
+# 考研真题语境查单词
+
+[![GitHub Release](https://img.shields.io/github/v/release/JTKING27/kaoyan-vocab-context)](https://github.com/JTKING27/kaoyan-vocab-context/releases)
+[![License: MIT](https://img.shields.io/github/license/JTKING27/kaoyan-vocab-context)](https://github.com/JTKING27/kaoyan-vocab-context/blob/main/LICENSE)
+
+*Kaoyan English exam vocabulary in real exam context. Meanings ranked by how often they actually appear, with translations and collocations.*
+
+一个 Windows 桌面小工具：输入考研英语真题里遇到的生词，它把该词（含各种变形）在真题里出现过的所有句子捞出来，让 AI 按本地词典的义项逐句归类翻译，告诉你这个词在真题里最常考的意思是什么，并附全部真题例句。
+
+背单词最纠结的就是"一个词好几个意思，先背哪个"。这个工具直接告诉你答案：真题里哪个义项出现最多、出现在几篇文章里，按出现频率排序，每个义项配真题例句和整句翻译。
+
+## 功能
+
+- **查词**：输入单词（支持变形，输 study 能查到 studying / studied），返回按文章篇数排序的义项列表 + 全部真题例句
+- **每句都标注**：该词在本句的意思 + 整句中文翻译，目标词高亮
+- **义项受本地词典约束**：AI 只能从词典义项里挑，不能自己编意思
+- **缓存**：查过的词存本地，重复查秒出
+- **批量预热**：把真题高频词提前查进缓存，之后查这些词直接出结果
+- **历史记录**：查过的词随时回看
+- **词条卡片**：记忆主线、词源、用法说明（本地数据）
+
+## 效果截图
+
+<p align="center">
+  <img src="docs/screenshot-main.png" alt="查词结果总览" width="49%"/>
+  <img src="docs/screenshot-sentences.png" alt="展开的真题例句" width="49%"/>
+</p>
+
+## 运行环境
+
+- Windows 10 / 11
+- Python 3.10+
+- 一个 DeepSeek API Key（查新词要调 AI，缓存命中的词不需要）
+
+## 快速开始
+
+```bash
+pip install -r requirements.txt
+python main.py
+```
+
+装好依赖后也可以直接双击 `start.bat`。
+
+首次启动会自动建索引（读 `corpus/` 下的语料，大约十几秒），然后去「设置」里填 API Key 就能查词了。
+
+## 配置
+
+打开「设置」：
+
+- **API Key**：在 platform.deepseek.com 注册充值后获取
+- **模型**：默认 deepseek-v4-flash，一般不用改
+- **每个词最多送 AI 翻译句数**：默认 36，句数越多越贵
+- **单价**：按 DeepSeek 官方价预填，价格变了可以自己改
+
+没配 Key 也能用：缓存命中的词离线可查；查新词会提示去配置。
+
+## 项目结构
+
+```
+main.py                 程序入口
+start.bat               Windows 双击启动
+app/                    核心代码
+  config.py             配置读写
+  db.py                 SQLite（索引库 + 查询缓存）
+  corpus_builder.py     语料建索引
+  lemmatizer.py         词形还原
+  llm.py                DeepSeek API 调用
+  query.py              查词主流程
+  ui/                   界面（PySide6）
+assets/                 图标 + 本地词典 + 词条卡片
+corpus/                 真题语料（kaoyan_sentences.jsonl）
+scripts/                语料 / 词典构建工具
+```
+
+## 数据来源与许可
+
+- 真题语料来自多个公开的考研英语真题仓库（详见 `corpus/README.md`），仅供个人学习使用
+- 本地词典为 open-dictionary v2.0（CC BY-SA 4.0）与 ECDICT 的裁剪数据
+- 代码本身以 MIT 许可发布，见 [LICENSE](LICENSE)
+
+## 免责声明
+
+程序输出的义项归类与翻译由大模型生成，可能出错，仅供参考，请以真题原文和权威词典为准。

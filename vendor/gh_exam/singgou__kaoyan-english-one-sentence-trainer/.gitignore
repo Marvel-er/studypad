@@ -1,0 +1,50 @@
+# User-provided exam materials
+*.pdf
+*.doc
+*.docx
+*.txt
+*.md.bak
+source-materials/
+raw-materials/
+
+# Derived exam corpus and reports
+data/corpus.jsonl
+data/source_manifest.json
+data/build_report.json
+data/corpus_validation.json
+data/corpus_stats*.json
+data/passage_index.jsonl
+data/passage_build_report.json
+data/question_index.jsonl
+data/question_build_report.json
+data/answer_index.jsonl
+data/answer_build_report.json
+data/vocabulary_occurrences.jsonl
+data/vocabulary_lexicon.jsonl
+data/vocabulary_stats.json
+data/exam_point_stats.json
+data/artifact_validation.json
+data/material_audit.json
+
+# Personal learning state
+data/progress.json
+data/vocabulary.json
+data/grammar_profile.json
+data/session_history.jsonl
+data/active_session.json
+data/pending_*.json
+data/backups/
+data/*.tmp
+data/.state.lock
+
+# Python and editor caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+.idea/
+.vscode/
+
+# Temporary article drafts
+mock-reading-*.txt
+*.tmp.txt

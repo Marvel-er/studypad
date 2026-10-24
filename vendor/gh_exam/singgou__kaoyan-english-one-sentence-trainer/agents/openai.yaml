@@ -1,0 +1,4 @@
+interface:
+  display_name: "考研英语一阅读与长难句训练"
+  short_description: "生成388—452词原创英语一阅读并讲解全文、长难句与重点词汇"
+  default_prompt: "使用 $kaoyan-english-one-sentence-trainer 生成一篇388—452词的原创英语一仿真阅读，并提供全文翻译、篇章逻辑、长难句和重点词汇讲解。"

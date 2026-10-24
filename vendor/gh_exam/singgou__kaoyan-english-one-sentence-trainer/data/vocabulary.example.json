@@ -1,0 +1,20 @@
+{
+  "address": {
+    "word": "address",
+    "status": "weak",
+    "encounters": 4,
+    "wrong_count": 3,
+    "correct_count": 1,
+    "correct_streak": 0,
+    "meanings_seen": [
+      "处理",
+      "演讲",
+      "地址"
+    ],
+    "last_seen": "2026-07-18",
+    "next_review": "2026-07-20",
+    "source_sentence_ids": [
+      "2018-reading-text2-sentence05"
+    ]
+  }
+}

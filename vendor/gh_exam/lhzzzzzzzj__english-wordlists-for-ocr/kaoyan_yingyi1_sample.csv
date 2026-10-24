@@ -1,0 +1,5 @@
+word,lemma,levels,source,chinese_def,frequency,pos,phonetic,root_affix,synonyms,antonyms,oxford_link
+abandon,abandon,kaoyan,"Kaoyan common lists; defs from Oxford/Youdao","放弃；抛弃",medium,verb,/əˈbændən/,"(Old Fr.) bandon 'control'","give up; relinquish","keep; retain","https://www.oxfordlearnersdictionaries.com/search/english/?q=abandon"
+accommodate,accommodate,kaoyan,"Kaoyan lists; defs from Oxford/Youdao","容纳；适应",low,verb,/əˈkɒmədeɪt/,"ad- + com- + mod (measure)","house; adapt","displace; inconvenience","https://www.oxfordlearnersdictionaries.com/search/english/?q=accommodate"
+analyze,analyze,kaoyan,"Kaoyan lists; defs from Oxford/Youdao","分析；分解",high,verb,/ˈænəlaɪz/,"ana- + lyze","examine; scrutinize","synthesize; ignore","https://www.oxfordlearnersdictionaries.com/search/english/?q=analyze"
+assess,assess,kaoyan,"Kaoyan lists; defs from Oxford/Youdao","评估；估价",high,verb,/əˈsɛs/,"ad-? + sess (sit) (approx.)","evaluate; appraise","ignore; neglect","https://www.oxfordlearnersdictionaries.com/search/english/?q=assess"

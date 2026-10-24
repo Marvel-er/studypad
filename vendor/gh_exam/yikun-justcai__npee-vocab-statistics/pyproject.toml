@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "npee-vocab"
+version = "1.0.0"
+description = "考研英语（一）真题词汇统计 —— 语料清洗、词形还原、跨年份词频与覆盖率分析"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "npee-vocab contributors" }]
+keywords = ["npee", "kaoyan", "vocabulary", "corpus-linguistics", "lemmatization"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+dependencies = [
+    "nltk>=3.8",
+]
+
+[project.optional-dependencies]
+pdf = ["pymupdf>=1.23"]
+dev = ["pytest>=7.4", "pymupdf>=1.23"]
+
+[project.scripts]
+npee-vocab = "npee_vocab.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["src"]

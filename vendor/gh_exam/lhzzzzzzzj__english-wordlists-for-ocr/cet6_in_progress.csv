@@ -1,0 +1,4 @@
+word,lemma,levels,source,chinese_def,frequency,pos,phonetic,root_affix,synonyms,antonyms,oxford_link
+# NOTE: This is a placeholder file indicating the full CET-6 list is being generated.
+# The full cet6.csv (complete CET-6 wordlist with all confirmed fields) will be uploaded in batches; estimated completion 30-60 minutes from this commit.
+# Meanwhile you can inspect cet6_sample_500.csv for format and content style.

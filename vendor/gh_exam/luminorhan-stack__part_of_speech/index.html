@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>学术词汇变形挑战 | 托福高阶动态练习系统</title>
+    <style>
+        :root {
+            --correct: #10b981;
+            --wrong: #ef4444;
+            --bg: #f2ede4;
+            --card: #fffdf9;
+            --text: #1e293b;
+            --muted: #64748b;
+            --accent: #b6895c;
+            --accent-dark: #9b6f46;
+            --border: #ede3d5;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--bg);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 0 0 80px;
+            color: #2c2b28;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        /* ================= 统一视觉资产：顶部 Lumi 卢米 品牌条 ================= */
+        .brand-bar {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+        .brand-text { font-weight: 700; font-size: 1.2rem; }
+        .brand-text .en { color: #1e293b; }
+        .brand-text .cn { color: #64748b; font-size: 0.85rem; font-weight: 500; margin-left: 6px; }
+        .brand-tagline { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+
+        /* ================= 统一视觉资产：右下角悬浮答疑卡片 ================= */
+        .contact-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .contact-btn {
+            background: #07c160;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(7, 193, 96, 0.3);
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            font-size: 0.95rem;
+        }
+        .contact-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            background: #06ad56;
+        }
+        .contact-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border);
+            display: none;
+            animation: slideIn 0.3s ease-out;
+            width: 220px;
+            text-align: center;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .contact-card.active { display: block; }
+        .contact-card h4 { font-size: 1rem; margin-bottom: 12px; color: var(--text); }
+        .wechat-id {
+            background: #f3f4f6;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #07c160;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border: 1px dashed #07c160;
+            display: inline-block;
+        }
+        .copy-hint { font-size: 0.75rem; color: var(--muted); }
+
+        /* 主体排版样式 */
+        .hero { text-align: center; margin-top: 1.5rem; margin-bottom: 2rem; }
+        .hero h1 { font-size: 1.9rem; font-weight: 700; color: #4e3a24; letter-spacing: -0.3px; }
+        .hero p {
+            background: #e7ddcf;
+            display: inline-block;
+            padding: 0.25rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            color: #5c432b;
+            margin-top: 0.5rem;
+        }
+        
+        /* 数据库控制面板 */
+        .db-panel {
+            background: #eadecc;
+            border-radius: 1rem;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid #d4c3ae;
+        }
+        .db-status { font-weight: 600; color: #4e3a24; font-size: 0.95rem; }
+        .db-btn-group { display: flex; gap: 10px; align-items: center; }
+        
+        /* 统一控制台按钮样式 */
+        .btn-action-small {
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            transition: 0.2s;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-import { background: #7a5a3a; color: white; }
+        .btn-import:hover { background: #5c432b; }
+        .btn-delete-cache { background: #ef4444; color: white; }
+        .btn-delete-cache:hover { background: #b91c1c; }
+
+        .exercise-grid {
+            background: var(--card);
+            border-radius: 2rem;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+        .section-title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 6px solid #c8a77b;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title { font-weight: 700; font-size: 1.25rem; color: #4e3a24; }
+        
+        .config-select {
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            border: 1.5px solid #cbd5e1;
+            background: white;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .question-card {
+            background: #fefaf5;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border);
+        }
+        .question-text { font-size: 1.05rem; line-height: 1.6; color: #3c362a; margin-bottom: 0.8rem; }
+        
+        .blank-input {
+            display: inline-block;
+            min-width: 160px;
+            background: #fff;
+            border: 1.8px solid #e2cfb3;
+            border-radius: 6px;
+            padding: 0.25rem 0.6rem;
+            font-family: 'Inter', monospace;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin: 0 5px;
+            outline: none;
+            text-align: center;
+            transition: 0.15s;
+        }
+        .blank-input:focus { border-color: #b6895c; box-shadow: 0 0 0 2px rgba(182,137,92,0.15); }
+        .blank-input.correct { background: #e0f0df; border-color: #6f9e6f; color: #1f5a1f; }
+        .blank-input.wrong { background: #ffe3db; border-color: #d98c6c; color: #b34e2a; }
+
+        .hints-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: #fdf6ec;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #e6a23c;
+        }
+        .correct-answer-hint { color: #7c6b4f; font-size: 0.88rem; font-weight: 600; display: block; }
+        .feedback-line { color: #bc6f4a; font-weight: 600; font-size: 0.88rem; margin-top: 8px; border-top: 1px dashed #ede3d5; padding-top: 6px; }
+
+        /* 错题集 Review 区域 */
+        .wrong-panel {
+            background: #fffdf9;
+            border-radius: 2rem;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-top: 2.5rem;
+            border: 1px solid #fecaca;
+        }
+        .wrong-title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 6px solid #ef4444;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .wrong-question-item {
+            background: #fff5f5;
+            border: 1px dashed #febca8;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn {
+            border: none;
+            background: #ede3d5;
+            padding: 0.6rem 1.4rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+            color: #5b432e;
+        }
+        .btn-primary { background: #b6895c; color: white; }
+        .btn-primary:hover { background: #9b6f46; transform: translateY(-1px); }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-secondary { background: #dac9b4; }
+        .btn-secondary:hover { background: #cbb69c; }
+        .btn:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; transform: none; }
+        
+        .score-area { background: #e9dfd1; border-radius: 3rem; padding: 0.6rem 1.5rem; font-weight: 700; font-size: 1rem; color: #4e3c28; }
+        footer { text-align: center; margin-top: 3rem; font-size: 0.85rem; color: #b69573; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="brand-bar">
+        <div class="brand-logo">
+            <div class="brand-icon">L</div>
+            <div class="brand-text">
+                <span class="en">Lumi's</span>
+                <span class="cn">卢米</span>
+            </div>
+        </div>
+        <span class="brand-tagline">🧠 让每个知识盲点都被看见</span>
+    </div>
+
+    <div class="contact-float">
+        <div class="contact-card" id="contactCard">
+            <h4>💬 答疑解惑</h4>
+            <div class="wechat-id">lumi_lumi</div>
+            <p class="copy-hint">长按复制微信号，添加老师</p>
+        </div>
+        <button class="contact-btn" onclick="toggleContact()">
+            <span>✨ 联系卢米老师</span>
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>📖 学术词汇 · 智能化自适应变形挑战</h1>
+            <p>🎯 纯净学术例句追踪 | 精准提示词前置版</p>
+        </div>
+
+        <div class="db-panel">
+            <div class="db-status" id="dbStatusText">🚫 未加载全量题库，请先导入最新的 JSON</div>
+            <div class="db-btn-group">
+                <label class="btn-action-small btn-import" for="jsonFileInput">📁 导入全量 JSON 题库</label>
+                <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+                
+                <button class="btn-action-small btn-delete-cache hidden" id="clearCacheBtn" onclick="clearDatabaseCache()">❌ 清除题库缓存</button>
+            </div>
+        </div>
+
+        <div class="exercise-grid hidden" id="mainExerciseArea">
+            <div class="section-title-bar">
+                <div class="section-title">🧠 随机动态测评区</div>
+                <div>
+                    <label for="quantitySelect" style="font-size:0.85rem; font-weight:600; color:#4e3a24;">刷题数量：</label>
+                    <select id="quantitySelect" class="config-select">
+                        <option value="10">10 道题</option>
+                        <option value="15" selected>15 道题</option>
+                        <option value="20">20 道题</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="questionsContainer"></div>
+
+            <div class="action-bar">
+                <div>
+                    <button class="btn btn-primary" id="checkBtn">✓ 提交批改</button>
+                    <button class="btn btn-secondary" id="nextBatchBtn">↺ 换一批题目</button>
+                    <button class="btn btn-secondary" id="revealBtn">🔎 显示参考答案</button>
+                </div>
+                <div class="score-area" id="globalScore">得分: --</div>
+            </div>
+        </div>
+        
+        <div class="wrong-panel hidden" id="wrongQuestionPanel">
+            <div class="wrong-title-bar">
+                <div class="wrong-title" id="wrongTitleText">❌ 错题review集管理中心 (0)</div>
+                <div>
+                    <button class="btn btn-primary" style="background:#2563eb;" onclick="exportWrongQuestionsToCSV()">📥 导出错题集为 CSV (Excel)</button>
+                    <button class="btn btn-danger" onclick="clearWrongQuestions()">🗑️ 清空错题集</button>
+                </div>
+            </div>
+            <div id="wrongQuestionsContainer"></div>
+        </div>
+        
+        <footer>由 Lumi's 卢米 倾心打造 · 助你搞定学术词汇变形变形 ✨</footer>
+    </div>
+
+<script>
+    let globalDatabase = []; 
+    let currentActiveQuestions = []; 
+    let wrongQuestionsBank = []; 
+    let hasChecked = false; 
+
+    function normalize(str) {
+        if (!str) return "";
+        return str.trim().toLowerCase().replace(/[^\w\s\-]/g, '').replace(/\s+/g, ' ').trim();
+    }
+
+    function toggleContact() {
+        document.getElementById('contactCard').classList.toggle('active');
+    }
+
+    window.onload = function() {
+        const cachedDb = localStorage.getItem("toefl_strict_hint_db_v2");
+        if (cachedDb) {
+            try {
+                globalDatabase = JSON.parse(cachedDb).filter(q => q && q.text);
+                updateDBStatusUI();
+                drawNewTest();
+            } catch (e) {
+                localStorage.removeItem("toefl_strict_hint_db_v2");
+            }
+        }
+        
+        const cachedWrong = localStorage.getItem("lumi_wrong_questions_bank");
+        if (cachedWrong) {
+            try {
+                wrongQuestionsBank = JSON.parse(cachedWrong);
+                renderWrongQuestionsBankUI();
+            } catch(e) {}
+        }
+        
+        document.getElementById('jsonFileInput').addEventListener('change', handleFileImport);
+        document.getElementById('checkBtn').addEventListener('click', evaluateAllAnswers);
+        document.getElementById('nextBatchBtn').addEventListener('click', () => drawNewTest());
+        document.getElementById('revealBtn').addEventListener('click', revealStandardAnswers);
+        document.getElementById('quantitySelect').addEventListener('change', () => drawNewTest());
+    };
+
+    function handleFileImport(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            try {
+                const parsed = JSON.parse(evt.target.result);
+                if (Array.isArray(parsed)) {
+                    globalDatabase = parsed.filter(item => item && item.text).map((item, idx) => {
+                        item.uid = idx + 1; 
+                        return item;
+                    });
+                    localStorage.setItem("toefl_strict_hint_db_v2", JSON.stringify(globalDatabase));
+                    updateDBStatusUI();
+                    drawNewTest();
+                    // 解决连续导入同一个文件不触发 change 的原生小瑕疵
+                    e.target.value = ""; 
+                    alert(`🎉 导入成功！已成功载入 ${globalDatabase.length} 道带精细方向提示的托福变形题！`);
+                } else {
+                    alert("错误：JSON 数据格式不规范。");
+                }
+            } catch (err) {
+                alert("JSON 解析失败: " + err);
+            }
+        };
+        reader.readAsText(file, 'utf-8');
+    }
+
+    function clearDatabaseCache() {
+        if (confirm("确定要清空当前网页加载的全量题库缓存吗？清空后可以重新导入新的 JSON 文件。")) {
+            localStorage.removeItem("toefl_strict_hint_db_v2");
+            globalDatabase = [];
+            updateDBStatusUI();
+            alert("题库缓存已彻底擦除！");
+        }
+    }
+
+    function updateDBStatusUI() {
+        const textEl = document.getElementById("dbStatusText");
+        const clearBtn = document.getElementById("clearCacheBtn");
+        if (globalDatabase.length > 0) {
+            textEl.innerHTML = `✅ 已挂载精细提示词题库（总储备：<span style="color:#7a5a3a; font-weight:bold;">${globalDatabase.length}</span> 道）`;
+            document.getElementById("mainExerciseArea").classList.remove("hidden");
+            clearBtn.classList.remove("hidden");
+        } else {
+            textEl.innerText = "🚫 未加载全量题库，请先导入最新的 JSON";
+            document.getElementById("mainExerciseArea").classList.add("hidden");
+            clearBtn.classList.add("hidden");
+        }
+    }
+
+    function drawNewTest() {
+        hasChecked = false;
+        document.getElementById("globalScore").innerText = "得分: --";
+        document.getElementById("checkBtn").disabled = false;
+        
+        const count = parseInt(document.getElementById("quantitySelect").value) || 15;
+        const shuffled = [...globalDatabase].sort(() => 0.5 - Math.random());
+        currentActiveQuestions = shuffled.slice(0, Math.min(count, shuffled.length));
+
+        const container = document.getElementById("questionsContainer");
+        let html = "";
+
+        currentActiveQuestions.forEach((q, index) => {
+            let blankCounter = 0;
+            let processedText = q.text.replace(/__+/g, function() {
+                const inputHtml = `<input type="text" class="blank-input" data-uid="${q.uid}" data-blankidx="${blankCounter}" autocomplete="off" placeholder="输入变形...">`;
+                blankCounter++;
+                return inputHtml;
+            });
+
+            let hintsHtml = "";
+            if (q.hints && Array.isArray(q.hints) && q.hints.length > 0) {
+                q.hints.forEach((hint, hIdx) => {
+                    const prefix = q.hints.length > 1 ? `提示 ${hIdx + 1} : ` : '提示 : ';
+                    hintsHtml += `<span class="correct-answer-hint">💡 ${prefix}${hint}</span>`;
+                });
+            } else {
+                hintsHtml += `<span class="correct-answer-hint">💡 提示 : → 根据语境填入合理变形形式</span>`;
+            }
+
+            html += `
+                <div class="question-card" id="card-${q.uid}">
+                    <div class="question-text"><strong>${index + 1}.</strong> ${processedText}</div>
+                    <div class="hints-box">${hintsHtml}</div>
+                    <div class="feedback-line hidden" id="feedback-${q.uid}"></div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    function evaluateAllAnswers() {
+        if (hasChecked) return;
+        
+        let totalBlanksCount = 0;
+        let correctBlanksCount = 0;
+        let batchWrongQuestions = []; 
+
+        currentActiveQuestions.forEach(q => {
+            const card = document.getElementById(`card-${q.uid}`);
+            const inputs = card.querySelectorAll('.blank-input');
+            const feedbackEl = document.getElementById(`feedback-${q.uid}`);
+            
+            let cardAllCorrect = true;
+            let standardAnswers = Array.isArray(q.answers) ? q.answers : [];
+
+            inputs.forEach((input) => {
+                totalBlanksCount++;
+                const blankIdx = parseInt(input.dataset.blankidx);
+                const userVal = normalize(input.value);
+                input.disabled = true; 
+
+                let isBlankCorrect = false;
+                if (inputs.length === 1) {
+                    isBlankCorrect = standardAnswers.some(ans => normalize(ans) === userVal);
+                } else {
+                    const targetCorrectAns = standardAnswers[blankIdx];
+                    if (targetCorrectAns && normalize(targetCorrectAns) === userVal) {
+                        isBlankCorrect = true;
+                    }
+                }
+
+                if (isBlankCorrect && userVal !== "") {
+                    input.classList.add('correct');
+                    correctBlanksCount++;
+                } else {
+                    input.classList.add('wrong');
+                    cardAllCorrect = false;
+                }
+            });
+
+            if (!cardAllCorrect) {
+                feedbackEl.innerHTML = `同胞提示（正确答案）: <span style="font-family:monospace; font-weight:bold; color:#b34e2a;">${standardAnswers.join(" / ")}</span>`;
+                feedbackEl.classList.remove('hidden');
+                batchWrongQuestions.push(q);
+            } else {
+                feedbackEl.classList.add('hidden');
+            }
+        });
+
+        const scoreEl = document.getElementById("globalScore");
+        scoreEl.innerText = `正确数: ${correctBlanksCount} / ${totalBlanksCount}`;
+        hasChecked = true;
+        document.getElementById("checkBtn").disabled = true;
+
+        if (batchWrongQuestions.length > 0) {
+            batchWrongQuestions.forEach(wq => {
+                if (!wrongQuestionsBank.some(existing => existing.text === wq.text)) {
+                    wrongQuestionsBank.push(wq);
+                }
+            });
+            localStorage.setItem("lumi_wrong_questions_bank", JSON.stringify(wrongQuestionsBank));
+            renderWrongQuestionsBankUI();
+        }
+    }
+
+    function renderWrongQuestionsBankUI() {
+        const panel = document.getElementById("wrongQuestionPanel");
+        const container = document.getElementById("wrongQuestionsContainer");
+        const titleText = document.getElementById("wrongTitleText");
+        
+        if (wrongQuestionsBank.length === 0) {
+            panel.classList.add("hidden");
+            return;
+        }
+
+        panel.classList.remove("hidden");
+        titleText.innerText = `❌ 错题review集管理中心 (${wrongQuestionsBank.length})`;
+        
+        let html = "";
+        wrongQuestionsBank.forEach((q, idx) => {
+            let readableText = q.text.replace(/__+/g, "_______");
+            html += `
+                <div class="wrong-question-item">
+                    <div><strong>错题 ${idx + 1}.</strong> ${readableText}</div>
+                    <div style="margin-top:5px; color:#64748b; font-size:0.85rem;">
+                        原词: <strong>${q.baseWord || '核心词'}</strong> | 
+                        标准形式: <span style="color:#b34e2a; font-weight:bold;">${q.answers.join(" / ")}</span>
+                    </div>
+                    <div style="font-size:0.85rem; color:#d97706; margin-top:3px;">${q.hints ? q.hints.join(' | ') : ''}</div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function clearWrongQuestions() {
+        if (confirm("确定要清空所有的历史错题记录吗？清空后将无法找回。")) {
+            localStorage.removeItem("lumi_wrong_questions_bank");
+            wrongQuestionsBank = [];
+            renderWrongQuestionsBankUI();
+            alert("错题集已成功重置。");
+        }
+    }
+
+    function exportWrongQuestionsToCSV() {
+        if (wrongQuestionsBank.length === 0) {
+            alert("当前错题集为空，无需导出。");
+            return;
+        }
+
+        let csvContent = "序号,考查句子(Text),基础原词(BaseWord),标准答案(Correct Answers),提示词(Hints)\n";
+        wrongQuestionsBank.forEach((q, idx) => {
+            let cleanText = q.text.replace(/__+/g, "_______").replace(/"/g, '""');
+            let cleanBase = (q.baseWord || "").replace(/"/g, '""');
+            let cleanAns = q.answers.join(" / ").replace(/"/g, '""');
+            let cleanHints = (q.hints ? q.hints.join(" | ") : "").replace(/"/g, '""');
+            csvContent += `${idx + 1},"${cleanText}","${cleanBase}","${cleanAns}","${cleanHints}"\n`;
+        });
+
+        const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Lumi_托福高阶词汇错题集_${new Date().toISOString().slice(0,10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function revealStandardAnswers() {
+        if (confirm("确定要直接查看这批题目的答案吗？")) {
+            currentActiveQuestions.forEach(q => {
+                const card = document.getElementById(`card-${q.uid}`);
+                const inputs = card.querySelectorAll('.blank-input');
+                let standardAnswers = Array.isArray(q.answers) ? q.answers : [];
+                
+                inputs.forEach((input) => {
+                    const blankIdx = parseInt(input.dataset.blankidx);
+                    if (inputs.length === 1) {
+                        input.value = standardAnswers[0] || "";
+                    } else {
+                        input.value = standardAnswers[blankIdx] || "";
+                    }
+                });
+            });
+            evaluateAllAnswers();
+        }
+    }
+</script>
+</body>
+</html>

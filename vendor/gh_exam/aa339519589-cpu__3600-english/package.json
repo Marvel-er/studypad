@@ -1,0 +1,43 @@
+{
+  "name": "stillword-english",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n WEB,API \"vite\" \"node server.mjs --api-only\"",
+    "dev:web": "vite",
+    "dev:api": "node server.mjs --api-only",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "npm run build && node server.mjs",
+    "start": "node server.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "cheerio": "^1.2.0",
+    "express": "^5.2.1",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "@eslint/js": "latest",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@types/express": "^5.0.6",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "concurrently": "^10.0.3",
+    "eslint": "latest",
+    "eslint-plugin-react-hooks": "latest",
+    "eslint-plugin-react-refresh": "latest",
+    "globals": "latest",
+    "jsdom": "latest",
+    "typescript-eslint": "^8.63.0",
+    "vitest": "latest"
+  }
+}

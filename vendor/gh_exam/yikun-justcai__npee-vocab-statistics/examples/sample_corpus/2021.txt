@@ -1,0 +1,33 @@
+Directions:
+Read the following four texts. Answer the questions below each text by choosing A, B, C or D.
+Mark your answers on the ANSWER SHEET. (10 points)
+
+Section II Reading Comprehension
+
+Part A
+
+Text 1
+
+The assumption that remote work would reduce the demand for office space rested on a simple
+calculation. If employees work from home three days a week, the argument ran, a firm needs
+only sixty per cent of the desks it once maintained. That reasoning has proved remarkably
+resilient in the boardroom and remarkably fragile in practice. Firms that reduced their
+footprint discovered that attendance is not evenly distributed across the week. Almost
+everyone appears on the same days, and on those days the remaining desks are insufficient,
+while on other days whole floors stand empty. The consequence is a peculiar kind of
+inefficiency, in which a company pays for space it does not use and still fails to provide
+space when it is needed. Planners have proposed a further implication: that the office should
+be reconceived not as a place where work is performed but as a place where a particular kind
+of work is performed. Collaborative tasks, the argument goes, benefit disproportionately from
+physical proximity, while concentrated individual work does not. If that distinction holds,
+the relevant question is not how many days employees should attend, but which activities
+justify the journey. Some executives remain sceptical, observing that the evidence for the
+collaboration benefit is thinner than its advocates suggest. Nevertheless the debate has
+moved on. Few now dispute that the office must justify its cost, and that is itself a
+considerable shift.
+
+[A] To explain why remote work has become popular.
+[B] To show that a plausible calculation can fail in practice.
+[C] To prove that offices are no longer necessary.
+
+22. The word "resilient" (Line 3) most probably means ______.

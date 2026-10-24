@@ -1,0 +1,46 @@
+{
+  "name": "雅思词汇通 - 剑桥雅思真题高频单词学习",
+  "short_name": "雅思词汇通",
+  "description": "基于剑桥雅思 4-19 真题语料的 34,212 个高频词汇学习平台。含音标、英英释义、记忆法、真题例句与英美发音。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f43f5e",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"],
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "开始学习",
+      "short_name": "学习",
+      "description": "翻卡学习新单词",
+      "url": "/?view=study"
+    },
+    {
+      "name": "单词测验",
+      "short_name": "测验",
+      "description": "测验你的词汇掌握度",
+      "url": "/?view=quiz"
+    },
+    {
+      "name": "智能复习",
+      "short_name": "复习",
+      "description": "基于艾宾浩斯遗忘曲线复习",
+      "url": "/?view=review"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Local environment files
+.env*
+!.env*.example
+
+# Logs
+*.log
+
+# OS and editor metadata
+.DS_Store
+.idea/
+.vscode/
+
+# Temporary Cloudflare build files
+next.config.cf.ts
+next.config.dev.ts.bak

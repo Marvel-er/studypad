@@ -1,0 +1,543 @@
+﻿word,lemma,frequency,importance_score,reason
+others,other,182,63.0,too_basic
+sections,section,228,61.0,exam_instruction_word
+directions,direction,207,61.0,exam_instruction_word
+conversations,conversation,142,61.0,exam_instruction_word
+questioned,question,443,61.0,exam_instruction_word
+students,student,97,60.0,too_basic
+answering,answer,293,58.0,exam_instruction_word
+give,give,51,58.0,too_basic
+worlds,world,111,58.0,too_basic
+people,person,366,58.0,too_basic
+written,write,183,58.0,too_basic
+schooling,school,62,57.0,too_basic
+listening,listen,55,56.0,too_basic
+spoken,spoken,48,56.0,too_basic
+better,good,238,56.0,too_basic
+helping,help,108,56.0,too_basic
+than,than,254,56.0,too_basic
+life,life,104,56.0,too_basic
+making,make,248,56.0,too_basic
+reading,read,108,56.0,too_basic
+children,child,84,56.0,too_basic
+becoming,become,88,56.0,too_basic
+then,then,98,55.0,exam_instruction_word
+numbers,number,54,55.0,too_basic
+suggesting,suggest,33,55.0,too_basic
+comprehension,comprehension,69,54.0,exam_instruction_word
+feeling,feel,91,54.0,too_basic
+foods,food,95,54.0,too_basic
+choose,choose,106,53.0,exam_instruction_word
+choices,choice,191,53.0,exam_instruction_word
+corresponding,correspond,125,53.0,exam_instruction_word
+sheet,sheet,158,53.0,exam_instruction_word
+single,single,116,53.0,exam_instruction_word
+passages,passage,366,53.0,exam_instruction_word
+things,thing,71,53.0,too_basic
+following,follow,118,53.0,exam_instruction_word
+allowing,allow,123,53.0,exam_instruction_word
+statements,statement,51,53.0,exam_instruction_word
+beginning,begin,66,53.0,too_basic
+offering,offer,31,52.0,too_basic
+four,four,168,51.0,exam_instruction_word
+once,once,138,51.0,exam_instruction_word
+lines,line,111,51.0,exam_instruction_word
+newly,new,151,51.0,too_basic
+using,use,157,51.0,too_basic
+finding,find,69,51.0,too_basic
+essays,essay,83,51.0,exam_instruction_word
+showing,show,61,51.0,too_basic
+meaning,mean,67,51.0,too_basic
+greatly,great,43,50.0,too_basic
+translation,translation,37,50.0,exam_instruction_word
+happening,happen,34,50.0,too_basic
+starting,start,48,50.0,too_basic
+places,place,54,50.0,too_basic
+women,woman,69,50.0,too_basic
+something,something,48,50.0,too_basic
+ending,end,86,49.0,too_basic
+tens,ten,50,49.0,too_basic
+getting,get,93,49.0,too_basic
+recording,record,75,48.0,exam_instruction_word
+leading,lead,54,48.0,too_basic
+same,same,48,48.0,too_basic
+growing,grow,40,48.0,too_basic
+playing,play,41,48.0,too_basic
+keeping,keep,53,48.0,too_basic
+translate,translate,39,48.0,exam_instruction_word
+opening,open,22,48.0,too_basic
+paragraphs,paragraph,73,48.0,exam_instruction_word
+rise,rise,25,48.0,too_basic
+small,small,27,47.0,too_basic
+cannot,cannot,29,47.0,too_basic
+friendly,friend,30,47.0,too_basic
+spending,spend,30,47.0,too_basic
+trying,try,66,46.0,too_basic
+water,water,21,46.0,too_basic
+teachers,teacher,40,46.0,too_basic
+losing,lose,27,45.0,too_basic
+recordings,recording,47,45.0,exam_instruction_word
+talking,talk,37,45.0,too_basic
+turning,turn,38,45.0,too_basic
+according,accord,43,45.0,exam_instruction_word
+chinese,chinese,44,45.0,proper_noun
+english,english,47,45.0,proper_noun
+least,least,53,45.0,exam_instruction_word
+findings,finding,17,45.0,too_basic
+blanks,blank,59,45.0,exam_instruction_word
+americans,american,57,45.0,proper_noun
+kindly,kind,28,45.0,too_basic
+bringing,bring,34,44.0,too_basic
+letters,letter,177,43.0,exam_instruction_word; too_basic
+setting,set,46,43.0,too_basic
+ideas,idea,54,43.0,exam_instruction_word
+owned,own,49,43.0,too_basic
+paying,pay,48,43.0,too_basic
+topics,topic,19,43.0,exam_instruction_word
+stops,stop,34,42.0,too_basic
+planning,plan,26,42.0,too_basic
+selected,select,32,42.0,exam_instruction_word
+five,five,13,42.0,too_basic
+sides,side,29,42.0,too_basic
+reporting,report,32,42.0,exam_instruction_word
+wrongly,wrong,28,42.0,exam_instruction_word
+booking,book,39,42.0,too_basic
+speaking,speak,15,41.0,too_basic
+reaching,reach,22,41.0,too_basic
+classes,class,17,41.0,too_basic
+generally,general,16,41.0,stopword
+instructions,instruction,17,41.0,exam_instruction_word
+eating,eat,43,40.0,too_basic
+items,item,31,40.0,exam_instruction_word
+big,big,26,40.0,too_basic
+running,run,29,40.0,too_basic
+calls,call,16,39.0,too_basic
+moving,move,18,39.0,too_basic
+tells,tell,19,39.0,too_basic
+bodily,body,22,39.0,too_basic
+minutes,minute,225,38.0,exam_instruction_word; too_basic
+centre,centre,111,38.0,exam_instruction_word; too_basic
+heard,heard,171,38.0,exam_instruction_word; too_basic
+adults,adult,21,38.0,too_basic
+watching,watch,19,38.0,too_basic
+families,family,16,38.0,too_basic
+sentences,sentence,43,38.0,exam_instruction_word; too_basic
+too,too,35,37.0,too_basic
+tables,table,8,37.0,too_basic
+hearing,hear,198,36.0,exam_instruction_word; too_basic
+parts,part,146,36.0,exam_instruction_word; too_basic
+saying,say,79,36.0,stopword
+words,word,186,36.0,exam_instruction_word; too_basic
+spaces,space,19,36.0,exam_instruction_word
+holding,hold,15,36.0,too_basic
+lovely,love,20,36.0,too_basic
+exercise,exercise,13,36.0,exam_instruction_word
+fathers,father,7,36.0,too_basic
+cet,cet,34,35.0,proper_noun
+types,type,13,35.0,too_basic
+staying,stay,14,35.0,too_basic
+buying,buy,17,34.0,too_basic
+tasks,task,24,34.0,exam_instruction_word
+winning,win,19,34.0,too_basic
+months,month,14,34.0,too_basic
+man,man,26,34.0,too_basic
+carried,carry,10,34.0,too_basic
+nights,night,8,34.0,too_basic
+shortly,short,13,34.0,too_basic
+middle,middle,11,34.0,too_basic
+green,green,19,33.0,too_basic
+early,ear,13,33.0,too_basic
+doors,door,8,33.0,too_basic
+weekly,week,14,32.0,too_basic
+drawing,draw,13,32.0,too_basic
+save,save,12,32.0,too_basic
+looking,look,24,32.0,stopword
+handing,hand,12,32.0,too_basic
+corrected,correct,10,32.0,exam_instruction_word
+hours,hour,11,32.0,too_basic
+falls,fall,12,32.0,too_basic
+held,held,10,32.0,too_basic
+mothers,mother,8,32.0,too_basic
+marking,mark,224,31.0,proper_noun; exam_instruction_word
+feelings,feeling,12,31.0,too_basic
+olds,old,17,31.0,too_basic
+cutting,cut,16,31.0,too_basic
+standing,stand,8,31.0,too_basic
+sugars,sugar,6,31.0,too_basic
+testing,test,21,31.0,exam_instruction_word
+kids,kid,15,31.0,too_basic
+asking,ask,13,30.0,too_basic
+true,true,11,30.0,exam_instruction_word
+acting,act,21,29.0,proper_noun
+detailed,detail,10,29.0,exam_instruction_word
+walking,walk,11,29.0,too_basic
+seeming,seem,23,29.0,stopword
+recently,recent,18,28.0,stopword
+fitted,fit,8,27.0,too_basic
+main,main,9,27.0,exam_instruction_word
+options,option,6,27.0,exam_instruction_word
+leave,leave,16,27.0,too_basic
+sleeping,sleep,12,27.0,too_basic
+rooms,room,6,25.0,too_basic
+sells,sell,12,25.0,too_basic
+america,america,8,25.0,proper_noun
+babies,baby,8,25.0,too_basic
+ones,one,16,24.0,stopword
+windows,window,5,24.0,too_basic
+mondays,monday,5,24.0,too_basic
+john,john,7,24.0,proper_noun
+happily,happy,7,24.0,too_basic
+years,year,51,23.0,stopword; too_basic
+red,red,25,23.0,too_basic
+lessons,lesson,8,23.0,too_basic
+thinking,think,36,22.0,stopword; too_basic
+french,french,10,22.0,proper_noun
+classrooms,classroom,10,22.0,too_basic
+kept,kept,7,22.0,too_basic
+waiting,wait,5,22.0,too_basic
+sorting,sort,7,22.0,too_basic
+stars,star,12,21.0,too_basic
+clearly,clear,9,21.0,stopword
+peter,peter,7,20.0,proper_noun
+takes,take,34,20.0,stopword; too_basic
+drinking,drink,7,20.0,too_basic
+knowing,know,32,20.0,stopword; too_basic
+sitting,sit,9,20.0,too_basic
+welcomes,welcome,6,20.0,too_basic
+needed,need,27,20.0,stopword; too_basic
+eyes,eye,13,20.0,too_basic
+adds,add,9,20.0,too_basic
+forgetting,forget,7,20.0,too_basic
+british,british,6,19.0,proper_noun
+warming,warm,4,19.0,too_basic
+necessarily,necessary,4,18.0,stopword
+currently,current,7,18.0,stopword
+africa,africa,8,18.0,proper_noun
+expressions,expression,6,18.0,exam_instruction_word
+false,false,9,18.0,exam_instruction_word
+headed,head,5,18.0,too_basic
+weekends,weekend,4,17.0,too_basic
+beings,being,9,17.0,stopword
+timely,time,19,17.0,stopword; too_basic
+floors,floor,4,17.0,too_basic
+afraid,afraid,4,17.0,too_basic
+meats,meat,31,17.0,too_basic
+components,component,4,16.0,exam_instruction_word
+dogs,dog,9,16.0,too_basic
+yellow,yellow,16,16.0,too_basic
+speakers,speaker,7,15.0,exam_instruction_word
+europe,europe,6,15.0,proper_noun
+sees,see,26,15.0,stopword; too_basic
+house,house,7,15.0,too_basic
+ways,way,32,15.0,stopword; too_basic
+thoughts,thought,7,15.0,too_basic
+pretty,pretty,6,15.0,too_basic
+grades,grade,5,15.0,too_basic
+similarly,similar,6,14.0,stopword
+differently,different,6,14.0,stopword
+certainly,certain,5,14.0,stopword
+comes,come,18,14.0,stopword; too_basic
+hitting,hit,4,14.0,too_basic
+daughter,daughter,7,14.0,too_basic
+fishing,fish,6,13.0,too_basic
+pass,pass,5,13.0,too_basic
+jump,jump,6,13.0,too_basic
+beautiful,beautiful,3,13.0,too_basic
+worry,worry,4,12.0,too_basic
+white,white,3,12.0,too_basic
+stuff,stuff,3,12.0,too_basic
+france,france,5,12.0,proper_noun
+gardening,garden,3,12.0,too_basic
+december,december,3,11.0,too_basic
+birds,bird,3,10.0,too_basic
+cool,cool,4,10.0,too_basic
+candidates,candidate,6,10.0,exam_instruction_word
+picked,pick,4,10.0,too_basic
+walls,wall,4,10.0,too_basic
+told,told,4,10.0,too_basic
+daily,day,21,9.0,stopword; too_basic
+centers,center,6,9.0,exam_instruction_word; too_basic
+flying,fly,3,8.0,too_basic
+australia,australia,8,7.0,proper_noun
+wind,wind,6,7.0,too_basic
+india,india,12,7.0,proper_noun
+china,china,14,7.0,proper_noun
+incorrect,incorrect,3,7.0,exam_instruction_word
+trees,tree,6,7.0,too_basic
+tomorrow,tomorrow,2,6.0,too_basic
+august,august,2,6.0,too_basic
+yesterday,yesterday,2,6.0,too_basic
+chaired,chair,2,6.0,too_basic
+returning,return,3,6.0,too_basic
+front,front,2,6.0,too_basic
+eight,eight,2,6.0,too_basic
+black,black,2,6.0,too_basic
+locals,local,2,6.0,stopword
+peoples,people,3,6.0,too_basic
+fill,fill,3,5.0,exam_instruction_word
+indians,indian,7,4.0,proper_noun; low_value
+colds,cold,4,4.0,too_basic; low_value
+milk,milk,4,4.0,too_basic; low_value
+kill,kill,3,4.0,too_basic; low_value
+european,european,5,4.0,proper_noun; low_value
+nine,nine,2,4.0,too_basic; low_value
+girls,girl,2,4.0,too_basic; low_value
+sends,send,2,4.0,too_basic; low_value
+feet,foot,3,4.0,too_basic; low_value
+daniel,daniel,6,4.0,proper_noun; low_value
+london,london,6,4.0,proper_noun; low_value
+nice,nice,2,4.0,too_basic; low_value
+blue,blue,2,4.0,too_basic; low_value
+aap,aap,6,4.0,low_value
+internationally,international,2,4.0,stopword; low_value
+dialogue,dialogue,5,4.0,exam_instruction_word; low_value
+fao,fao,7,4.0,low_value
+exams,exam,4,3.0,exam_instruction_word; low_value
+seven,seven,3,3.0,too_basic; low_value
+asia,asia,5,2.0,proper_noun; low_value
+famed,fam,1,1.0,low_value
+pit,pit,1,1.0,low_value
+waves,waf,2,1.0,low_value
+fmd,fmd,1,1.0,low_value
+australians,australian,3,1.0,proper_noun; low_value
+ijts,ijt,3,1.0,low_value
+jij,jij,1,1.0,low_value
+oow,oow,2,1.0,low_value
+ifj,ifj,1,1.0,low_value
+ijl,ijl,1,1.0,low_value
+iit,iit,2,1.0,low_value
+pjr,pjr,1,1.0,low_value
+flu,flu,1,1.0,low_value
+jvl,jvl,1,1.0,low_value
+ajj,ajj,1,1.0,low_value
+jti,jti,1,1.0,low_value
+tit,tit,1,1.0,low_value
+ilt,ilt,1,1.0,low_value
+iiy,iiy,1,1.0,low_value
+jvi,jvi,1,1.0,low_value
+jtz,jtz,1,1.0,low_value
+tij,tij,1,1.0,low_value
+itl,itl,1,1.0,low_value
+net,net,1,1.0,low_value
+lfr,lfr,1,1.0,low_value
+uav,uav,2,1.0,low_value
+ibm,ibm,2,1.0,low_value
+tilling,til,1,1.0,low_value
+david,david,4,1.0,proper_noun; low_value
+bum,bum,1,1.0,low_value
+etc,etc,1,1.0,low_value
+fed,fed,1,1.0,low_value
+freeing,fre,1,1.0,low_value
+jml,jml,1,1.0,low_value
+sized,siz,1,1.0,low_value
+caps,cap,1,1.0,low_value
+wih,wih,1,1.0,low_value
+msc,msc,3,1.0,low_value
+ihe,ihe,1,1.0,low_value
+fun,fun,2,1.0,low_value
+rapping,rap,1,1.0,low_value
+ripping,rip,1,1.0,low_value
+tli,tli,1,1.0,low_value
+bff,bff,1,1.0,low_value
+res,res,2,1.0,low_value
+mining,min,2,1.0,low_value
+asian,asian,3,1.0,proper_noun; low_value
+dna,dna,2,1.0,low_value
+spa,spa,2,1.0,low_value
+jjl,jjl,2,1.0,low_value
+pro,pro,2,1.0,low_value
+sobbing,sob,1,1.0,low_value
+eas,eas,1,1.0,low_value
+ing,ing,1,1.0,low_value
+fading,fad,2,1.0,low_value
+het,het,2,1.0,low_value
+cmg,cmg,2,1.0,low_value
+ceo,ceo,2,1.0,low_value
+gaming,gam,2,1.0,low_value
+kelly,kel,2,1.0,low_value
+rigs,rig,2,1.0,low_value
+nst,nst,2,1.0,low_value
+dubbed,dub,2,1.0,low_value
+hubs,hub,2,1.0,low_value
+ont,ont,2,1.0,low_value
+ice,ice,1,1.0,low_value
+wives,wif,1,1.0,low_value
+fou,fou,2,1.0,low_value
+ugh,ugh,1,1.0,low_value
+hiring,hir,1,1.0,low_value
+fle,fle,1,1.0,low_value
+bef,bef,1,1.0,low_value
+ore,ore,1,1.0,low_value
+gmo,gmo,4,1.0,low_value
+aft,aft,1,1.0,low_value
+fko,fko,1,1.0,low_value
+pop,pop,1,1.0,low_value
+bats,bat,1,1.0,low_value
+shoes,sho,4,1.0,low_value
+mlo,mlo,1,1.0,low_value
+irl,irl,2,1.0,low_value
+leo,leo,1,1.0,low_value
+phrase,phrase,2,1.0,exam_instruction_word; low_value
+tom,tom,1,1.0,low_value
+lam,lam,1,1.0,low_value
+pulling,pul,1,1.0,low_value
+bleed,ble,1,1.0,low_value
+eve,eve,2,1.0,low_value
+vas,vas,1,1.0,low_value
+jil,jil,1,1.0,low_value
+eai,eai,1,1.0,low_value
+tra,tra,1,1.0,low_value
+fbr,fbr,1,1.0,low_value
+audio,audio,4,1.0,exam_instruction_word; low_value
+german,german,2,1.0,proper_noun; low_value
+fbg,fbg,1,1.0,low_value
+eco,eco,1,1.0,low_value
+cubs,cub,1,1.0,low_value
+owe,owe,1,1.0,low_value
+bet,bet,1,1.0,low_value
+tons,ton,2,1.0,low_value
+eia,eia,2,1.0,low_value
+yelling,yel,1,1.0,low_value
+dance,dance,1,1.0,too_basic; low_value
+wowing,wow,1,1.0,low_value
+bug,bug,1,1.0,low_value
+raw,raw,2,1.0,low_value
+oddly,odd,2,1.0,low_value
+fried,fry,1,1.0,low_value
+typing,typ,1,1.0,low_value
+telling,tel,1,1.0,low_value
+haves,haf,1,1.0,low_value
+tug,tug,1,1.0,low_value
+van,van,1,1.0,low_value
+fur,fur,1,1.0,low_value
+edging,edg,1,1.0,low_value
+gyms,gym,1,1.0,low_value
+mating,mat,1,1.0,low_value
+bees,bee,1,1.0,low_value
+dozed,doz,1,1.0,low_value
+moms,mom,1,1.0,low_value
+arc,arc,2,1.0,low_value
+bow,bow,1,1.0,low_value
+reply,rep,2,1.0,low_value
+fox,fox,1,1.0,low_value
+owl,owl,1,1.0,low_value
+idling,idl,1,1.0,low_value
+tea,tea,3,1.0,low_value
+cue,cue,1,1.0,low_value
+cup,cup,1,1.0,low_value
+rags,rag,2,1.0,low_value
+coping,cop,1,1.0,low_value
+mar,mar,1,1.0,low_value
+bid,bid,1,1.0,low_value
+apt,apt,1,1.0,low_value
+hfc,hfc,3,1.0,low_value
+paved,pav,1,1.0,low_value
+hip,hip,1,1.0,low_value
+gdp,gdp,3,1.0,low_value
+rays,ray,1,1.0,low_value
+wet,wet,1,1.0,low_value
+dot,dot,1,1.0,low_value
+dries,dry,1,1.0,low_value
+sewing,sew,1,1.0,low_value
+tag,tag,4,1.0,low_value
+coded,cod,1,1.0,low_value
+quo,quo,1,1.0,low_value
+sided,sid,1,1.0,low_value
+dipped,dip,1,1.0,low_value
+named,nam,1,1.0,low_value
+turing,tur,2,1.0,low_value
+rats,rat,1,1.0,low_value
+canada,canada,1,0,proper_noun; low_value
+meanings,meaning,1,0,exam_instruction_word; too_basic; low_value
+wanted,want,9,0,stopword; too_basic; low_value
+sky,sky,2,0,too_basic; low_value
+completes,complete,1,0,stopword; exam_instruction_word; low_value
+cloud,cloud,1,0,too_basic; low_value
+richard,richard,2,0,proper_noun; low_value
+fats,fat,1,0,too_basic; low_value
+january,january,1,0,too_basic; low_value
+february,february,1,0,too_basic; low_value
+brother,brother,1,0,too_basic; low_value
+extremes,extreme,1,0,stopword; low_value
+thursday,thursday,1,0,too_basic; low_value
+putting,put,9,0,stopword; too_basic; low_value
+thin,thin,1,0,too_basic; low_value
+pages,page,3,0,exam_instruction_word; low_value
+sister,sister,2,0,too_basic; low_value
+cousins,cousin,1,0,too_basic; low_value
+cat,cat,4,0,too_basic; low_value
+arms,arm,4,0,too_basic; low_value
+wells,well,2,0,stopword; too_basic; low_value
+tuesday,tuesday,4,0,too_basic; low_value
+japan,japan,2,0,proper_noun; low_value
+parking,park,6,0,proper_noun; too_basic; low_value
+letting,let,6,0,stopword; low_value
+mexico,mexico,1,0,proper_noun; low_value
+evening,even,4,0,stopword; low_value
+lee,lee,4,0,proper_noun; low_value
+rights,right,19,0,stopword; exam_instruction_word; too_basic; low_value
+canning,can,3,0,stopword; low_value
+mouth,mouth,2,0,too_basic; low_value
+settings,setting,2,0,too_basic; low_value
+england,england,2,0,proper_noun; low_value
+britain,britain,2,0,proper_noun; low_value
+founding,found,6,0,stopword; too_basic; low_value
+text,text,1,0,exam_instruction_word; low_value
+bananas,banana,1,0,too_basic; low_value
+maybe,maybe,1,0,exam_instruction_word; low_value
+dies,die,1,0,too_basic; low_value
+overly,over,1,0,stopword; too_basic; low_value
+legged,leg,2,0,too_basic; low_value
+titles,title,2,0,exam_instruction_word; low_value
+angry,angry,1,0,too_basic; low_value
+hungry,hungry,1,0,too_basic; low_value
+lots,lot,2,0,stopword; too_basic; low_value
+apple,apple,2,0,proper_noun; too_basic; low_value
+spanish,spanish,1,0,proper_noun; low_value
+six,six,1,0,too_basic; low_value
+backing,back,3,0,stopword; too_basic; low_value
+bob,bob,1,0,proper_noun; low_value
+wondering,wonder,2,0,too_basic; low_value
+ran,ran,2,0,too_basic; low_value
+robert,robert,1,0,proper_noun; low_value
+noting,not,2,0,stopword; low_value
+smith,smith,2,0,proper_noun; low_value
+joseph,joseph,2,0,proper_noun; low_value
+sat,sat,3,0,proper_noun; too_basic; low_value
+canadian,canadian,1,0,proper_noun; low_value
+michael,michael,1,0,proper_noun; low_value
+likes,like,1,0,stopword; too_basic; low_value
+okay,okay,2,0,too_basic; low_value
+brown,brown,1,0,proper_noun; too_basic; low_value
+downs,down,2,0,stopword; low_value
+italian,italian,1,0,proper_noun; low_value
+vocabularies,vocabulary,1,0,exam_instruction_word; low_value
+kitchen,kitchen,2,0,too_basic; low_value
+sleepy,sleepy,1,0,too_basic; low_value
+bathroom,bathroom,1,0,too_basic; low_value
+beds,bed,3,0,too_basic; low_value
+nasa,nasa,2,0,proper_noun; low_value
+oranges,orange,2,0,too_basic; low_value
+tops,top,2,0,stopword; too_basic; low_value
+sun,sun,3,0,too_basic; low_value
+germany,germany,1,0,proper_noun; low_value
+korean,korean,1,0,proper_noun; low_value
+desk,desk,2,0,too_basic; low_value
+hot,hot,1,0,too_basic; low_value
+wednesday,wednesday,1,0,too_basic; low_value
+friday,friday,1,0,too_basic; low_value
+kim,kim,2,0,proper_noun; low_value
+son,son,1,0,too_basic; low_value
+bread,bread,1,0,too_basic; low_value
+summary,summary,1,0,exam_instruction_word; low_value
+flower,flower,1,0,too_basic; low_value
+cows,cow,3,0,too_basic; low_value
+washington,washington,2,0,proper_noun; low_value
+march,march,1,0,too_basic; low_value
+sheep,sheep,1,0,too_basic; low_value
+greed,gre,3,0,proper_noun; low_value
+chosen,chosen,1,0,exam_instruction_word; low_value
+grammar,grammar,1,0,exam_instruction_word; low_value
+horse,horse,1,0,too_basic; low_value
+african,african,1,0,proper_noun; low_value
+google,google,1,0,proper_noun; low_value

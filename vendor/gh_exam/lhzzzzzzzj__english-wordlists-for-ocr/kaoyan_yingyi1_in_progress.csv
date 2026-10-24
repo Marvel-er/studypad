@@ -1,0 +1,4 @@
+word,lemma,levels,source,chinese_def,frequency,pos,phonetic,root_affix,synonyms,antonyms,oxford_link
+# NOTE: This is a placeholder file indicating the Kaoyan (考研英语一) wordlist is being prepared.
+# The full kaoyan_yingyi1.csv will be uploaded after cet6 is completed; estimated additional 30-60 minutes.
+# Meanwhile you can inspect kaoyan_yingyi1_sample.csv as a format sample.

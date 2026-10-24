@@ -1,0 +1,36 @@
+# ---- 真题原文：绝对不要提交 ----
+#
+# 考研真题的著作权属于教育部教育考试院及相关出版机构。
+# 本仓库**只发布统计结果，不发布试卷全文**。
+# 把 PDF 或其抽取文本推上来会有侵权风险（DMCA 下架 / 封号）。
+#
+# 想复现全部数字，请自备真题 PDF，放在 pdfs/ 下，然后：
+#   python -m npee_vocab extract --pdf-dir pdfs --corpus-dir raw
+#   python -m npee_vocab all
+raw/
+pdfs/
+*.pdf
+!examples/**/*.pdf
+
+# ---- 生成物 ----
+# reports/ 是**提交**的（那是本仓库的产出），但 stats.json 之外的临时文件不提交
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+__pycache__/
+*.py[cod]
+
+# ---- 环境 ----
+.venv/
+venv/
+env/
+.idea/
+.vscode/
+*.swp
+
+# ---- 本地笔记 / 个人路径 ----
+*.local.md
+_scratch/

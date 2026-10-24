@@ -1,0 +1,14 @@
+{
+  "relative_clause": {
+    "attempts": 8,
+    "wrong": 5,
+    "level": "weak",
+    "last_seen": "2026-07-18"
+  },
+  "non_finite": {
+    "attempts": 10,
+    "wrong": 7,
+    "level": "weak",
+    "last_seen": "2026-07-18"
+  }
+}

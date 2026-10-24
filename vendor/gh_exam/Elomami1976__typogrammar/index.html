@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f1f5f9">
+    <meta name="google-adsense-account" content="ca-pub-4709657806016589">
+    
+    <!-- SEO Meta Tags - Updated dynamically by React -->
+    <meta name="description" content="Master English grammar with free lessons, IELTS & TOEFL prep, vocabulary, quizzes, and AI writing tools. Start free.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://typogrammar.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://typogrammar.com/">
+    <meta property="og:title" content="TypoGrammar - Free English Grammar, IELTS & TOEFL Prep">
+    <meta property="og:description" content="Master English grammar with free lessons, IELTS & TOEFL prep, vocabulary, quizzes, and AI writing tools. Start free.">
+    <meta property="og:image" content="https://typogrammar.com/og-default.png">
+    <meta property="og:site_name" content="TypoGrammar">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TypoGrammar - Free English Grammar, IELTS & TOEFL Prep">
+    <meta name="twitter:description" content="Master English grammar with free lessons, IELTS & TOEFL prep, vocabulary, quizzes, and AI writing tools. Start free.">
+    <meta name="twitter:image" content="https://typogrammar.com/og-default.png">
+    
+    <!-- Google AdSense loaded lazily after page interaction - see end of body -->
+    
+    <title>TypoGrammar - Free English Grammar, IELTS & TOEFL Prep</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/FAVICON.svg">
+
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.youtube.com">
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+
+    <!-- Print Styles -->
+    <style>
+      @media print {
+        /* Hide navigation, sidebar, ads, and interactive elements */
+        header, nav, aside, .print\\:hidden, button, .ad-container, footer, iframe {
+          display: none !important;
+        }
+        
+        /* Optimize content for print */
+        body {
+          font-size: 12pt;
+          line-height: 1.6;
+          color: #000;
+          background: #fff;
+          max-width: 100%;
+          margin: 0;
+          padding: 20px;
+        }
+        
+        /* Remove shadows, backgrounds, and borders for clean print */
+        *, *::before, *::after {
+          box-shadow: none !important;
+          background: transparent !important;
+          border-color: #000 !important;
+        }
+        
+        /* Maintain article structure */
+        article {
+          max-width: 100%;
+          padding: 0;
+          margin: 0;
+        }
+        
+        /* Typography for print */
+        h1 {
+          font-size: 24pt;
+          margin: 0 0 12pt;
+          page-break-after: avoid;
+        }
+        
+        h2, h3 {
+          font-size: 18pt;
+          margin: 18pt 0 6pt;
+          page-break-after: avoid;
+        }
+        
+        h4, h5, h6 {
+          font-size: 14pt;
+          margin: 12pt 0 6pt;
+          page-break-after: avoid;
+        }
+        
+        p, li {
+          margin: 0 0 6pt;
+          orphans: 3;
+          widows: 3;
+        }
+        
+        /* Code blocks */
+        pre, code {
+          background: #f5f5f5 !important;
+          border: 1px solid #ddd !important;
+          padding: 4pt;
+          font-family: 'Courier New', monospace;
+          font-size: 10pt;
+          page-break-inside: avoid;
+        }
+        
+        /* Lists */
+        ul, ol {
+          margin: 6pt 0;
+          padding-left: 20pt;
+        }
+        
+        /* Prevent orphaned elements */
+        img, table, figure {
+          page-break-inside: avoid;
+        }
+        
+        /* Links */
+        a {
+          color: #000;
+          text-decoration: underline;
+        }
+        
+        /* Hide link URLs for cleaner print */
+        a[href]:after {
+          content: none;
+        }
+        
+        /* Example boxes and callouts */
+        .bg-blue-50, .bg-green-50, .bg-yellow-50, .bg-red-50 {
+          background: #f9f9f9 !important;
+          border: 1px solid #ccc !important;
+          padding: 8pt;
+          margin: 6pt 0;
+        }
+        
+        /* Ensure dark mode doesn't affect print */
+        .dark body, .dark * {
+          color: #000 !important;
+          background: #fff !important;
+        }
+      }
+    </style>
+
+    <!-- Google Analytics - Load after 5 seconds to not block LCP -->
+    <script>
+      // Defer Google Analytics significantly
+      setTimeout(function() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-58SFTXGWLV';
+        document.head.appendChild(script);
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-58SFTXGWLV');
+      }, 5000);
+    </script>
+    
+    <!-- Google AdSense script is loaded in head section -->
+    
+    <!-- Structured Data (Schema.org JSON-LD) - Enhanced Educational Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "EducationalOrganization",
+          "@id": "https://typogrammar.com/#organization",
+          "name": "TypoGrammar",
+          "url": "https://typogrammar.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://typogrammar.com/assets/favicon.svg"
+          },
+          "description": "Free comprehensive English grammar learning platform offering interactive lessons, quizzes, and resources for mastering grammar, writing skills, and vocabulary.",
+          "sameAs": [
+            "https://www.youtube.com/@TypoGrammar"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Support",
+            "email": "support@typogrammar.com",
+            "availableLanguage": ["English"]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://typogrammar.com/#website",
+          "url": "https://typogrammar.com",
+          "name": "TypoGrammar",
+          "publisher": {
+            "@id": "https://typogrammar.com/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://typogrammar.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          },
+          "inLanguage": "en"
+        },
+        {
+          "@type": "Course",
+          "@id": "https://typogrammar.com/#course",
+          "name": "Complete English Grammar Course",
+          "description": "Master English grammar with comprehensive lessons covering verb tenses, sentence structure, punctuation, vocabulary, and writing skills.",
+          "provider": {
+            "@id": "https://typogrammar.com/#organization"
+          },
+          "educationalLevel": "Beginner to Advanced",
+          "inLanguage": "en",
+          "isAccessibleForFree": true,
+          "hasCourseInstance": {
+            "@type": "CourseInstance",
+            "courseMode": "online",
+            "courseWorkload": "PT20H"
+          },
+          "teaches": [
+            "English Grammar",
+            "Verb Tenses",
+            "Sentence Structure",
+            "Punctuation Rules",
+            "Writing Skills",
+            "Vocabulary Building",
+            "Reading Comprehension"
+          ]
+        },
+        {
+          "@type": "WebApplication",
+          "name": "TypoGrammar Learning Platform",
+          "url": "https://typogrammar.com",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Any",
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "inLanguage": "en",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "featureList": [
+            "Interactive Grammar Lessons",
+            "Verb Tense Visualizer",
+            "Reading Comprehension Practice",
+            "Writing Skills Development",
+            "Vocabulary Building Tools",
+            "Progress Tracking",
+            "Quiz System",
+            "Mobile Responsive"
+          ]
+        },
+        {
+          "@type": "LearningResource",
+          "@id": "https://typogrammar.com/#learningresource",
+          "name": "TypoGrammar Free English Learning Hub",
+          "description": "Comprehensive online resource for learning English grammar, improving writing skills, and building vocabulary through interactive lessons and exercises.",
+          "learningResourceType": "Course",
+          "educationalLevel": ["Beginner", "Intermediate", "Advanced"],
+          "inLanguage": "en",
+          "isAccessibleForFree": true,
+          "publisher": {
+            "@id": "https://typogrammar.com/#organization"
+          },
+          "audience": {
+            "@type": "EducationalAudience",
+            "educationalRole": "student"
+          },
+          "about": [
+            {
+              "@type": "Thing",
+              "name": "English Grammar"
+            },
+            {
+              "@type": "Thing",
+              "name": "Writing Skills"
+            },
+            {
+              "@type": "Thing",
+              "name": "English Language Learning"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    
+    <!-- Critical inline styles -->
+    <style>
+      :root {
+        --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-heading: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+      html { background-color: #f1f5f9; color-scheme: light; }
+      body { margin: 0; padding: 0; font-family: var(--font-body); background-color: #f1f5f9; color: #0f172a; }
+      #root:empty::before { content: ''; display: block; width: 100%; height: 100vh; background: #f1f5f9; }
+    </style>
+
+    <!-- Ensure light mode site-wide (no stale theme preference from older builds). -->
+    <script>
+      (function() {
+        document.documentElement.classList.remove('dark');
+        try { localStorage.removeItem('theme'); } catch(e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+
+    <!-- Service Worker Registration - Only for production -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        // Only register service worker in production (not localhost)
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
+              console.log('ServiceWorker registered:', registration.scope);
+            }).catch(function(err) {
+              console.log('ServiceWorker registration failed:', err);
+            });
+          });
+        } else {
+          // Unregister service workers on localhost
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+              registration.unregister();
+            }
+          });
+        }
+      }
+    </script>
+
+    
+    <!-- Google Fonts - Load after user interaction for better FCP/LCP -->
+    <script>
+      var fontsLoaded = false;
+      function loadFonts() {
+        if (fontsLoaded) return;
+        fontsLoaded = true;
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap';
+        document.head.appendChild(link);
+        document.fonts.ready.then(function() {
+          document.documentElement.style.setProperty('--font-body', "'Inter', system-ui, sans-serif");
+          document.documentElement.style.setProperty('--font-heading', "'Poppins', system-ui, sans-serif");
+        });
+      }
+      window.addEventListener('scroll', loadFonts, { once: true, passive: true });
+      window.addEventListener('click', loadFonts, { once: true });
+      // Load fonts during the first idle period after paint (falls back to a
+      // short timeout). This swaps in real fonts far sooner than the old 3s
+      // delay, reducing late-reflow layout shift while staying render-non-blocking.
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadFonts, { timeout: 1500 });
+      } else {
+        setTimeout(loadFonts, 800);
+      }
+    </script>
+    
+    <!-- Google AdSense - Lazy loaded for better performance -->
+    <script>
+      // Pre-initialize the adsbygoogle queue so React pushes are never lost,
+      // even if the AdSense script hasn't finished loading yet (fixes mobile race condition).
+      window.adsbygoogle = window.adsbygoogle || [];
+
+      var adsenseLoaded = false;
+      function loadAdsense() {
+        if (!adsenseLoaded) {
+          adsenseLoaded = true;
+          var script = document.createElement('script');
+          script.async = true;
+          script.crossOrigin = 'anonymous';
+          script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4709657806016589';
+          document.head.appendChild(script);
+        }
+      }
+      // Load AdSense after user interaction or 6 second delay (after LCP)
+      window.addEventListener('scroll', loadAdsense, { once: true, passive: true });
+      window.addEventListener('click', loadAdsense, { once: true });
+      window.addEventListener('touchstart', loadAdsense, { once: true, passive: true });
+      setTimeout(loadAdsense, 6000);
+    </script>
+  </body>
+</html>

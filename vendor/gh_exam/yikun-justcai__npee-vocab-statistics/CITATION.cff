@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "如果本项目的数据或方法对你的研究或教学有帮助，请按以下格式引用。"
+title: "npee-vocab-statistics: 考研英语（一）真题词汇统计"
+abstract: >-
+  基于 2002–2026 共 25 套考研英语（一）真题正文语料的词汇统计管线。
+  清洗试卷噪声后进行词形还原，统计跨年份词频、分档复习清单、
+  token 覆盖率曲线，以及逻辑/抽象词（A 类）与长尾实词（B 类）的分解。
+type: software
+license: MIT
+version: "1.0.0"
+date-released: "2026-10-01"
+keywords:
+  - 考研英语
+  - 词汇统计
+  - 语料库语言学
+  - 词形还原
+  - NPEE
+  - vocabulary
+  - corpus-linguistics
+authors:
+  - alias: yikun-justcai
+    # 你的姓名与主页（可选）
+repository-code: "https://github.com/yikun-justcai/npee-vocab-statistics"
+references:
+  - type: software
+    title: "words-statistics"
+    authors:
+      - alias: YSMull
+    url: "https://github.com/YSMull/words-statistics"
+    notes: >-
+      本项目的问题设定与方法受其启发（2014 年建、2017 年停更）。
+      该仓库因关键依赖 NodeBox en 库未随仓库提供而无法运行，且数据停在 2012 年，
+      因此本项目用一套独立的 Python 管线重做，无代码继承关系。
+  - type: dataset
+    title: "english-wordlists (NPEE_Wordlist)"
+    authors:
+      - alias: mahavivo
+    url: "https://github.com/mahavivo/english-wordlists"
+    notes: "用于大纲词表的交叉验证。"

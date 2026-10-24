@@ -1,0 +1,199 @@
+/* StudyPad · 两个页面共用的基础样式
+   ------------------------------------------------------------------
+   为什么抽出来：主页（index.html）与知识库（library.html）原本是同一份文件，
+   拆成两页后如果各写一份 reset/配色/按钮样式，很快就会漂移
+   （改了一处忘了另一处，出现两个颜色略不同的灰按钮）。
+
+   ⚠ 这里只放**真正共用**的东西。任何只被一个页面用到的样式，
+   仍然留在那个页面自己的 <style> 里 —— 公共层变成垃圾桶比重复更难维护。
+
+   ⚠⚠ 关于主题（2026-10-15 新增暗色模式）：
+   **所有颜色一律走变量，不许写死 #hex**。写死了的地方暗色模式覆盖不到，
+   页面上会留下一块亮白（最典型的是白底卡片浮在深色背景上）。
+   `check_inline_js.py` 已有断言在盯这件事，详见那里的说明。
+*/
+:root{
+  /* ---- 表面 ---- */
+  --bg:#f6f7f9;          /* 页面底色 */
+  --card:#fff;           /* 卡片 */
+  --surface-2:#f2f4f7;   /* 次级表面（导航条底、统计块底） */
+  --surface-3:#fbfcfd;   /* 三级表面（details、考点面板底） */
+  --surface-hover:#fafbfc;
+  --inset:#f8fafc;       /* 表格行 hover / 极浅底 */
+  --line-soft:#f0f2f5;   /* 表格行分隔线 */
+  --frame:#e9e5da;       /* 手账预览框（纸面外的环境色） */
+
+  /* ---- 文字 ---- */
+  --ink:#1f2328;
+  --ink2:#5b6370;
+  --ink3:#8b93a1;        /* 更弱的一层（占位、次要说明） */
+
+  /* ---- 边框 ---- */
+  --border:#e3e6ea;
+  --border-strong:#c9ced6;
+
+  /* ---- 品牌 ---- */
+  --accent:#c0392b;
+  --accent-soft:#fdf2f0;
+  --on-accent:#fff;      /* 主按钮上的文字 */
+
+  /* ---- 状态 ---- */
+  --ok:#0f6e56;
+  --warn:#b45309;
+  --danger:#b91c1c;
+
+  /* ---- 语义提示条 ---- */
+  --note-bg:#fffbeb; --note-border:#fde68a; --note-ink:#7c5a00;
+  --ok-bg:#eefaf3;  --ok-border:#a7e3c4;
+  --err-bg:#fef2f2; --err-border:#fecaca;
+  --hint-ok:#0f7b4f;
+
+  /* ---- 徽章（考点来源、分类标签等）----
+     这些底色都是极浅的染色，深色下要换成「深底 + 亮字」才读得清。 */
+  --badge-gray-bg:#eef2f7;  --badge-gray-ink:#4b5563;
+  --badge-green-bg:#e3f5ec; --badge-green-ink:#0f6e56;
+  --badge-amber-bg:#fef4e3; --badge-amber-ink:#916107;
+  --badge-purple-bg:#f1f0f6;--badge-purple-ink:#5b5b7a;
+  --badge-plain-bg:#f3f4f6; --badge-plain-ink:#6b7280;
+
+  /* ---- 统计块数字（语法点分类的彩色数字）---- */
+  --num-amber:#b45309; --num-red:#d02b2b; --num-blue:#0284c7;
+  --num-indigo:#2563eb; --num-crimson:#dc2626;
+
+  --shadow:0 1px 2px rgba(0,0,0,.06);
+}
+
+/* ---------- 暗色 ----------
+   只覆盖变量，不重复任何选择器 —— 这是令牌化的全部意义。
+   配色原则：底色用「近黑的中性灰」而不是纯黑（长时间阅读更累，
+   也更接近系统级的暗色观感）；正文不用纯白（对比过冲）。
+*/
+[data-theme="dark"]{
+  --bg:#14161a;
+  --card:#1c1f25;
+  --surface-2:#242830;
+  --surface-3:#20242a;
+  --surface-hover:#232730;
+  --inset:#242830;
+  --line-soft:#262a31;
+  --frame:#0e1013;        /* 手账纸面外：比页面底更深，让纸「浮起来」 */
+
+  --ink:#e6e8eb;
+  --ink2:#a2a9b4;
+  --ink3:#6f7784;
+
+  --border:#2c313a;
+  --border-strong:#3d434e;
+
+  --accent:#e8776a;          /* 暗色下要提亮，否则深底上不够跳 */
+  --accent-soft:#2a1f1e;
+  --on-accent:#1a1110;
+
+  --ok:#4ec4a0;
+  --warn:#e0a458;
+  --danger:#f08a8a;
+
+  --note-bg:#2a2418; --note-border:#5c4a24; --note-ink:#e8cf9a;
+  --ok-bg:#16302a;  --ok-border:#2f6151;
+  --err-bg:#2e1a1a; --err-border:#6b3232;
+  --hint-ok:#4ec4a0;
+
+  --badge-gray-bg:#262b33;  --badge-gray-ink:#b6bec9;
+  --badge-green-bg:#16302a; --badge-green-ink:#5fd0ad;
+  --badge-amber-bg:#31260f; --badge-amber-ink:#e8bf72;
+  --badge-purple-bg:#262633;--badge-purple-ink:#a9a6d6;
+  --badge-plain-bg:#262b33; --badge-plain-ink:#9aa3b0;
+
+  --num-amber:#e0a458; --num-red:#f0857c; --num-blue:#6cc0f5;
+  --num-indigo:#8ab4f8; --num-crimson:#f28b8b;
+
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:14px;line-height:1.7}
+/* 切换主题时不要有颜色闪动：颜色变化应当是即时的 */
+body,header,.card,.lv,.drop,.stat,details,table.kb,table.kb th,table.kb td{
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+
+/* ---------- 顶栏 ---------- */
+header{background:var(--card);border-bottom:1px solid var(--border);padding:14px 26px;
+  display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:20}
+.logo{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.logo span{color:var(--accent)}
+.logo a{color:inherit;text-decoration:none}
+.slogan{color:var(--ink2);font-size:12.5px}
+header .spacer{flex:1}
+/* 顶栏导航：当前所在页高亮。两页都有，避免用户不知道自己身处何处 */
+.nav{display:flex;gap:4px;background:var(--surface-2);padding:3px;border-radius:9px}
+.nav a{display:block;padding:6px 14px;border-radius:7px;font-size:13px;
+  color:var(--ink2);text-decoration:none;font-weight:500}
+.nav a:hover{background:var(--card);color:var(--ink)}
+.nav a.on{background:var(--card);color:var(--accent);font-weight:650;
+  box-shadow:var(--shadow)}
+
+/* ---------- 主题切换 ---------- */
+.theme-btn{border:1px solid var(--border);background:var(--card);border-radius:9px;
+  width:36px;height:34px;display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink2);font-size:15px;padding:0;line-height:1}
+.theme-btn:hover{border-color:var(--border-strong);color:var(--ink)}
+/* 图标切换用 CSS 画，不引图标字体（项目零 CDN 依赖） */
+.theme-btn .ic{display:block}
+[data-theme="dark"] .theme-btn .ic-sun{display:none}
+.theme-btn .ic-moon{display:none}
+[data-theme="dark"] .theme-btn .ic-moon{display:block}
+
+main{max-width:1180px;margin:0 auto;padding:22px 26px 90px}
+
+/* ---------- 卡片 ---------- */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:20px;margin-bottom:16px}
+.card h2{font-size:15px;margin:0 0 14px;font-weight:650;display:flex;align-items:center;gap:8px}
+.card h2 i{width:4px;height:14px;background:var(--accent);border-radius:2px;display:inline-block}
+.card h2 .spacer{flex:1}
+.card h2 .tag{font-size:11.5px;font-weight:400;color:var(--ink2)}
+
+/* ---------- 表单控件 ---------- */
+button.primary{background:var(--accent);color:var(--on-accent);border:none;border-radius:9px;
+  padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer}
+button.primary:disabled{opacity:.5;cursor:not-allowed}
+button.ghost{background:var(--card);border:1px solid var(--border);border-radius:9px;
+  padding:8px 14px;font-size:13px;cursor:pointer;color:var(--ink);font-family:inherit}
+button.ghost:hover{border-color:var(--border-strong);background:var(--surface-hover)}
+input[type=text],input[type=password],select,textarea{
+  border:1px solid var(--border);border-radius:8px;padding:8px 11px;font-size:13px;
+  font-family:inherit;background:var(--card);color:var(--ink);width:100%}
+textarea{min-height:110px;resize:vertical;line-height:1.7}
+/* select 的下拉箭头在暗色下默认是黑三角、几乎看不见 —— 必须换成 SVG data-uri，
+   否则是「功能在但看不清」的那类问题。 */
+select{
+  appearance:none;-webkit-appearance:none;padding-right:26px;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235b6370' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 9px center}
+[data-theme="dark"] select{
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a2a9b4' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")}
+input::placeholder,textarea::placeholder{color:var(--ink3)}
+label.f{display:block;font-size:12px;color:var(--ink2);margin-bottom:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row.mt{margin-top:14px}
+
+/* ---------- 折叠块 ---------- */
+details{border:1px solid var(--border);border-radius:10px;padding:12px 14px;
+  background:var(--surface-3);margin-top:14px}
+details summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--ink)}
+details[open] summary{margin-bottom:12px}
+
+/* ---------- 提示条 ---------- */
+.hint{font-size:11.5px;color:var(--ink2);margin-top:6px}
+.hint.ok{color:var(--hint-ok)}
+.hint.warn{color:var(--warn)}
+.note-bar{background:var(--note-bg);border:1px solid var(--note-border);border-radius:9px;
+  padding:9px 13px;font-size:12.5px;color:var(--note-ink);margin-bottom:14px}
+.note-bar.ok{background:var(--ok-bg);border-color:var(--ok-border);color:var(--ok)}
+.err{background:var(--err-bg);border:1px solid var(--err-border);color:var(--danger);
+  border-radius:9px;padding:10px 13px;font-size:13px;margin-top:12px;display:none}
+
+.hidden{display:none!important}

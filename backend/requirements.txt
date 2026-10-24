@@ -1,0 +1,17 @@
+fastapi>=0.115
+uvicorn[standard]>=0.32
+python-multipart>=0.0.12
+
+# PDF 解析 —— pypdfium2 为 Apache-2.0 / BSD-3，规避 PyMuPDF 的 AGPL-3.0 传染风险
+pypdfium2>=4.30
+pillow>=10.4
+
+# OCR —— RapidOCR 3.x（onnxruntime 后端，Apache-2.0，不依赖 paddlepaddle）
+rapidocr>=3.0
+onnxruntime>=1.20
+
+python-docx>=1.1
+httpx>=0.27
+jinja2>=3.1
+markdown-it-py>=3.0
+pygments>=2.18

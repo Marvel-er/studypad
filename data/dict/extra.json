@@ -1,0 +1,353 @@
+{
+  "_meta": {
+    "what": "手写补充词典：六档词表与 build_general_dict.py 生成的补充词典都漏收的常用词",
+    "why": "2026-10-15 用户导入《A Piece of Red Calico》后反馈「生词表有的行音标/词性/释义全空」。追下来发现 calico 这类常用词在 vendor/english-vocabulary-master 的 11.7 万条源数据里根本不存在，六档索引和补充词典都查不到，生词表里就留下三列全空的一行。",
+    "provenance": "本文件每一条都是**手写**的，不是从任何开源词库拷贝而来。上游数据源（KyleBing/english-vocabulary-master，MIT）已确认不含这些词；为避免「编一个没有出处的释义」，这里如实标注 src=hand。音标为通用 IPA，词性与释义按常用义项。",
+    "how_measured": "种子清单由 scripts/probe_missing_words.py 量出：测 505 个常用词，456 个有词条、49 个完全查不到，本文件补的就是那 49 个（去掉探针里的一个拼写错误 desereter）。",
+    "format": "与 data/dict/general.json 完全一致：{word: {p 音标, pos 词性, t 释义, e 英释, s 例句}}，便于同一套加载代码复用。",
+    "caution": "以后新增条目请保持「确实是常用词、且确认六档与 general.json 都没有」——不要把这个文件变成又一个来路不明的词库。"
+  },
+  "almsgiving": {
+    "p": "/ˈɑːmzɡɪvɪŋ/",
+    "pos": "n.",
+    "t": "布施；施舍",
+    "e": "the practice of giving money or goods to poor people",
+    "s": "The monastery survived on the almsgiving of neighbouring farms."
+  },
+  "beauteous": {
+    "p": "/ˈbjuːtiəs/",
+    "pos": "adj.",
+    "t": "美丽的；美好的（文学用词）",
+    "e": "beautiful, especially in a literary or poetic way",
+    "s": "He wrote a beauteous line about the harbour at dawn."
+  },
+  "bier": {
+    "p": "/bɪə/",
+    "pos": "n.",
+    "t": "棺架；停尸架",
+    "e": "a stand on which a coffin rests before burial",
+    "s": "The bier was carried slowly through the narrow lane."
+  },
+  "broth": {
+    "p": "/brɒθ/",
+    "pos": "n.",
+    "t": "肉汤；清汤",
+    "e": "thin soup made by stewing meat, fish or vegetables in water",
+    "s": "She warmed the broth and added a handful of herbs."
+  },
+  "buoy": {
+    "p": "/bɔɪ/",
+    "pos": "n.",
+    "t": "浮标；航标",
+    "e": "a floating mark used to guide ships or mark a channel",
+    "s": "A red buoy marked the edge of the shallow water."
+  },
+  "byway": {
+    "p": "/ˈbaɪweɪ/",
+    "pos": "n.",
+    "t": "偏僻小路；旁道",
+    "e": "a minor or little-used road, away from the main route",
+    "s": "They turned off the highway onto a grassy byway."
+  },
+  "calico": {
+    "p": "/ˈkælɪkəʊ/",
+    "pos": "n.",
+    "t": "印花棉布；白布",
+    "e": "a plain white cotton cloth, or one printed with a pattern",
+    "s": "She cut a piece of red calico and held it against the light."
+  },
+  "calicoes": {
+    "p": "/ˈkælɪkəʊz/",
+    "pos": "n.",
+    "t": "calico 的复数：印花棉布；白布",
+    "e": "plural of calico",
+    "s": "The shop sold calicoes of every shade of red and blue."
+  },
+  "cask": {
+    "p": "/kɑːsk/",
+    "pos": "n.",
+    "t": "木桶；酒桶",
+    "e": "a large barrel used for storing liquids, especially ale or wine",
+    "s": "The cask was tapped and the ale ran golden into the jugs."
+  },
+  "centaur": {
+    "p": "/ˈsentɔː/",
+    "pos": "n.",
+    "t": "半人半马怪（希腊神话）",
+    "e": "a creature from Greek myth with a man's head and torso and a horse's body",
+    "s": "The centaur is a familiar figure in Greek mythology."
+  },
+  "coachman": {
+    "p": "/ˈkəʊtʃmən/",
+    "pos": "n.",
+    "t": "马车夫",
+    "e": "a man who drives a horse-drawn coach",
+    "s": "The coachman cracked his whip and the horses leaned forward."
+  },
+  "convent": {
+    "p": "/ˈkɒnvənt/",
+    "pos": "n.",
+    "t": "女修道院；修女院",
+    "e": "a community of nuns living under religious vows",
+    "s": "She was sent to the convent at the age of sixteen."
+  },
+  "cortege": {
+    "p": "/kɔːˈteɪʒ/",
+    "pos": "n.",
+    "t": "送葬行列；随从队伍",
+    "e": "a solemn procession, especially at a funeral",
+    "s": "The cortege moved quietly through the wet streets."
+  },
+  "crib": {
+    "p": "/krɪb/",
+    "pos": "n.",
+    "t": "婴儿床；饲料槽",
+    "e": "a baby's bed with high sides; also a manger for animals",
+    "s": "The baby slept soundly in its crib by the fire."
+  },
+  "crumpet": {
+    "p": "/ˈkrʌmpɪt/",
+    "pos": "n.",
+    "t": "英式烤面饼",
+    "e": "a thick soft British cake, toasted and buttered",
+    "s": "He ate a buttered crumpet with his morning tea."
+  },
+  "damask": {
+    "p": "/ˈdæməsk/",
+    "pos": "n.",
+    "t": "花缎；锦缎",
+    "e": "a rich woven fabric with a pattern visible on both sides",
+    "s": "The table was covered with white damask."
+  },
+  "deserter": {
+    "p": "/dɪˈzɜːtə/",
+    "pos": "n.",
+    "t": "逃兵；擅离职守者",
+    "e": "a person who leaves the armed forces without permission",
+    "s": "The deserter was caught a mile from the camp."
+  },
+  "distillery": {
+    "p": "/dɪˈstɪləri/",
+    "pos": "n.",
+    "t": "酿酒厂；蒸馏厂",
+    "e": "a factory where spirits are produced by distillation",
+    "s": "The old distillery still smells of malt and peat."
+  },
+  "dyer": {
+    "p": "/ˈdaɪə/",
+    "pos": "n.",
+    "t": "染工；染色师",
+    "e": "a person whose job is dyeing cloth or yarn",
+    "s": "The dyer dipped the silk and it came out a deep red."
+  },
+  "galoshes": {
+    "p": "/ɡəˈlɒʃɪz/",
+    "pos": "n.",
+    "t": "橡胶套鞋",
+    "e": "waterproof overshoes, usually made of rubber",
+    "s": "He pulled on his galoshes before stepping into the slush."
+  },
+  "gewgaw": {
+    "p": "/ˈɡjuːɡɔː/",
+    "pos": "n.",
+    "t": "廉价小饰物；华而不实之物",
+    "e": "a showy but worthless trinket",
+    "s": "The stall was piled with gewgaws nobody needed."
+  },
+  "gibbet": {
+    "p": "/ˈdʒɪbɪt/",
+    "pos": "n.",
+    "t": "绞架；示众架",
+    "e": "a gallows, or a post on which executed bodies were hung as a warning",
+    "s": "The gibbet stood on the hill as a warning to travellers."
+  },
+  "inglenook": {
+    "p": "/ˈɪŋɡlnʊk/",
+    "pos": "n.",
+    "t": "壁炉边（可坐人的）凹角",
+    "e": "a recess beside a fireplace, often with seats",
+    "s": "The cat slept in the inglenook all afternoon."
+  },
+  "inkwell": {
+    "p": "/ˈɪŋkwel/",
+    "pos": "n.",
+    "t": "墨水瓶；（桌上的）墨水池",
+    "e": "a small container for holding writing ink",
+    "s": "He dipped the pen into the inkwell and hesitated."
+  },
+  "kerb": {
+    "p": "/kɜːb/",
+    "pos": "n.",
+    "t": "路缘；马路牙子（英式）",
+    "e": "the stone edge of a pavement (BrE; AmE curb)",
+    "s": "The car mounted the kerb and stopped against a lamppost."
+  },
+  "larder": {
+    "p": "/ˈlɑːdə/",
+    "pos": "n.",
+    "t": "食物储藏室",
+    "e": "a cool place where food is stored in a house",
+    "s": "There was cheese and cold meat in the larder."
+  },
+  "lent": {
+    "p": "/lent/",
+    "pos": "n.",
+    "t": "（基督教的）大斋节；四旬期",
+    "e": "the period of fasting and penitence before Easter",
+    "s": "He gave up sugar for the whole of Lent."
+  },
+  "lorgnette": {
+    "p": "/lɔːˈnjet/",
+    "pos": "n.",
+    "t": "长柄眼镜；观剧镜",
+    "e": "eyeglasses held to the eyes by a long handle",
+    "s": "She raised her lorgnette and studied him in silence."
+  },
+  "milliner": {
+    "p": "/ˈmɪlɪnə/",
+    "pos": "n.",
+    "t": "女帽商；制帽匠",
+    "e": "a person who makes or sells women's hats",
+    "s": "The milliner showed her a hat trimmed with velvet."
+  },
+  "minotaur": {
+    "p": "/ˈmaɪnətɔː/",
+    "pos": "n.",
+    "t": "弥诺陶洛斯（希腊神话牛头怪）",
+    "e": "the bull-headed monster of Greek legend kept in the Labyrinth",
+    "s": "Theseus killed the Minotaur and found his way out."
+  },
+  "muslin": {
+    "p": "/ˈmʌzlɪn/",
+    "pos": "n.",
+    "t": "薄棉布；细纱",
+    "e": "a light, loosely woven cotton fabric",
+    "s": "The curtains were of plain white muslin."
+  },
+  "nave": {
+    "p": "/neɪv/",
+    "pos": "n.",
+    "t": "（教堂的）中殿",
+    "e": "the central part of a church, where the congregation sits",
+    "s": "Light fell through the high windows of the nave."
+  },
+  "portmanteau": {
+    "p": "/pɔːtˈmæntəʊ/",
+    "pos": "n.",
+    "t": "旅行皮箱；大行李箱",
+    "e": "a large travelling case, typically made of leather",
+    "s": "He packed a portmanteau and left before dawn."
+  },
+  "repast": {
+    "p": "/rɪˈpɑːst/",
+    "pos": "n.",
+    "t": "一餐；饭菜",
+    "e": "a meal, especially a formal or substantial one",
+    "s": "After the repast the guests moved to the drawing-room."
+  },
+  "scone": {
+    "p": "/skɒn/",
+    "pos": "n.",
+    "t": "英式烤饼",
+    "e": "a small soft British cake, often eaten with cream and jam",
+    "s": "She baked scones for the afternoon tea."
+  },
+  "scullery": {
+    "p": "/ˈskʌləri/",
+    "pos": "n.",
+    "t": "碗碟洗涤间（厨房旁）",
+    "e": "a small room next to a kitchen, for washing dishes",
+    "s": "The pans were stacked in the scullery."
+  },
+  "silo": {
+    "p": "/ˈsaɪləʊ/",
+    "pos": "n.",
+    "t": "青贮塔；筒仓",
+    "e": "a tall tower for storing grain or silage",
+    "s": "The concrete silo stood above the barley fields."
+  },
+  "solstice": {
+    "p": "/ˈsɒlstɪs/",
+    "pos": "n.",
+    "t": "至日；至点（夏至/冬至）",
+    "e": "either of the two times of year when the sun is furthest from the equator",
+    "s": "The festival is held at the summer solstice."
+  },
+  "tithe": {
+    "p": "/taɪð/",
+    "pos": "n.",
+    "t": "什一税；（交给教会的）十分之一",
+    "e": "one tenth of a person's income, paid to the church",
+    "s": "Every farmer was expected to pay a tithe on his corn."
+  },
+  "truffle": {
+    "p": "/ˈtrʌfl/",
+    "pos": "n.",
+    "t": "松露（菌）",
+    "e": "a strong-smelling underground fungus used as a delicacy",
+    "s": "The chef shaved black truffle over the eggs."
+  },
+  "tun": {
+    "p": "/tʌn/",
+    "pos": "n.",
+    "t": "大酒桶",
+    "e": "a large cask for beer, wine or spirits",
+    "s": "A tun of wine was rolled into the cellar."
+  },
+  "unlovely": {
+    "p": "/ʌnˈlʌvli/",
+    "pos": "adj.",
+    "t": "不美丽的；难看的",
+    "e": "not attractive or pleasing to look at",
+    "s": "The house was unlovely but warm and dry."
+  },
+  "unmindful": {
+    "p": "/ʌnˈmaɪndfl/",
+    "pos": "adj.",
+    "t": "不留心的；不在意的",
+    "e": "not conscious or aware of something; heedless",
+    "s": "He rode on, unmindful of the coming storm."
+  },
+  "unroll": {
+    "p": "/ʌnˈrəʊl/",
+    "pos": "v.",
+    "t": "展开；铺开",
+    "e": "to open or spread out something that was rolled up",
+    "s": "She unrolled the map across the table."
+  },
+  "vat": {
+    "p": "/væt/",
+    "pos": "n.",
+    "t": "大桶；大缸（染/酿用）",
+    "e": "a large tank or tub used for holding liquids",
+    "s": "The cloth was lowered into a vat of dark dye."
+  },
+  "vellum": {
+    "p": "/ˈveləm/",
+    "pos": "n.",
+    "t": "皮纸；上等犊皮纸",
+    "e": "fine parchment made from calfskin, used for manuscripts",
+    "s": "The manuscript was copied onto vellum."
+  },
+  "victuals": {
+    "p": "/ˈvɪtlz/",
+    "pos": "n.",
+    "t": "食物；粮食（旧式）",
+    "e": "food, especially solid food; provisions",
+    "s": "They carried enough victuals for a fortnight."
+  },
+  "yardarm": {
+    "p": "/ˈjɑːdɑːm/",
+    "pos": "n.",
+    "t": "横桁端（帆索固着处）",
+    "e": "the outer end of a yard on a square-rigged ship",
+    "s": "A sailor climbed out along the yardarm to furl the sail."
+  },
+  "yule": {
+    "p": "/juːl/",
+    "pos": "n.",
+    "t": "圣诞节；圣诞季（古语/诗）",
+    "e": "the Christmas season, especially in older or poetic use",
+    "s": "The old songs still speak of the yule log."
+  }
+}

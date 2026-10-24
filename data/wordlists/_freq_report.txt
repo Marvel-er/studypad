@@ -1,0 +1,14 @@
+[OK] _freq.json  words=20000  size=0.29MB
+   different          rank=421
+   probably           rank=1317
+   millions           rank=3583
+   frequently         rank=2481
+   productivity       rank=4217
+   endurance          rank=14627
+   negotiation        rank=9497
+   transparent        rank=7379
+   remediation        rank=14414
+   pandemic           rank=19021
+   the                rank=1
+   algorithm          rank=4249
+   counterproductive  rank=20001

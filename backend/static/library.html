@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StudyPad · 知识库</title>
+<meta name="theme-color" content="#f6f7f9">
+<script>
+/* 防闪烁：必须在样式表**之前**同步执行。
+   放在其后会看到「先白一下再变黑」—— 那个闪一下在夜间非常刺眼，
+   等于功能做了但体验坏了。这也是为什么它不能挪进 common.js：
+   那个文件是普通 <script src>，要等下载+解析完才跑，来不及。 */
+(function(){var t=null;
+try{t=localStorage.getItem('studypad.theme')}catch(e){}
+/* ?theme=dark / ?theme=light 可以临时指定并**记住**。
+   两个用途：① 分享「看这个版本的暗色长什么样」的链接；
+            ② 自动化截图 —— 预置 localStorage 的路子受同源限制很难走通。
+   非法值一律当没给，不会把页面钉死在某个主题上。 */
+try{var q=new URLSearchParams(location.search).get('theme');
+if(q==='dark'||q==='light'){t=q;localStorage.setItem('studypad.theme',t);}}catch(e){}
+if(t!=='dark'&&t!=='light')t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link rel="stylesheet" href="/static/common.css">
+<style>
+/* 知识库页面专属样式。共用的东西都在 common.css 里，不重复一遍。 */
+
+/* ---------- 概览条：进来先看到「我有多少东西」 ---------- */
+.kb-hero{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px 20px;margin-bottom:14px}
+.kb-hero-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.kb-hero-top h1{font-size:16px;margin:0;font-weight:650}
+.kb-hero-top .sub{color:var(--ink2);font-size:12px}
+.kb-metrics{display:flex;gap:10px;flex-wrap:wrap}
+.kb-metric{border:1px solid var(--border);border-radius:10px;padding:8px 14px;min-width:96px;
+  background:var(--card)}
+.kb-metric u{display:block;text-decoration:none;font-size:19px;font-weight:700;line-height:1.3;
+  font-variant-numeric:tabular-nums}
+.kb-metric s{display:block;text-decoration:none;font-size:11.5px;color:var(--ink2)}
+.kb-metric.docs u{color:var(--accent)}
+.kb-metric.words u{color:var(--num-amber)}
+.kb-metric.pat u{color:var(--num-indigo)}
+.kb-metric.gram u{color:var(--num-crimson)}
+.kb-metric.known u{color:var(--ok)}
+.kb-path{font-size:11.5px;color:var(--ink2);margin-top:11px;word-break:break-all}
+.kb-path code{background:var(--surface-2);padding:1px 5px;border-radius:4px;font-size:11px}
+
+/* ---------- 页签：这是本页唯一的导航，层级要清楚 ---------- */
+.kb-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;
+  border-bottom:1px solid var(--border);padding-bottom:0}
+.kb-tabs button{background:none;border:none;padding:9px 16px;font-size:13.5px;cursor:pointer;
+  color:var(--ink2);font-family:inherit;border-bottom:2px solid transparent;margin-bottom:-1px;
+  display:flex;align-items:center;gap:7px}
+.kb-tabs button:hover{color:var(--ink)}
+.kb-tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:650}
+.kb-tabs .cnt{font-size:11px;background:var(--surface-2);color:var(--ink2);border-radius:99px;
+  padding:0 7px;font-weight:400;font-variant-numeric:tabular-nums}
+.kb-tabs button.on .cnt{background:var(--accent-soft);color:var(--accent)}
+
+/* ---------- 筛选栏 ---------- */
+.kb-bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.kb-bar input[type=text]{width:240px}
+.kb-bar select{width:auto;min-width:106px}
+.kb-bar .spacer{flex:1}
+
+/* ---------- 表格 ---------- */
+.kb-body{border:1px solid var(--border);border-radius:10px;overflow:auto;
+  background:var(--card);max-height:calc(100vh - 300px);min-height:180px;
+  /* ⚠ 宽度必须显式给：这是表格的父级且带 overflow:auto，
+     父级按内容收缩时 table{width:100%} 会跟着塌成内容宽 ——
+     表现为每格被压到一个字宽、文字竖排（实测过）。 */
+  width:100%}
+table.kb{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);table-layout:fixed}
+table.kb th{position:sticky;top:0;background:var(--surface-2);text-align:left;font-size:12px;
+  color:var(--ink2);font-weight:600;padding:9px 11px;border-bottom:1px solid var(--border);
+  white-space:nowrap;z-index:2}
+table.kb td{padding:8px 11px;border-bottom:1px solid var(--line-soft);vertical-align:top;
+  overflow-wrap:anywhere}
+table.kb tr:last-child td{border-bottom:none}
+table.kb tr.done{opacity:.5}
+table.kb tr.done .kb-w{text-decoration:line-through}
+/* 单词列用**清晰的衬线体**，不用手写体。
+   手写体（Segoe Script）连笔严重，l/1、r/v、a/d 几乎分不开 ——
+   用户反馈「根本看不清」。纸面手账（render.py）用它是刻意的观感，
+   但知识库是**工具界面**，天天要读几十个词，辨识度优先于风格。 */
+.kb-w{font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:600;
+  white-space:normal;overflow-wrap:anywhere;letter-spacing:.01em}
+/* 句型/语法名同样用衬线体，允许换行（句型名是带省略号的长模板）。 */
+.kb-name{font-family:Georgia,'Times New Roman',serif;font-size:14px;font-weight:600;
+  white-space:normal;overflow-wrap:anywhere;line-height:1.5}
+/* 列宽写在 `<col width="%">` 上。必须给**属性**而不是只给 style.width ——
+   `table-layout:fixed` 下只给 style.width 时 col 可能被忽略，列宽全塌。 */
+.kb-ph{color:var(--ink2);font-size:12px;white-space:normal}
+.kb-pos{color:var(--ink2);font-size:12px;white-space:normal}
+.kb-gloss{min-width:0}
+.kb-ex{color:var(--ink2);font-size:12.5px;line-height:1.65;min-width:0}
+.kb-src{color:var(--ink2);font-size:11.5px;line-height:1.55;min-width:0}
+.kb-usage{margin:2px 0 0;padding-left:16px;color:var(--ink2);font-size:12px}
+
+/* 掌握度三态按钮。三个按钮必须收得进列宽 —— 在 table-layout:fixed 下
+   内容不会撑宽单元格，超了会**直接溢出**到卡片边界外（用户截图过）。
+   gap / padding / min-width 三者都要，缺一个仍然溢出。
+   三态的类名是 s-new / s-fuzzy / s-known，由 setKbStatusClass 直接赋 className。 */
+.kb-st{display:flex;gap:3px;white-space:nowrap;min-width:0;justify-content:flex-start}
+.kb-st button{border:1px solid var(--border);background:var(--card);border-radius:6px;
+  flex:0 1 auto;min-width:20px;padding:3px 5px;font-size:11.5px;line-height:1.2;
+  text-align:center;cursor:pointer;color:var(--ink2);font-family:inherit}
+.kb-st button:hover{border-color:var(--border-strong)}
+.kb-st button.on{font-weight:700}
+.kb-st button.on.s-new{background:var(--badge-plain-bg);border-color:var(--border-strong);color:var(--ink2)}
+.kb-st button.on.s-fuzzy{background:var(--note-bg);border-color:var(--note-border);color:var(--note-ink)}
+.kb-st button.on.s-known{background:var(--ok-bg);border-color:var(--ok-border);color:var(--ok)}
+
+.kb-kind{font-size:11px;padding:1px 7px;border-radius:5px;background:var(--badge-gray-bg);color:var(--badge-gray-ink);
+  white-space:nowrap}
+.kb-kind.t{background:var(--badge-amber-bg);color:var(--badge-amber-ink)}
+.kb-kind.o{background:var(--err-bg);color:var(--danger)}
+.kb-kind.r{background:var(--badge-gray-bg);color:var(--badge-gray-ink)}
+.kb-ex-flag{margin-top:3px;font-size:11px;color:var(--note-ink);background:var(--note-bg);
+  border:1px solid var(--note-border);border-radius:5px;padding:1px 6px;display:inline-block}
+
+.kb-empty{padding:48px 20px;text-align:center;color:var(--ink2);font-size:13.5px}
+.kb-empty b{display:block;font-size:14px;color:var(--ink);margin-bottom:6px}
+
+/* ---------- 历史手账列表 ---------- */
+.kb-doc{display:flex;gap:14px;align-items:flex-start;padding:13px 16px;
+  border-bottom:1px solid var(--line-soft)}
+.kb-doc:last-child{border-bottom:none}
+.kb-doc:hover{background:var(--surface-hover)}
+.kb-doc .g{flex:1;min-width:0}
+.kb-doc .t{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap}
+.kb-doc .lv{font-size:11px;padding:1px 8px;border-radius:99px;background:var(--note-bg);
+  color:var(--note-ink);font-weight:400}
+.kb-doc .m{font-size:11.5px;color:var(--ink2);margin-top:4px}
+.kb-doc .a{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.kb-doc .a button{font-size:12px;padding:5px 11px;white-space:nowrap}
+
+.kb-warn{background:var(--note-bg);border:1px solid var(--note-border);border-radius:9px;padding:9px 13px;
+  font-size:12.5px;color:var(--note-ink);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.kb-warn .spacer{flex:1}
+.kb-count{font-size:11.5px;color:var(--ink2);margin-top:8px}
+</style>
+</head>
+<body data-page="library">
+
+<header>
+  <div class="logo"><a href="/">Study<span>Pad</span></a></div>
+  <div class="slogan">英语精读手账</div>
+  <div class="nav">
+    <a href="/" data-p="home">生成手账</a>
+    <a href="/library" data-p="library">知识库</a>
+  </div>
+  <div class="spacer"></div>
+    <button class="theme-btn" id="btnTheme" data-mode="auto" title="切换主题" aria-label="切换主题">
+      <span class="ic ic-sun" aria-hidden="true">☀</span><span class="ic ic-moon" aria-hidden="true">☾</span>
+    </button>
+  <a class="ghost" href="/" style="text-decoration:none">← 返回制作</a>
+</header>
+
+<main>
+  <div class="kb-hero">
+    <div class="kb-hero-top">
+      <h1>知识库</h1>
+      <span class="sub">每次生成的手账会自动收录在这里；生词、句型、语法跨篇汇总，可标记掌握度后复习</span>
+    </div>
+    <div class="kb-metrics" id="kbMetrics"></div>
+    <div class="kb-path" id="kbPath"></div>
+  </div>
+
+  <div id="kbWarn"></div>
+
+  <div class="kb-tabs" id="kbTabs">
+    <button data-k="docs">历史手账 <span class="cnt" id="c-docs">0</span></button>
+    <button data-k="words">生词本 <span class="cnt" id="c-words">0</span></button>
+    <button data-k="patterns">句型本 <span class="cnt" id="c-patterns">0</span></button>
+    <button data-k="grammar">语法本 <span class="cnt" id="c-grammar">0</span></button>
+  </div>
+
+  <div class="kb-bar" id="kbBar">
+    <input type="text" id="kbQ" data-search placeholder="搜索单词 / 释义 / 例句…（Ctrl+K）">
+    <select id="kbStatus">
+      <option value="">全部状态</option>
+      <option value="new">○ 未掌握</option>
+      <option value="fuzzy">△ 模糊</option>
+      <option value="known">● 掌握</option>
+    </select>
+    <select id="kbLevel"><option value="">全部等级</option></select>
+    <select id="kbSort">
+      <option value="recent">最近遇到</option>
+      <option value="alpha">字母顺序</option>
+      <option value="freq">见过次数</option>
+      <option value="status">按掌握度</option>
+    </select>
+    <span class="spacer"></span>
+    <button class="ghost" id="kbExportHtml">导出 HTML</button>
+    <button class="ghost" id="kbExportCsv">导出 CSV</button>
+  </div>
+
+  <div class="kb-body" id="kbBody"></div>
+  <div class="kb-count" id="kbHint"></div>
+</main>
+
+<script src="/static/common.js"></script>
+<script>
+// ---------------- 知识库
+// 数据全在后端 library.py；这里只做呈现与交互，三个状态一律走接口，
+// 不在前端另存一份 —— 否则两边会漂。
+var KB = {
+  tab: 'docs', docs: [], stats: null, data: null, problems: [], busy: false
+};
+
+var KB_TABS = [
+  { k: 'docs', t: '历史手账' }, { k: 'words', t: '生词本' },
+  { k: 'patterns', t: '句型本' }, { k: 'grammar', t: '语法本' }
+];
+var KB_ST = { new: '○ 未掌握', fuzzy: '△ 模糊', known: '● 掌握' };
+var KB_KIND = { target: '本级考纲', overflow: '超纲常见', rare: '超纲生僻',
+                beyond: '六档之外' };
+
+/* 列宽（单位 %，每行合计 100）
+   ⚠ 末列是掌握度，**不能低于 10%**：三个按钮 + gap + 单元格左右 padding
+   至少要 ~104px（1086px 容器下），给 6% 就会溢出单元格边界。 */
+var KB_COLS = {
+  words: [13, 11, 6, 16, 26, 8, 8, 12],
+  patterns: [15, 21, 17, 29, 8, 10],
+  grammar: [16, 34, 32, 8, 10]
+};
+var KB_HEAD = {
+  words: ['单词', '音标', '词性', '释义', '例句（原文）', '分类', '出处', '掌握'],
+  patterns: ['句型', '用法', '仿写示例', '例句（原文）', '出处', '掌握'],
+  grammar: ['语法点', '讲解', '例句（原文）', '出处', '掌握']
+};
+
+function kbQuery() {
+  var p = new URLSearchParams();
+  var q = $('kbQ').value.trim();
+  if (q) p.set('q', q);
+  if (KB.tab !== 'docs') {
+    ['status', 'level', 'sort'].forEach(function (f) {
+      var v = $('kb' + f.charAt(0).toUpperCase() + f.slice(1)).value;
+      if (v) p.set(f, v);
+    });
+  }
+  return p.toString();
+}
+
+function kbMsg(m) { $('kbHint').textContent = m; }
+
+function kbMetrics() {
+  var s = KB.stats;
+  if (!s) return;
+  $('kbMetrics').innerHTML = [
+    ['docs', s.docs, '历史手账'],
+    ['words', s.cards.words, '生词'],
+    ['pat', s.cards.patterns, '句型'],
+    ['gram', s.cards.grammar, '语法点'],
+    ['known', s.word_tally.known, '已掌握']
+  ].map(function (x) {
+    return '<div class="kb-metric ' + x[0] + '"><u>' + x[1] + '</u><s>' + x[2] + '</s></div>';
+  }).join('');
+  $('kbPath').innerHTML = '数据存放在 <code>' + esc(s.path) + '</code>'
+    + '（与项目目录分离，可整目录备份）';
+  $('c-docs').textContent = s.docs;
+  $('c-words').textContent = s.cards.words;
+  $('c-patterns').textContent = s.cards.patterns;
+  $('c-grammar').textContent = s.cards.grammar;
+
+  $('kbWarn').innerHTML = KB.problems.length
+    ? '<div class="kb-warn">发现 ' + KB.problems.length
+      + ' 处数据不一致（多半是你手工删过文件）。<span class="spacer"></span>'
+      + '<button class="ghost" id="kbRepair">一键修复</button></div>'
+    : '';
+  var rb = $('kbRepair');
+  if (rb) rb.onclick = function () {
+    if (!confirm('将清理 ' + KB.problems.length
+      + ' 处失效引用（只影响索引，不会删你的手账文件）。继续？')) return;
+    api('/api/library/repair', { method: 'POST' }).then(function () {
+      kbRefresh();
+    }).catch(function (e) { kbMsg(e.message); });
+  };
+}
+
+// 状态按钮的类名走 setKbStatusClass（以 Class 结尾 → 参数直接给 className）
+function setKbStatusClass(cls) { this.className = cls; }
+
+function kbStatusBtns(it, kind, key) {
+  var st = it.status || 'new';
+  var wrap = document.createElement('span');
+  wrap.className = 'kb-st';
+  ['new', 'fuzzy', 'known'].forEach(function (s) {
+    var b = document.createElement('button');
+    b.textContent = { new: '○', fuzzy: '△', known: '●' }[s];
+    b.title = KB_ST[s];
+    setKbStatusClass.call(b, 's-' + s + (st === s ? ' on' : ''));
+    b.onclick = function () {
+      if (st === s) return;                     // 点当前态 = 不动
+      api('/api/library/cards/' + kind + '/' + encodeURIComponent(key) + '/status',
+          { method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: s }) })
+        .then(function () { kbLoad(); })
+        .catch(function (e) { kbMsg(e.message); });
+    };
+    wrap.appendChild(b);
+  });
+  return wrap;
+}
+
+function kbSrcCell(it) {
+  var srcs = it.sources || [];
+  if (!srcs.length) return '<td class="kb-src">—</td>';
+  return '<td class="kb-src">' + srcs.slice(0, 3).map(function (s) {
+    return esc(s.title || '未命名');
+  }).join('<br>') + (srcs.length > 3 ? '<br>…另有 ' + (srcs.length - 3) + ' 篇' : '')
+    + '</td>';
+}
+
+function kbKindCell(it) {
+  var k = it.kind || '';
+  var cls = k === 'target' ? 't' : (k === 'overflow' ? 'o' : 'r');
+  return '<td><span class="kb-kind ' + cls + '">'
+    + esc(KB_KIND[k] || (k === 'pattern' ? '加分句型' : '语法点')) + '</span></td>';
+}
+
+function kbExCell(it) {
+  var ex = it.example || '';
+  if (!ex) return '<td class="kb-ex">—</td>';
+  // 词典例句要**标出来**：用户默认以为每条例句都出自自己读过的原文，
+  // 混进几句无关的词典例句会让他复习时找不着语境。
+  if (it.ex_from === 'dict') {
+    return '<td class="kb-ex">' + esc(ex)
+      + '<div class="kb-ex-flag">词典例句（原文未出现该词形）</div></td>';
+  }
+  return '<td class="kb-ex">' + esc(ex) + '</td>';
+}
+
+function kbCardRow(it) {
+  var kind = KB.tab;
+  var key = it.lemma || it.name;
+  var tmp = document.createElement('tbody');   // 只是个 <tr> 的解析容器
+  var cols;
+  if (kind === 'words') {
+    cols = '<td class="kb-w">' + esc(it.surface || it.lemma) + '</td>'
+      + '<td class="kb-ph">' + esc(it.phonetic) + '</td>'
+      + '<td class="kb-pos">' + esc(it.pos) + '</td>'
+      + '<td class="kb-gloss">' + esc(it.gloss) + '</td>'
+      + kbExCell(it) + kbKindCell(it);
+  } else if (kind === 'patterns') {
+    var ul = (it.usage || []).length
+      ? '<ul class="kb-usage">' + it.usage.map(function (u) {
+          return '<li>' + esc(u) + '</li>'; }).join('') + '</ul>' : '—';
+    cols = '<td class="kb-name">' + esc(it.name) + '</td>'
+      + '<td>' + ul + '</td>'
+      + '<td>' + (it.imitation ? esc(it.imitation) : '—') + '</td>'
+      + kbExCell(it);
+  } else {
+    cols = '<td class="kb-name">' + esc(it.label || it.name) + '</td>'
+      + '<td class="kb-gloss">' + esc(it.explain) + '</td>'
+      + kbExCell(it);
+  }
+  var mark = document.createElement('td');
+  mark.appendChild(kbStatusBtns(it, kind, key));
+  var tr = document.createElement('tr');
+  if ((it.status || 'new') === 'known') tr.className = 'done';
+  // ⚠ 这些格子必须挂在 **<tr> 上**解析，不能挂到 <tbody> 或 <div> 上 ——
+  // 游离的 <td> 在非表格行上下文里会被 HTML 解析器**直接丢弃**：
+  // 实测有的行 8 格、有的行只剩 7 格，列宽整个乱掉、文字竖排，
+  // 而表头 th 的宽度完全正确。页面上不报任何错，纯粹靠肉眼才发现。
+  tmp.innerHTML = '<tr>' + cols + kbSrcCell(it) + '</tr>';
+  var cells = tmp.firstChild
+    ? Array.prototype.slice.call(tmp.firstChild.children) : [];
+  cells.forEach(function (td) { tr.appendChild(td); });
+  tr.appendChild(mark);
+  return tr;
+}
+
+function kbRenderCards() {
+  var d = KB.data;
+  var wrap = $('kbBody');
+  wrap.innerHTML = '';
+  if (!d || !d.items.length) {
+    var filtered = $('kbQ').value.trim() || $('kbStatus').value || $('kbLevel').value;
+    wrap.innerHTML = '<div class="kb-empty">'
+      + (filtered
+        ? '<b>没有匹配的卡片</b>换个关键词，或把筛选条件放宽。'
+        : '<b>这一本还是空的</b>在'
+          + '<a href="/" style="color:var(--accent)">生成手账</a>'
+          + '页面导入文章，生词 / 句型 / 语法会自动收进对应的一本。')
+      + '</div>';
+    kbMsg('');
+    return;
+  }
+  var t = document.createElement('table');
+  t.className = 'kb';
+  var head = KB_HEAD[KB.tab] || [];
+  var widths = KB_COLS[KB.tab] || [];
+  // colgroup 必须作为 table 的**第一个子元素**插入，不能塞进 innerHTML ——
+  // 否则浏览器可能把 <col> 挪到 table 外面，列宽全丢（列被压成竖排单字）。
+  var cg = document.createElement('colgroup');
+  widths.forEach(function (w) {
+    var c = document.createElement('col');
+    c.setAttribute('width', w + '%');   // 两条都给，兼容不同渲染器
+    c.style.width = w + '%';
+    cg.appendChild(c);
+  });
+  t.appendChild(cg);
+  var thead = document.createElement('thead');
+  var htr = document.createElement('tr');
+  head.forEach(function (h) {
+    var th = document.createElement('th');
+    th.textContent = h;
+    htr.appendChild(th);
+  });
+  thead.appendChild(htr);
+  t.appendChild(thead);
+  var tb = document.createElement('tbody');
+  d.items.forEach(function (it) { tb.appendChild(kbCardRow(it)); });
+  t.appendChild(tb);
+  wrap.appendChild(t);
+  kbMsg('共 ' + d.total + ' 条'
+    + (d.shown !== d.total ? '，当前筛选显示 ' + d.shown + ' 条' : '')
+    + '　·　未掌握 ' + (d.tally.new || 0)
+    + ' / 模糊 ' + (d.tally.fuzzy || 0)
+    + ' / 掌握 ' + (d.tally.known || 0));
+}
+
+function kbRenderDocs() {
+  var wrap = $('kbBody');
+  wrap.innerHTML = '';
+  if (!KB.docs.length) {
+    wrap.innerHTML = '<div class="kb-empty"><b>还没有历史手账</b>'
+      + '在<a href="/" style="color:var(--accent)">生成手账</a>页面导入一份材料，'
+      + '成品会自动收录到这里，可随时删除或重新导出。</div>';
+    kbMsg('');
+    return;
+  }
+  KB.docs.forEach(function (d) {
+    var row = document.createElement('div');
+    row.className = 'kb-doc';
+    var g = document.createElement('div');
+    g.className = 'g';
+    var c = d.counters || {};
+    g.innerHTML = '<div class="t">' + esc(d.title)
+      + '<span class="lv">' + esc(d.level_name || d.level_id) + '</span></div>'
+      + '<div class="m">' + fmtDateTime(d.updated_at) + ' · ' + d.word_count
+      + ' 词 · 标注 ' + c.words + ' 词 / 语法 ' + c.grammar + ' / 句型 ' + c.patterns
+      + (d.trans_mode && d.trans_mode !== 'off' ? ' · 带译文' : '') + '</div>';
+    var act = document.createElement('div');
+    act.className = 'a';
+    function mk(label, fn) {
+      var b = document.createElement('button');
+      b.className = 'ghost';
+      b.textContent = label;
+      b.onclick = fn;
+      act.appendChild(b);
+    }
+    var url = '/api/library/' + encodeURIComponent(d.id);
+    // 「打开」跳回制作页并载入这一篇。手账预览要占一整屏，
+    // 挤在列表下面既看不清也打不开导出工具栏，所以拆成独立页 + 跨页传参。
+    mk('打开', function () {
+      location.href = '/?doc=' + encodeURIComponent(d.id);
+    });
+    mk('导出 HTML', function () {
+      kbDownload(url + '/html', d.title + '-' + d.level_id + '.html');
+    });
+    mk('打印 PDF', function () { kbPrint(url + '/html', d.title); });
+    mk('删除', function () {
+      if (!confirm('删除「' + d.title + '」？\n\n'
+        + '这篇手账会被删除，它贡献的生词 / 句型 / 语法卡片也会一并从卡片本里移除。')) return;
+      api(url, { method: 'DELETE' }).then(function () {
+        kbMsg('已删除');
+        kbRefresh();
+      }).catch(function (e) { kbMsg(e.message); });
+    });
+    row.appendChild(g);
+    row.appendChild(act);
+    wrap.appendChild(row);
+  });
+  kbMsg('共 ' + KB.docs.length + ' 篇 · 点「打开」跳到制作页预览与导出');
+}
+
+function kbRender() {
+  var isDocs = KB.tab === 'docs';
+  $('kbBar').style.display = isDocs ? 'none' : 'flex';
+  Array.prototype.forEach.call($('kbTabs').children, function (b) {
+    b.className = b.getAttribute('data-k') === KB.tab ? 'on' : '';
+  });
+  if (isDocs) kbRenderDocs(); else kbRenderCards();
+}
+
+function kbLoad() {
+  if (KB.tab === 'docs') { kbRefresh(); return; }
+  var kind = KB.tab;
+  kbMsg('正在载入…');
+  api('/api/library/cards/' + kind + '?' + kbQuery()).then(function (d) {
+    // ⚠ 竞态：用户在慢请求回来之前切了页签/改了筛选。
+    // 不比对 kind 就渲染，会把「生词本」的数据画到「句型本」的页签上。
+    if (KB.tab !== kind) return;
+    KB.data = d;
+    kbRenderCards();
+  }).catch(function (e) {
+    if (KB.tab === kind) kbMsg(e.message);
+  });
+}
+
+function kbRefresh() {
+  if (KB.busy) return;
+  KB.busy = true;
+  api('/api/library').then(function (d) {
+    KB.docs = d.docs || [];
+    KB.stats = d.stats;
+    kbMetrics();
+    kbRender();
+    return api('/api/library/audit').then(function (a) {
+      KB.problems = a.problems || [];
+      kbMetrics();
+    }).catch(function () {});
+  }).catch(function (e) {
+    $('kbBody').innerHTML = '<div class="kb-empty">知识库读取失败：'
+      + esc(e.message) + '</div>';
+  }).then(function () { KB.busy = false; });
+}
+
+// ---- 导出（走接口而不是前端拼 blob：服务端那份才是权威，且带知识库路径） ----
+function kbDownload(url, name) {
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = name || 'export';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// 卡片本的 HTML 里带 [data-theme="dark"] 皮肤，屏幕上跟随主题；
+// 打印时服务端 CSS 的 @media print 会逐条收回白底纸面。
+function kbPrint(url) {
+  var f = document.createElement('iframe');
+  f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+  document.body.appendChild(f);
+  f.onload = function () {
+    setTimeout(function () {
+      try {
+        var d = f.contentDocument;
+        if (d && document.documentElement.getAttribute('data-theme') === 'dark') {
+          d.documentElement.setAttribute('data-theme', 'dark');
+        }
+        f.contentWindow.focus();
+        f.contentWindow.print();
+      }
+      catch (e) { kbMsg('打印失败，请改用「导出 HTML」后手动打印'); }
+      setTimeout(function () { document.body.removeChild(f); }, 60000);
+    }, 400);
+  };
+  f.src = url;
+}
+
+$('kbExportHtml').onclick = function () {
+  if (KB.tab === 'docs') { kbMsg('请先切到生词本 / 句型本 / 语法本'); return; }
+  kbDownload('/api/library/cards/' + KB.tab + '/export.html?' + kbQuery(),
+             'studypad-' + KB.tab + '.html');
+  kbMsg('已导出可打印 HTML，用浏览器打开后 Ctrl+P 可存成 PDF');
+};
+
+$('kbExportCsv').onclick = function () {
+  if (KB.tab === 'docs') { kbMsg('请先切到生词本 / 句型本 / 语法本'); return; }
+  kbDownload('/api/library/cards/' + KB.tab + '/export.csv?' + kbQuery(),
+             'studypad-' + KB.tab + '.csv');
+  kbMsg('已导出 CSV（Excel 可直接打开）');
+};
+
+var _debounce = null;
+$('kbQ').oninput = function () {
+  // 搜索要防抖：每敲一下就发一次请求，大库上会把服务打满，
+  // 而且慢响应回来还会盖掉后一次的结果。
+  clearTimeout(_debounce);
+  _debounce = setTimeout(kbLoad, 220);
+};
+$('kbStatus').onchange = kbLoad;
+$('kbLevel').onchange = kbLoad;
+$('kbSort').onchange = kbLoad;
+
+Array.prototype.forEach.call($('kbTabs').children, function (b) {
+  b.onclick = function () {
+    KB.tab = b.getAttribute('data-k');
+    kbRender();
+    if (KB.tab !== 'docs') kbLoad();
+  };
+});
+
+// ---------------- 启动
+api('/api/levels').then(function (d) {
+  var sel = $('kbLevel');
+  (d.levels || []).forEach(function (l) {
+    var o = document.createElement('option');
+    o.value = l.id;
+    o.textContent = l.name;
+    sel.appendChild(o);
+  });
+}).catch(function () {});
+
+kbRefresh();
+
+// URL 带 ?tab=words 时直接落到生词本（从别处深链进来的场景）
+(function () {
+  var m = /[?&]tab=([a-z]+)/.exec(location.search);
+  if (m && KB_TABS.some(function (t) { return t.k === m[1]; })) {
+    KB.tab = m[1];
+    kbRender();
+    if (KB.tab !== 'docs') kbLoad();
+  }
+})();
+</script>
+</body>
+</html>

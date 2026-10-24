@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StudyPad · 英语精读手账</title>
+<meta name="theme-color" content="#f6f7f9">
+<script>
+/* 防闪烁：必须在样式表**之前**同步执行。
+   放在其后会看到「先白一下再变黑」—— 那个闪一下在夜间非常刺眼，
+   等于功能做了但体验坏了。这也是为什么它不能挪进 common.js：
+   那个文件是普通 <script src>，要等下载+解析完才跑，来不及。 */
+(function(){var t=null;
+try{t=localStorage.getItem('studypad.theme')}catch(e){}
+/* ?theme=dark / ?theme=light 可以临时指定并**记住**。
+   两个用途：① 分享「看这个版本的暗色长什么样」的链接；
+            ② 自动化截图 —— 预置 localStorage 的路子受同源限制很难走通。
+   非法值一律当没给，不会把页面钉死在某个主题上。 */
+try{var q=new URLSearchParams(location.search).get('theme');
+if(q==='dark'||q==='light'){t=q;localStorage.setItem('studypad.theme',t);}}catch(e){}
+if(t!=='dark'&&t!=='light')t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<link rel="stylesheet" href="/static/common.css">
+<style>
+*{box-sizing:border-box}
+main{max-width:1180px;margin:0 auto;padding:22px 26px 90px}
+
+.levels{display:flex;flex-wrap:wrap;gap:9px}
+.lv{border:1px solid var(--border);background:var(--card);border-radius:10px;padding:9px 15px;cursor:pointer;
+  transition:.15s;text-align:left;min-width:132px}
+.lv b{display:block;font-size:13.5px}
+.lv s{display:block;text-decoration:none;color:var(--ink2);font-size:11.5px;margin-top:2px}
+.lv:hover{border-color:var(--border-strong)}
+.lv.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent) inset}
+.lv.on b{color:var(--accent)}
+
+.drop{border:2px dashed var(--border-strong);border-radius:12px;padding:26px;text-align:center;cursor:pointer;
+  transition:.15s;background:var(--surface-3)}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop b{display:block;font-size:14px;margin-bottom:4px}
+.drop small{color:var(--ink2)}
+
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:104px}
+.stat u{display:block;text-decoration:none;font-size:20px;font-weight:700;line-height:1.25}
+.stat s{display:block;text-decoration:none;font-size:11.5px;color:var(--ink2)}
+.stat.a u{color:var(--num-amber)}.stat.b u{color:var(--num-red)}.stat.c u{color:var(--num-blue)}
+.stat.d u{color:var(--num-indigo)}.stat.e u{color:var(--num-crimson)}
+
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:14px;
+  padding-bottom:14px;border-bottom:1px dashed var(--border)}
+.frame{width:100%;height:74vh;border:1px solid var(--border);border-radius:12px;background:var(--frame)}
+
+/* ---- 考点依据面板 ---- */
+.ep{margin-top:14px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface-3)}
+.ep-tabs{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--border);background:var(--card)}
+.ep-tabs button{background:none;border:none;padding:9px 14px;font-size:12.5px;cursor:pointer;
+  color:var(--ink2);font-family:inherit;border-bottom:2px solid transparent}
+.ep-tabs button:hover{background:var(--inset)}
+.ep-tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:650}
+.ep-body{padding:13px 15px;max-height:420px;overflow:auto}
+.ep-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:11px}
+.ep-chip{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:3px 9px;
+  font-size:11.5px;color:var(--ink2)}
+.ep-chip b{color:var(--ink);font-weight:650}
+.ep-item{padding:9px 0;border-top:1px dashed var(--border)}
+.ep-item:first-child{border-top:none;padding-top:0}
+.ep-item b{font-size:13px;font-weight:650}
+.ep-item p{margin:3px 0 0;color:var(--ink2);font-size:12.5px;line-height:1.65}
+.ep-item ul{margin:4px 0 0;padding-left:17px;color:var(--ink2);font-size:12.5px;line-height:1.7}
+.ep-src{display:inline-block;margin-left:5px;font-size:10.5px;padding:1px 6px;border-radius:5px;
+  background:var(--badge-gray-bg);color:var(--badge-gray-ink);cursor:help;vertical-align:1px;white-space:nowrap}
+.ep-src.official{background:var(--badge-green-bg);color:var(--badge-green-ink)}
+.ep-src.semi_official{background:var(--badge-amber-bg);color:var(--badge-amber-ink)}
+.ep-src.secondary{background:var(--badge-purple-bg);color:var(--badge-purple-ink)}
+.ep-tag{display:inline-block;margin-left:5px;font-size:10.5px;padding:1px 6px;border-radius:5px;
+  background:var(--badge-plain-bg);color:var(--badge-plain-ink);vertical-align:1px}
+.ep-src-row{padding:9px 0;border-top:1px dashed var(--border);font-size:12.5px}
+.ep-src-row:first-child{border-top:none;padding-top:0}
+.ep-src-row b{font-size:12.5px}
+.ep-src-row .meta{color:var(--ink2);font-size:11.5px;margin-top:2px}
+.ep-link{color:var(--num-indigo);text-decoration:none;word-break:break-all}
+.ep-link:hover{text-decoration:underline}
+.ep-loading{color:var(--ink2);font-size:12.5px}
+.ep-note{color:var(--ink2);font-size:11.5px;margin-bottom:9px}
+.ep-warn{background:var(--note-bg);border:1px solid var(--note-border);border-radius:7px;padding:7px 10px;
+  font-size:11.5px;color:var(--note-ink);margin-bottom:10px}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.4);
+  border-top-color:var(--on-accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ---- 标注进度 ---- */
+.prog{margin-top:14px;border:1px solid var(--border);border-radius:10px;padding:13px 15px;background:var(--surface-3)}
+.prog-top{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}
+.prog-stage{flex:1;font-size:13.5px;font-weight:650;color:var(--ink)}
+.prog-pct{font-size:14px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.prog-track{height:7px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prog-bar{height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent),var(--num-crimson));transition:width .35s ease}
+.prog-note{font-size:11.5px;color:var(--ink2);margin-top:8px;min-height:17px;
+  font-variant-numeric:tabular-nums}
+.prog-meta{font-size:11.5px;color:var(--ink2);margin-top:3px}
+.prog.waiting .prog-bar{background:repeating-linear-gradient(45deg,var(--warn) 0,var(--warn) 9px,var(--note-bg) 9px,var(--note-bg) 18px);
+  animation:progMove 1s linear infinite}
+.prog.waiting .prog-pct{color:var(--warn)}
+.prog.waiting .prog-meta{color:var(--warn)}
+.prog.done .prog-bar{background:linear-gradient(90deg,var(--ok),var(--hint-ok))}
+.prog.done .prog-pct{color:var(--ok)}
+.prog.bad .prog-bar{background:var(--border-strong);transition:none}
+.prog.bad .prog-pct{color:var(--danger)}
+@keyframes progMove{to{background-position:36px 0}}
+
+</style>
+</head>
+<body data-page="home">
+
+<header>
+  <div class="logo"><a href="/">Study<span>Pad</span></a></div>
+  <div class="slogan">英语精读手账</div>
+  <div class="nav">
+    <a href="/" data-p="home">生成手账</a>
+    <a href="/library" data-p="library">知识库</a>
+  </div>
+  <div class="spacer"></div>
+  <button class="theme-btn" id="btnTheme" data-mode="auto" title="切换主题" aria-label="切换主题">
+      <span class="ic ic-sun" aria-hidden="true">☀</span><span class="ic ic-moon" aria-hidden="true">☾</span>
+    </button>
+  <button class="ghost" id="btnReset">重新开始</button>
+</header>
+
+<main>
+  <div class="card">
+    <h2><i></i>第一步 · 选择你的目标水平</h2>
+    <div class="levels" id="levels"></div>
+    <div class="hint" id="lvHint"></div>
+
+    <!-- 考点面板默认**折叠**（2026-10-15 拆页时改的）。
+         此前它是展开的，六个页签的内容直接顶在首屏，
+         把「上传材料」这个更主要的下一步挤到了屏幕外 ——
+         层级上它是「了解」，不是「操作」。折叠后首屏只剩
+         「选水平 / 传材料」两件必须做的事。 -->
+    <details id="epDetails">
+      <summary><span id="epSummary">查看这个等级的考点依据与来源</span></summary>
+      <div class="ep" id="epBox">
+        <div class="ep-tabs" id="epTabs"></div>
+        <div class="ep-body" id="epBody"><div class="ep-loading">正在载入考点依据…</div></div>
+      </div>
+      <div class="hint">以上考点均标注来源；鼠标悬停徽章可看来源全称，切到「来源依据」页可查链接。</div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2><i></i>第二步 · 上传材料</h2>
+    <div class="drop" id="drop">
+      <b>点击选择文件，或把文件拖到这里</b>
+      <small>文字层 PDF · 扫描件 PDF · 拍照/截图（PNG/JPG）· DOCX · Markdown · TXT</small>
+    </div>
+    <input type="file" id="file" class="hidden"
+           accept=".pdf,.docx,.doc,.md,.markdown,.txt,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff">
+    <div class="hint" id="fileName"></div>
+    <div class="hint" id="ocrHint"></div>
+
+    <details>
+      <summary>或者：直接粘贴英文文本</summary>
+      <textarea id="pasteBox" placeholder="把英文文章粘到这里……"></textarea>
+      <div class="row mt">
+        <button class="ghost" id="btnSample">载入示例文章</button>
+        <button class="ghost" id="btnPaste">用这段文本生成</button>
+      </div>
+    </details>
+
+    <details>
+      <summary>大模型接入（可选 · 不配置也能用，全部由本地规则引擎标注）</summary>
+      <div class="grid">
+        <div>
+          <label class="f">服务商</label>
+          <select id="llmProvider"></select>
+        </div>
+        <div>
+          <label class="f">模型名</label>
+          <input type="text" id="llmModel" placeholder="留空用默认">
+        </div>
+        <div>
+          <label class="f">API Key</label>
+          <input type="password" id="llmKey" placeholder="sk-...">
+        </div>
+        <div>
+          <label class="f">Base URL</label>
+          <input type="text" id="llmBase" placeholder="留空用默认">
+        </div>
+      </div>
+      <div class="row mt">
+        <button class="ghost" id="btnTest">测试连接</button>
+        <button class="ghost" id="btnForget">清除已保存配置</button>
+        <span class="hint" id="llmMsg"></span>
+      </div>
+      <div class="hint" id="llmSaved"></div>
+      <label class="hint" style="display:flex;gap:7px;align-items:center;margin-top:10px">
+        <input type="checkbox" id="useLlm" style="width:auto"> 开启后用模型重写语法讲解（更自然，但需要 Key）
+      </label>
+    </details>
+
+    <details open>
+      <summary>中文译文（可选 · 由本机翻译模型完成，不消耗云端额度）</summary>
+      <label class="hint" style="display:flex;gap:7px;align-items:center">
+        <input type="checkbox" id="useTrans" style="width:auto"> 生成中文译文：把英语原文自然流利地译出来
+      </label>
+      <div class="row mt">
+        <div style="min-width:210px">
+          <label class="f">译文版式</label>
+          <select id="transMode">
+            <option value="sentence">逐句对照（原文一行 / 译文一行）</option>
+            <option value="paragraph">整段附译（段落后附译文）</option>
+          </select>
+        </div>
+        <button class="ghost" id="btnTransCache">清除译文缓存</button>
+        <span class="hint" id="transMsg"></span>
+      </div>
+      <div class="hint" id="transHint"></div>
+
+      <details>
+        <summary>翻译模型设置（默认本机 Ollama · hy-mt2:1.8b，不需要 Key）</summary>
+        <div class="grid">
+          <div>
+            <label class="f">翻译服务</label>
+            <select id="mtProvider"></select>
+          </div>
+          <div>
+            <label class="f">模型名</label>
+            <input type="text" id="mtModel" placeholder="hy-mt2:1.8b">
+          </div>
+          <div>
+            <label class="f">API Key</label>
+            <input type="password" id="mtKey" placeholder="本地模型不需要">
+          </div>
+          <div>
+            <label class="f">Base URL</label>
+            <input type="text" id="mtBase" placeholder="http://localhost:11434/v1">
+          </div>
+        </div>
+        <div class="row mt">
+          <button class="ghost" id="btnMtTest">测试翻译模型</button>
+          <span class="hint" id="mtMsg"></span>
+        </div>
+        <div class="hint" id="mtSaved"></div>
+        <label class="hint" style="display:flex;gap:7px;align-items:center;margin-top:8px">
+          <input type="checkbox" id="mtEnabled" style="width:auto" checked>
+          翻译交给这个模型（关掉则退回用上面的「大模型」翻译：更慢，且按 token 计费）
+        </label>
+        <label class="hint" style="display:flex;gap:7px;align-items:center">
+          <input type="checkbox" id="mtFallback" style="width:auto" checked>
+          它连不上时自动退回大模型翻译（不勾选则宁可这一篇不出译文，也不偷偷花额度）
+        </label>
+        <div class="hint">
+          为什么要分开：翻译是逐句转写，一篇 20 页 PDF 就是几百句，交给云端大模型既慢又贵；
+          而语法讲解需要真正的语言能力。分开后云端额度只花在讲解上。
+          实测同一篇 23 句文章：本机模型 3.3 秒翻完。
+        </div>
+      </details>
+    </details>
+
+    <div class="prog hidden" id="progBox">
+      <div class="prog-top">
+        <span class="prog-stage" id="progStage">正在提交材料…</span>
+        <span class="prog-pct" id="progPct">0%</span>
+      </div>
+      <div class="prog-track"><div class="prog-bar" id="progBar"></div></div>
+      <div class="prog-note" id="progNote"></div>
+      <div class="prog-meta" id="progMeta"></div>
+    </div>
+
+    <div class="row mt">
+      <button class="primary" id="btnGo" disabled>生成手账</button>
+      <span class="hint" id="goHint">请先选择文件或粘贴文本</span>
+    </div>
+    <div class="err" id="err"></div>
+  </div>
+
+  <div class="card hidden" id="resultCard">
+    <h2><i></i>第三步 · 手账预览与导出</h2>
+    <div class="note-bar" id="llmNote"></div>
+    <div class="hint" id="parseNote"></div>
+    <div class="note-bar hidden" id="transNote"></div>
+    <div class="stats" id="stats"></div>
+    <div class="toolbar">
+      <button class="primary" id="btnPdf">导出 PDF（一键打印）</button>
+      <button class="ghost" id="btnHtml">下载手账 HTML</button>
+      <button class="ghost" id="btnStandalone">在新窗口打开</button>
+      <span style="flex:1"></span>
+      <span class="hint" id="regenHint"></span>
+    </div>
+    <iframe class="frame" id="frame"></iframe>
+  </div>
+
+  </main>
+
+<script src="/static/common.js"></script>
+<script>
+var S = { levels: [], level: 'cet4', file: null, text: null, title: '', hb: null, presets: [] };
+function showErr(m) { var e = $('err'); e.textContent = m; e.style.display = 'block'; }
+function clearErr() { $('err').style.display = 'none'; }
+
+// ---------------- 初始化
+api('/api/levels').then(function (d) {
+  S.levels = d.levels;
+  S.formats = d.formats || [];
+  $('levels').innerHTML = d.levels.map(function (l) {
+    return '<button class="lv" data-id="' + l.id + '"><b>' + l.name + '</b><s>'
+      + l.vocab_note + ' · ' + l.tagline + '</s></button>';
+  }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.lv'), function (b) {
+    b.onclick = function () { setLevel(b.getAttribute('data-id')); };
+  });
+  setLevel('cet4');
+  renderOcrHint(d.ocr);
+  refreshTransStatus();
+});
+
+function shortEngine(n) {
+  if (!n) return '未知';
+  var p = String(n).split('.');
+  return p[p.length - 1];
+}
+
+function renderOcrHint(oc) {
+  oc = oc || {};
+  var h = $('ocrHint');
+  if (oc.available) {
+    h.className = 'hint ok';
+    h.textContent = 'OCR 引擎就绪（' + shortEngine(oc.engine) + '，Python '
+      + (oc.python || '?') + '）· 扫描件 PDF 与拍照/截图可直接上传识别';
+  } else {
+    h.className = 'hint warn';
+    h.textContent = 'OCR 不可用 —— 扫描件与图片将无法解析（' + (oc.message || '未知原因')
+      + '）。文字层 PDF / DOCX / Markdown / TXT 不受影响。';
+  }
+}
+
+// ---------------- 中文译文状态
+// 翻译没有规则兜底：没配模型就明确说不可用，不给假译文。
+function refreshTransStatus() {
+  return api('/api/translate/status').then(function (d) {
+    S.trans = d;
+    var h = $('transHint');
+    h.className = d.available ? 'hint ok' : 'hint warn';
+    h.textContent = d.message + (d.available && d.cache_entries
+      ? '（译文缓存 ' + d.cache_entries + ' 句）' : '');
+    return d;
+  }).catch(function () {});
+}
+
+api('/api/llm/presets').then(function (d) {
+  S.presets = d.presets;
+  S.mtPresets = d.mt_presets || [];
+  $('llmProvider').innerHTML = d.presets.map(function (p) {
+    return '<option value="' + p.id + '">' + p.label + '</option>';
+  }).join('');
+  $('llmProvider').value = 'deepseek';
+  // 翻译模型是独立的一套下拉 —— 两套模型的作用不可互换，
+  // 共用一个列表会让人把 deepseek 填进翻译、或把 1.8B 填进讲解
+  $('mtProvider').innerHTML = S.mtPresets.map(function (p) {
+    return '<option value="' + p.id + '">' + p.label + '</option>';
+  }).join('');
+  // 拉一次已保存的配置：老用户打开就是配好的状态，不需要重新填 Key
+  return api('/api/llm/config');
+}).then(function (d) {
+  S.llmSaved = d || {};
+  applyLlmSaved(S.llmSaved);
+  applyMtSaved(S.llmSaved);
+}).catch(function () { /* 配置读取失败不影响使用 */ });
+
+// ---------------- 大模型配置（本地持久化）
+function collectLlm() {
+  return {
+    provider: $('llmProvider').value,
+    base_url: $('llmBase').value,
+    model: $('llmModel').value,
+    api_key: $('llmKey').value,
+    enabled: $('useLlm').checked
+  };
+}
+
+function renderLlmSaved(c) {
+  var el = $('llmSaved');
+  if (!c || !c.has_key) {
+    el.className = 'hint';
+    el.textContent = '尚未保存配置。填好 Key 后点「测试连接」，通过即自动保存，下次打开不用再填。';
+    return;
+  }
+  el.className = 'hint ok';
+  el.textContent = '已保存：' + (c.provider || '未指定') + '（' + c.key_hint + '）'
+    + '，下次打开自动生效 · 配置文件：' + c.path;
+}
+
+function applyLlmSaved(c) {
+  if (!c) return;
+  if (c.provider) $('llmProvider').value = c.provider;
+  $('llmBase').value = c.base_url || '';
+  $('llmModel').value = c.model || '';
+  $('useLlm').checked = !!c.enabled;
+  $('llmKey').value = '';          // Key 已存服务端，输入框保持留空
+  $('llmKey').placeholder = c.has_key
+    ? '已保存 ' + c.key_hint + ' —— 留空继续使用，填新的则覆盖'
+    : 'sk-...（点「测试连接」后自动保存到本机）';
+  renderLlmSaved(c);
+}
+
+function saveLlm(cfg) {
+  return api('/api/llm/config', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cfg || collectLlm())
+  }).then(function (d) {
+    S.llmSaved = d;
+    applyLlmSaved(d);
+    return d;
+  });
+}
+
+function refreshLlmSaved() {
+  return api('/api/llm/config').then(function (d) {
+    S.llmSaved = d;
+    applyLlmSaved(d);
+    applyMtSaved(d);
+  }).catch(function () {});
+}
+
+// ---------------- 翻译模型（与上面的「大模型」是两套独立配置）
+//
+// 为什么不复用下面那套字段：两个模型的作用不可互换 ——
+// 讲解要的是语言能力（云端大模型），翻译要的是便宜和快（本机 1.8B）。
+// 共用一个下拉框迟早会有人把 deepseek 填进翻译，把这次的优化白做。
+function collectMt() {
+  return {
+    mt_provider: $('mtProvider').value,
+    mt_base_url: $('mtBase').value,
+    mt_model: $('mtModel').value,
+    mt_api_key: $('mtKey').value,
+    mt_enabled: $('mtEnabled').checked,
+    mt_fallback: $('mtFallback').checked
+  };
+}
+
+function renderMtSaved(c) {
+  var el = $('mtSaved');
+  var model = (c && c.mt_model) || 'hy-mt2:1.8b';
+  var where = (c && c.mt_base_url) || 'http://localhost:11434/v1';
+  var on = !c || c.mt_enabled === undefined ? true : !!c.mt_enabled;
+  var fb = !c || c.mt_fallback === undefined ? true : !!c.mt_fallback;
+  el.className = on ? 'hint ok' : 'hint';
+  el.textContent = '翻译模型：' + model + ' @ ' + where
+    + (c && c.mt_has_key ? '（Key ' + c.mt_key_hint + '）' : '')
+    + ' · ' + (on ? '已启用' : '已关闭（翻译会走上面的大模型）')
+    + ' · 连不上时' + (fb ? '退回大模型' : '不出译文');
+}
+
+function applyMtSaved(c) {
+  if (!c) return;
+  if (c.mt_provider) $('mtProvider').value = c.mt_provider;
+  $('mtBase').value = c.mt_base_url || '';
+  $('mtModel').value = c.mt_model || '';
+  $('mtEnabled').checked = c.mt_enabled === undefined ? true : !!c.mt_enabled;
+  $('mtFallback').checked = c.mt_fallback === undefined ? true : !!c.mt_fallback;
+  $('mtKey').value = '';           // Key 已存服务端，输入框保持留空
+  $('mtKey').placeholder = c.mt_has_key
+    ? '已保存 ' + c.mt_key_hint + ' —— 留空继续使用'
+    : '本地模型不需要';
+  renderMtSaved(c);
+}
+
+function saveMt() {
+  return api('/api/llm/config', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(collectMt())
+  }).then(function (d) {
+    S.llmSaved = d;
+    applyMtSaved(d);
+    return d;
+  });
+}
+
+// 切换服务商时把该预设的 Base URL / 模型名填进输入框。
+// 必须这样做：后端按「界面上填的值」解析配置，如果只换了下拉框、
+// 输入框里还留着上一个服务商的模型名，用户会以为自己换成了 7B 其实没有。
+$('mtProvider').onchange = function () {
+  var p = (S.mtPresets || []).filter(function (x) { return x.id === $('mtProvider').value; })[0];
+  if (!p) return;
+  $('mtBase').value = p.base_url || '';
+  $('mtModel').value = p.model || '';
+};
+
+$('btnMtTest').onclick = function () {
+  $('mtMsg').textContent = '测试中…（本机模型通常 1 秒内返回）';
+  $('mtMsg').style.color = '';
+  api('/api/llm/test', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ target: 'mt' }, collectMt()))
+  }).then(function (d) {
+    if (!d.ok) {
+      $('mtMsg').textContent = '连接失败：' + d.message;
+      $('mtMsg').style.color = '#b91c1c';
+      return;
+    }
+    $('mtMsg').textContent = '连接成功：' + (d.model || '') + ' —— ' + d.message;
+    $('mtMsg').style.color = '#0f6e56';
+    // 测通就落盘（与「测试连接」同一套习惯）
+    return saveMt().then(function () {
+      $('mtMsg').textContent = '连接成功并已保存：' + (d.model || '') + ' —— ' + d.message;
+    });
+  }).catch(function (e) {
+    $('mtMsg').textContent = '失败：' + e.message;
+    $('mtMsg').style.color = '#b91c1c';
+  });
+};
+
+// 两个开关改动即保存：它们不影响「模型是否可用」，没必要逼用户先点测试连接
+$('mtEnabled').onchange = function () { saveMt().catch(function () {}); };
+$('mtFallback').onchange = function () { saveMt().catch(function () {}); };
+
+function setLevel(id) {
+  S.level = id;
+  Array.prototype.forEach.call(document.querySelectorAll('.lv'), function (b) {
+    b.classList.toggle('on', b.getAttribute('data-id') === id);
+  });
+  var lv = S.levels.filter(function (x) { return x.id === id; })[0];
+  if (lv) $('lvHint').textContent = '当前：' + lv.name + '（' + lv.vocab_note + '）— '
+    + lv.tagline + '。每千词标 ' + lv.highlight_per_1000 + ' 个本级考纲词、'
+    + lv.circle_per_1000 + ' 个超纲常见词。';
+  // 低等级默认带译文（高中/四级），高等级默认不带；用户手动改过就不再覆盖
+  if (lv && !S.transTouched) $('useTrans').checked = !!lv.show_translation;
+  loadExamPoints(id);
+  if (S.hb && (S.file || S.text)) regen();
+}
+
+$('useTrans').onchange = function () {
+  S.transTouched = true;
+  if (S.hb && (S.file || S.text)) regen();
+};
+$('transMode').onchange = function () {
+  if (S.hb && (S.file || S.text)) regen();
+};
+
+// ---------------- 考点依据面板
+// 数据全部来自后端考点知识库（backend/app/exam_points.py），每条都带来源。
+// 这里只负责呈现，绝不在这里写死任何考点 —— 否则「有据可查」就断了。
+var EP_TABS = [
+  { k: 'vocabulary',     t: '词汇' },
+  { k: 'grammar',        t: '语法' },
+  { k: 'question_types', t: '题型与分值' },
+  { k: 'high_frequency', t: '高频考点' },
+  { k: 'focus',          t: '考查重点' },
+  { k: 'sources',        t: '来源依据' }
+];
+var EP = { level: '', data: null, sources: [], srcMap: {}, tab: 'vocabulary', cache: {} };
+
+function srcBadges(ids) {
+  if (!ids || !ids.length) return '';
+  return ids.map(function (id) {
+    var s = EP.srcMap[id];
+    if (!s) return '<span class="ep-src">' + esc(id) + '</span>';
+    return '<span class="ep-src ' + esc(s.tier) + '" title="'
+      + esc(s.title + ' —— ' + s.publisher + '（访问日期 ' + s.accessed + '）')
+      + '">' + esc(s.short) + '</span>';
+  }).join('');
+}
+
+function epRenderTabs() {
+  $('epTabs').innerHTML = EP_TABS.map(function (x) {
+    return '<button data-t="' + x.k + '" class="' + (EP.tab === x.k ? 'on' : '') + '">'
+      + x.t + '</button>';
+  }).join('');
+  Array.prototype.forEach.call($('epTabs').querySelectorAll('button'), function (b) {
+    b.onclick = function () { EP.tab = b.getAttribute('data-t'); epRenderTabs(); epRenderBody(); };
+  });
+}
+
+function epRenderBody() {
+  var p = EP.data;
+  if (!p) { $('epBody').innerHTML = '<div class="ep-loading">暂无数据</div>'; return; }
+  var h = '';
+  var prof = p.profile || {};
+
+  if (EP.tab === 'vocabulary') {
+    var v = p.vocabulary || {};
+    h += '<div class="ep-meta">'
+      + '<span class="ep-chip">目标词量 <b>' + esc(v.target) + '</b> 词</span>'
+      + srcBadges(v.src) + '</div>';
+    h += '<div class="ep-note">' + esc(v.basis) + '</div>';
+    (v.tiers || []).forEach(function (t) {
+      h += '<div class="ep-item"><b>' + esc(t.name) + '</b><p>' + esc(t.detail) + '</p></div>';
+    });
+    if ((v.focus || []).length) {
+      h += '<div class="ep-item"><b>考查侧重</b><ul>'
+        + v.focus.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('')
+        + '</ul></div>';
+    }
+
+  } else if (EP.tab === 'grammar') {
+    var g = p.grammar || {};
+    h += '<div class="ep-meta"><span class="ep-chip">共 <b>'
+      + (g.items || []).length + '</b> 个考点块</span></div>';
+    if (g.note) h += '<div class="ep-note">' + esc(g.note) + '</div>';
+    (g.items || []).forEach(function (it) {
+      h += '<div class="ep-item"><b>' + esc(it.name) + '</b>' + srcBadges(it.src)
+        + '<p>' + esc(it.detail) + '</p></div>';
+    });
+    if ((g.cross_check || []).length) {
+      h += '<div class="ep-note" style="margin-top:10px">结构交叉校验：'
+        + g.cross_check.map(esc).join('、') + '（仅比对是否遗漏，未引用原文）</div>';
+    }
+
+  } else if (EP.tab === 'question_types') {
+    var q = p.question_types || {};
+    h += '<div class="ep-meta"><span class="ep-chip">满分 <b>'
+      + esc(prof.score_scale) + '</b></span><span class="ep-chip">时长 <b>'
+      + esc(prof.duration) + '</b></span><span class="ep-chip">题量 <b>'
+      + esc(prof.paper_count) + '</b></span></div>';
+    if (q.note) h += '<div class="ep-note">' + esc(q.note) + '</div>';
+    if (prof.note) h += '<div class="ep-warn">' + esc(prof.note) + '</div>';
+    (q.items || []).forEach(function (it) {
+      h += '<div class="ep-item"><b>' + esc(it.section) + ' · ' + esc(it.name) + '</b>'
+        + srcBadges(it.src);
+      if (it.effective_until) h += '<span class="ep-tag">已于 ' + esc(it.effective_until) + ' 起失效</span>';
+      var bits = [];
+      if (it.items && it.items !== '—') bits.push('题量 ' + it.items);
+      if (it.score && it.score !== '—') bits.push('分值 ' + it.score);
+      if (it.time) bits.push(it.time);
+      if (bits.length) h += '<p><b style="font-weight:600">' + esc(bits.join('　·　')) + '</b></p>';
+      if (it.detail) h += '<p>' + esc(it.detail) + '</p>';
+      h += '</div>';
+    });
+
+  } else if (EP.tab === 'high_frequency') {
+    (p.high_frequency || []).forEach(function (t) {
+      h += '<div class="ep-item"><b>' + esc(t.topic) + '</b>' + srcBadges(t.src)
+        + '<ul>' + (t.points || []).map(function (x) {
+          return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
+    });
+
+  } else if (EP.tab === 'focus') {
+    (p.focus || []).forEach(function (f) {
+      h += '<div class="ep-item"><b>' + esc(f.title) + '</b>' + srcBadges(f.src)
+        + '<p>' + esc(f.detail) + '</p></div>';
+    });
+
+  } else if (EP.tab === 'sources') {
+    h += '<div class="ep-note">共 ' + EP.sources.length
+      + ' 条来源。official = 考试主办方或教育主管部门原文，可信度最高；'
+      + 'semi_official = 权威教研机构对官方口径的转述。</div>';
+    EP.sources.forEach(function (s) {
+      var tierName = { official: '官方', semi_official: '教研转述', secondary: '第三方' }[s.tier] || s.tier;
+      h += '<div class="ep-src-row"><b>' + esc(s.title) + '</b>'
+        + '<span class="ep-src ' + esc(s.tier) + '">' + esc(tierName) + '</span>'
+        + '<div class="meta">' + esc(s.publisher) + '　·　访问日期 ' + esc(s.accessed) + '</div>'
+        + '<div class="meta">可查证：' + esc(s.establishes) + '</div>'
+        + (s.note ? '<div class="meta">注：' + esc(s.note) + '</div>' : '')
+        + '<div class="meta"><a class="ep-link" href="' + esc(s.url)
+        + '" target="_blank" rel="noopener">' + esc(s.url) + '</a></div></div>';
+    });
+  }
+  $('epBody').innerHTML = h;
+}
+
+function loadExamPoints(id) {
+  EP.tab = 'vocabulary';
+  if (EP.cache[id]) {
+    EP.data = EP.cache[id].point; EP.sources = EP.cache[id].sources;
+    EP.srcMap = {}; EP.sources.forEach(function (s) { EP.srcMap[s.id] = s; });
+    epRenderTabs(); epRenderBody(); return;
+  }
+  $('epBody').innerHTML = '<div class="ep-loading">正在载入考点依据…</div>';
+  api('/api/exam-points/' + encodeURIComponent(id)).then(function (d) {
+    EP.cache[id] = d;
+    if (S.level !== id) return;      // 用户已经切走了，丢弃这次结果
+    EP.data = d.point; EP.sources = d.sources;
+    EP.srcMap = {}; EP.sources.forEach(function (s) { EP.srcMap[s.id] = s; });
+    epRenderTabs(); epRenderBody();
+  }).catch(function (e) {
+    $('epBody').innerHTML = '<div class="ep-loading">考点依据载入失败：' + esc(e.message) + '</div>';
+  });
+}
+
+// ---------------- 文件
+var drop = $('drop'), fileInput = $('file');
+drop.onclick = function () { fileInput.click(); };
+drop.ondragover = function (e) { e.preventDefault(); drop.classList.add('over'); };
+drop.ondragleave = function () { drop.classList.remove('over'); };
+drop.ondrop = function (e) {
+  e.preventDefault(); drop.classList.remove('over');
+  if (e.dataTransfer.files.length) pick(e.dataTransfer.files[0]);
+};
+fileInput.onchange = function () { if (fileInput.files.length) pick(fileInput.files[0]); };
+
+var OCR_IMAGE_EXT = ['.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tif', '.tiff'];
+
+function pick(f) {
+  S.file = f; S.text = null; clearErr();
+  var ext = (f.name.match(/\.[^.]+$/) || [''])[0].toLowerCase();
+  var tail = '';
+  if (OCR_IMAGE_EXT.indexOf(ext) >= 0) tail = ' · 图片，将走 OCR 识别';
+  else if (ext === '.pdf') tail = ' · PDF（无文字层时自动切 OCR）';
+  $('fileName').textContent = '已选择：' + f.name + '（' + (f.size / 1024).toFixed(0)
+    + ' KB）' + tail;
+  $('btnGo').disabled = false;
+  $('goHint').textContent = '材料已就绪，点击「生成手账」开始标注';
+}
+
+$('btnSample').onclick = function () {
+  api('/api/sample').then(function (d) {
+    $('pasteBox').value = d.text;
+    S.title = d.title;
+    $('pasteBox').parentElement.open = true;
+  });
+};
+
+$('btnPaste').onclick = function () {
+  var t = $('pasteBox').value.trim();
+  if (!t) { showErr('文本框是空的'); return; }
+  S.text = t; S.file = null; S.title = '粘贴的文本'; clearErr();
+  $('fileName').textContent = '已粘贴文本（' + t.split(/\s+/).length + ' 词）';
+  $('btnGo').disabled = false;
+  $('goHint').textContent = '材料已就绪，点击「生成手账」开始标注';
+};
+
+$('btnReset').onclick = function () {
+  // 丢掉 ?doc=… 再刷：否则从知识库「打开」进来后，
+  // 「重新开始」会又把同一篇载回来，用户根本清不掉。
+  if (location.search) { location.href = '/'; return; }
+  location.reload();
+};
+
+// ---------------- 从知识库跳回来的手账（/?doc=<id>）
+// 2026-10-15 拆页后，「打开历史手账」从「同页下方预览」变成「跳回本页预览」。
+// 原来那一版知识库把整份手账塞在列表下方，拆页后位置没了，
+// 所以改成 URL 传 id、这边取回来渲染 —— 预览与导出工具栏仍在主页，
+// 用户看到的行为与拆分前一致。
+//
+// ⚠ **必须打两个接口，不能只打第一个**（2026-10-15 用户反馈打开是空白页，改前必读）：
+//   · `/api/library/<id>`      → 结构化记录（标注 / 统计 / 译文），**里面没有 html**；
+//   · `/api/library/<id>/html` → 服务端**现渲染**的手账 HTML。
+// 库表刻意不存 HTML 快照（`library.save_handbook` 里有说明：改版式后旧手账点导出
+// 就是新样式，不用重付一次模型钱），于是「HTML 要去 /html 拿」这件事
+// **在数据结构上是隐性的** —— 少打第二个接口不会有任何报错，
+// `renderResult` 只是拿 `undefined` 去喂 iframe，页面显示成一片空白 + 两个字 `undefined`。
+(function () {
+  var m = /[?&]doc=([^&]+)/.exec(location.search);
+  if (!m) return;
+  var id = decodeURIComponent(m[1]);
+  var url = '/api/library/' + encodeURIComponent(id);
+  var bar = document.createElement('div');
+  bar.className = 'note-bar';
+  bar.textContent = '正在载入知识库里的手账…';
+  document.querySelector('main').insertBefore(bar, document.querySelector('main').firstChild);
+  api(url).then(function (hb) {
+    return apiText(url + '/html').then(function (html) {
+      hb.html = html;                 // ← renderResult / 导出 / 打印都读这个字段
+      return hb;
+    });
+  }).then(function (hb) {
+    renderResult(hb);
+    bar.className = 'note-bar ok';
+    bar.textContent = '已从知识库载入「' + (hb.title || '') + '」'
+      + '（' + (hb.level_name || hb.level_id) + '）。'
+      + '重新导出或点「生成手账」都可以；'
+      + '<a href="/library" style="color:inherit;text-decoration:underline">回知识库</a>';
+    // 载入的是历史数据，S.hb 里没有文件，「重新生成」会失败 ——
+    // 明确清掉，免得用户点一下只看到「请先选择文件」。
+    S.file = null;
+    S.text = null;
+    $('btnGo').disabled = true;
+    $('goHint').textContent = '当前展示的是历史手账；上传新材料即可重新生成';
+  }).catch(function (e) {
+    bar.className = 'note-bar';
+    bar.innerHTML = '载入失败：' + esc(e.message)
+      + ' · <a href="/library" style="color:inherit;text-decoration:underline">回知识库</a>';
+  });
+})();
+
+// ---------------- LLM
+$('btnTest').onclick = function () {
+  $('llmMsg').textContent = '测试中…';
+  $('llmMsg').style.color = '';
+  api('/api/llm/test', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(collectLlm())
+  }).then(function (d) {
+    if (!d.ok) {
+      $('llmMsg').textContent = '连接失败：' + d.message;
+      $('llmMsg').style.color = '#b91c1c';
+      return;
+    }
+    $('llmMsg').textContent = '连接成功：' + d.message;
+    $('llmMsg').style.color = '#0f6e56';
+    // 测通 = 配置真的可用 → 立刻落盘，这是「下次不用重配」的触发点
+    return saveLlm().then(function () {
+      $('llmMsg').textContent = '连接成功并已保存（下次打开自动生效）：' + d.message;
+    });
+  }).catch(function (e) {
+    $('llmMsg').textContent = '失败：' + e.message;
+    $('llmMsg').style.color = '#b91c1c';
+  });
+};
+
+$('btnTransCache').onclick = function () {
+  if (!window.confirm('清空译文缓存？缓存用于在切换水平重新标注时复用译文，'
+    + '清空后需要重新调用模型翻译。')) return;
+  api('/api/translate/cache', { method: 'DELETE' }).then(function (d) {
+    $('transMsg').textContent = '已清除 ' + d.removed + ' 条译文缓存';
+    $('transMsg').style.color = '#0f6e56';
+    refreshTransStatus();
+  }).catch(function (e) {
+    $('transMsg').textContent = '清除失败：' + e.message;
+    $('transMsg').style.color = '#b91c1c';
+  });
+};
+
+$('btnForget').onclick = function () {  if (!window.confirm('清除本机保存的大模型配置？清除后需要重新填写 Key。')) return;
+  api('/api/llm/config', { method: 'DELETE' }).then(function (d) {
+    S.llmSaved = d;
+    $('llmProvider').value = 'deepseek';
+    applyLlmSaved(d);
+    $('llmMsg').textContent = '已清除本机保存的配置';
+    $('llmMsg').style.color = '#0f6e56';
+  }).catch(function (e) {
+    $('llmMsg').textContent = '清除失败：' + e.message;
+    $('llmMsg').style.color = '#b91c1c';
+  });
+};
+
+// ---------------- 标注进度（真实上报 + 存活反馈）
+// 设计原则：
+//   1) 进度只来自服务端真实上报，前端不编造百分比（有分母才推进）；
+//   2) 百分比单调不减，做错了也不回退，避免「倒退」这种明显的假进度；
+//   3) 进度条是增强而非前置条件：轮询失败一律静默，生成请求照常进行。
+var PROG = { job: '', timer: null, t0: 0, shown: false, running: false };
+
+// 服务端没给 waiting_label 时的兜底（老版本服务端、或阶段已结束）
+var WAIT_FALLBACK = '等待模型应答';
+
+function newJobId() {
+  try {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID().replace(/-/g, '');
+  } catch (e) { /* 老浏览器没有 randomUUID，走下面的降级 */ }
+  var s = '';
+  for (var i = 0; i < 4; i++) s += Math.random().toString(16).slice(2, 10);
+  return s;
+}
+
+function fmtSec(ms) {
+  var s = Math.max(0, Math.round((ms || 0) / 1000));
+  if (s < 60) return s + ' 秒';
+  return Math.floor(s / 60) + ' 分 ' + (s % 60) + ' 秒';
+}
+
+function progElapsed() { return fmtSec(Date.now() - PROG.t0); }
+
+function startProgress(job) {
+  PROG.job = job; PROG.running = true; PROG.shown = false; PROG.t0 = Date.now();
+  var box = $('progBox');
+  if (box) box.className = 'prog hidden';
+  $('progBar').style.width = '0%';
+  $('progPct').textContent = '0%';
+  $('progStage').textContent = '正在提交材料…';
+  $('progNote').textContent = '';
+  $('progMeta').textContent = '';
+  if (PROG.timer) clearInterval(PROG.timer);
+  PROG.timer = setInterval(tickProgress, 700);
+}
+
+function stopProgress() {
+  PROG.running = false;
+  if (PROG.timer) { clearInterval(PROG.timer); PROG.timer = null; }
+}
+
+// 让进度面板显形并设定外观。
+// **函数名以 Class 结尾是刻意的**：scripts/check_inline_js.py 靠
+// 「以 Class 结尾的函数的字符串参数会直接赋给 className」这条约定做类名交叉校验，
+// 改名就覆盖不到这个分支（探针 probe_css_check.py 能验证这条校验真的有效）。
+function setProgressClass(cls) {
+  var box = $('progBox');
+  if (!box) return;
+  box.className = cls || 'prog';
+  PROG.shown = true;
+}
+
+function finishProgress() {
+  stopProgress();
+  var box = $('progBox');
+  if (!box) return;
+  if (!PROG.shown) { box.className = 'prog hidden'; return; }
+  box.className = 'prog done';
+  $('progBar').style.width = '100%';
+  $('progPct').textContent = '100%';
+  $('progStage').textContent = '手账已生成';
+  $('progNote').textContent = '共耗时 ' + progElapsed();
+  $('progMeta').textContent = '';
+}
+
+function failProgress(msg) {
+  stopProgress();
+  var box = $('progBox');
+  if (!box) return;
+  if (!PROG.shown) { box.className = 'prog hidden'; return; }
+  box.className = 'prog bad';
+  $('progStage').textContent = '标注中断';
+  $('progNote').textContent = '已用时 ' + progElapsed();
+  $('progMeta').textContent = msg || '未完成';
+}
+
+function tickProgress() {
+  if (!PROG.running || !PROG.job) return;
+  // 超过 400ms 才把面板露出来：秒回的小任务不该闪一下大面板又立刻变成 100%
+  if (Date.now() - PROG.t0 > 400 && !PROG.shown) setProgressClass('prog');
+  api('/api/progress/' + encodeURIComponent(PROG.job)).then(function (d) {
+    if (!PROG.running) return;
+    if (!d || !d.found) return;   // 服务端还没建任务，继续等下一轮
+    applyProgress(d);
+  }).catch(function () { /* 轮询失败静默：进度条是增强，不是前置条件 */ });
+}
+
+function applyProgress(d) {
+  if (d.done) { finishProgress(); return; }
+  if (d.error) { failProgress(d.error); return; }
+  if (!PROG.shown) setProgressClass('prog');
+
+  var pct = Math.max(0, Math.min(100, Math.round(d.percent || 0)));
+  $('progBar').style.width = pct + '%';
+  $('progPct').textContent = pct + '%';
+  $('progStage').textContent = d.stage_label || '处理中…';
+
+  var bits = [];
+  if (d.detail) bits.push(d.detail);
+  else if (d.stage_index != null && d.stage_count) {
+    bits.push('阶段 ' + (d.stage_index + 1) + '/' + d.stage_count);
+  }
+  bits.push('已用时 ' + progElapsed());
+  $('progNote').textContent = bits.join(' · ');
+
+  if (d.waiting) {
+    // 这一段刻意用服务端给的 waiting_label，而不是写死「等待模型应答」：
+    // OCR 一页跑十几秒时进度条同样会停，但那时根本没有模型参与 ——
+    // 把等待原因说错，和原来那句「正在标注…」是同一类毛病。
+    setProgressClass('prog waiting');
+    var waited = Math.round(d.since_update || 0);
+    $('progMeta').textContent = (d.waiting_label || WAIT_FALLBACK)
+      + '（已 ' + waited + ' 秒没有新进展）';
+  } else {
+    setProgressClass('prog');
+    $('progMeta').textContent = d.hint || '';
+  }
+}
+
+// ---------------- 生成
+$('btnGo').onclick = function () { run(); };
+
+function run() {
+  clearErr();
+  var btn = $('btnGo');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span>正在标注…';
+  // 把「待办提示」藏起来 —— 它和「正在标注」并排出现正是这次要修的矛盾
+  $('goHint').classList.add('hidden');
+
+  var job = newJobId();
+  startProgress(job);
+
+  var p;
+  if (S.file) {
+    var fd = new FormData();
+    fd.append('job_id', job);
+    fd.append('file', S.file);
+    fd.append('level_id', S.level);
+    fd.append('use_llm', $('useLlm').checked ? 'true' : 'false');
+    fd.append('translate', $('useTrans').checked ? 'true' : 'false');
+    fd.append('trans_mode', $('transMode').value);
+    fd.append('llm_provider', $('llmProvider').value);
+    fd.append('llm_api_key', $('llmKey').value);
+    fd.append('llm_base_url', $('llmBase').value);
+    fd.append('llm_model', $('llmModel').value);
+    fd.append('mt_provider', $('mtProvider').value);
+    fd.append('mt_api_key', $('mtKey').value);
+    fd.append('mt_base_url', $('mtBase').value);
+    fd.append('mt_model', $('mtModel').value);
+    p = api('/api/analyze', { method: 'POST', body: fd });
+  } else if (S.text) {
+    p = api('/api/analyze-text', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        job_id: job,
+        text: S.text, level_id: S.level, title: S.title || '粘贴的文本',
+        use_llm: $('useLlm').checked,
+        translate: $('useTrans').checked,
+        trans_mode: $('transMode').value,
+        llm_provider: $('llmProvider').value, llm_api_key: $('llmKey').value,
+        llm_base_url: $('llmBase').value, llm_model: $('llmModel').value,
+        mt_provider: $('mtProvider').value, mt_api_key: $('mtKey').value,
+        mt_base_url: $('mtBase').value, mt_model: $('mtModel').value
+      })
+    });
+  } else {
+    showErr('还没有材料');
+    stopProgress();
+    btn.disabled = false; btn.textContent = '生成手账';
+    $('goHint').classList.remove('hidden');
+    return;
+  }
+
+  p.then(function (hb) { finishProgress(); renderResult(hb); })
+   .catch(function (e) { failProgress(e.message); showErr(e.message); })
+   .then(function () {
+     btn.disabled = false; btn.textContent = '生成手账';
+     $('goHint').textContent = '已完成，改水平或换译文版式后可再次生成';
+     $('goHint').classList.remove('hidden');
+   });
+}
+
+function regen() {
+  $('regenHint').textContent = '正在按「' + S.level + '」重新标注…';
+  run();
+}
+
+function describeParse(pi) {
+  pi = pi || {};
+  var bits = [];
+  if (pi.engine) bits.push('解析引擎 ' + pi.engine);
+  if (pi.page_count) bits.push(pi.page_count + ' 页');
+  if (pi.image_size) bits.push('图片 ' + pi.image_size[0] + '×' + pi.image_size[1]);
+  if (pi.scanned) bits.push('扫描件（无文字层，已走 OCR）');
+  else if (pi.ocr) bits.push('OCR 识别');
+  if (pi.ocr_dropped_lines) {
+    bits.push('丢弃 ' + pi.ocr_dropped_lines + ' 行 OCR 识别失败内容');
+  }
+  return bits.join(' · ');
+}
+
+function renderResult(hb) {
+  S.hb = hb;
+  var c = hb.counters;
+  $('stats').innerHTML = [
+    ['a', c.word_highlight, '本级考纲词'],
+    ['b', c.word_circle, '超纲常见词'],
+    ['c', c.word_rare, '超纲生僻词'],
+    ['d', c.grammar, '语法标注'],
+    ['e', c.patterns, '加分句型']
+  ].map(function (x) {
+    return '<div class="stat ' + x[0] + '"><u>' + x[1] + '</u><s>' + x[2] + '</s></div>';
+  }).join('') + '<div class="stat"><u>' + hb.word_count + '</u><s>全文词数</s></div>';
+
+  $('llmNote').textContent = hb.llm_note;
+  // 译文状态单独一行：没译出来时必须让人一眼看见原因，而不是以为「隐藏了」
+  var tn = $('transNote');
+  var trans = hb.translations || {};
+  var n = Object.keys(trans).length;
+  if (n) {
+    tn.className = 'note-bar ok';
+    tn.textContent = '中文译文已生成（' + n + ' 段' +
+      (hb.trans_mode === 'paragraph' ? '，整段附译' : '，逐句对照') + '）'
+      + (hb.trans_note ? ' · ' + hb.trans_note : '');
+  } else if (hb.trans_note) {
+    tn.className = 'note-bar';
+    tn.textContent = '未生成中文译文 · ' + hb.trans_note;
+  } else {
+    tn.className = 'note-bar hidden';
+    tn.textContent = '';
+  }
+  if ($('useTrans').checked) refreshTransStatus();
+  $('parseNote').textContent = describeParse(hb.parse_info);
+  // 后端在「真的用上模型」时会自动落盘，这里同步一下面板状态
+  if ($('useLlm').checked) refreshLlmSaved();
+  $('regenHint').textContent = '';
+  $('resultCard').classList.remove('hidden');
+  // ⚠ 缺 html 时要**看见原因**，绝不能把 undefined 喂给 iframe
+  //（2026-10-15 用户反馈：从知识库打开历史手账一片空白 —— 病因就是这里收了
+  //  `/api/library/<id>` 这份**不含 html** 的记录，iframe 只显示两个字 `undefined`）。
+  // 历史手账的 HTML 必须来自 `/api/library/<id>/html`（服务端现渲染）。
+  if (!hb.html || typeof hb.html !== 'string') {
+    $('frame').srcdoc = '<meta charset="utf-8"><body style="font-family:system-ui;'
+      + 'padding:24px;color:#b91c1c;line-height:1.8">手账 HTML 缺失：这份数据里没有 '
+      + '<code>html</code> 字段。<br>历史手账的 HTML 需要从 '
+      + '<code>/api/library/&lt;id&gt;/html</code> 现渲染取得，不能直接用知识库的 JSON 记录。</body>';
+  } else {
+    $('frame').srcdoc = themeHandbook(hb.html);
+  }
+  $('resultCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// 手账 html 跟随当前主题。
+// ⚠ 只改 `<html lang="zh-CN">` 这一个属性，**不动其它任何内容** ——
+// render.py 里的暗色皮肤由 `[data-theme="dark"]` 选择器接管，
+// 打印时又由 @media print 强制收回浅色，两边都不需要前端额外处理。
+// 用户下载/打印的 HTML 走的是原始 S.hb.html，不经过这里，仍是白底纸面。
+function themeHandbook(html) {
+  var t = document.documentElement.getAttribute('data-theme');
+  if (t !== 'dark') return html;
+  return String(html).replace('<html lang="zh-CN">',
+    '<html lang="zh-CN" data-theme="dark">');
+}
+
+// 主题切换后要重新喂一次 iframe，否则预览要等下次生成才变
+document.addEventListener('studypad:theme', function () {
+  if (S.hb) $('frame').srcdoc = themeHandbook(S.hb.html);
+});
+
+// 下载 / 打印**一律用原始的 S.hb.html**（不带 data-theme）——
+// 那是「纸面产物」，必须白底：深色背景打印费墨，PDF 也不像样。
+// render.py 的 @media print 里也把暗色逐条收回了，两边都不依赖对方。
+$('btnHtml').onclick = function () {
+  if (!S.hb) return;
+  var blob = new Blob([S.hb.html], { type: 'text/html;charset=utf-8' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (S.hb.title || 'handbook') + '-' + S.hb.level_id + '.html';
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+};
+
+$('btnStandalone').onclick = function () {
+  if (!S.hb) return;
+  var w = window.open('', '_blank');
+  if (!w) { showErr('浏览器拦截了新窗口，请允许弹出窗口'); return; }
+  // 这里跟随主题：它是「在浏览器里读」，不是纸面。
+  // 即便用户在里面按 Ctrl+P，render.py 的 @media print 也会收回白底。
+  w.document.write(themeHandbook(S.hb.html));
+  w.document.close();
+};
+
+$('btnPdf').onclick = function () {
+  if (!S.hb) return;
+  // 用隐藏 iframe 触发打印，避免弹窗被拦截
+  var f = document.createElement('iframe');
+  f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+  document.body.appendChild(f);
+  f.onload = function () {
+    setTimeout(function () {
+      try { f.contentWindow.focus(); f.contentWindow.print(); }
+      catch (e) { showErr('打印失败，请改用「在新窗口打开」后按 Ctrl+P'); }
+      setTimeout(function () { document.body.removeChild(f); }, 60000);
+    }, 350);
+  };
+  f.srcdoc = themeHandbook(S.hb.html);
+};
+</script>
+</body>
+</html>

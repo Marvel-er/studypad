@@ -1,0 +1,27 @@
+# ---- 运行产物 / 缓存 ----
+out/
+.cache/
+**/__pycache__/
+*.pyc
+*.pyo
+*.py[cod]
+
+# ---- 虚拟环境 ----
+.venv/
+venv/
+env/
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---- 本地工具记忆（含个人路径与会话笔记，不进公开仓库）----
+.workbuddy/
+
+# ---- 可能含密钥的本地配置（若未来出现）----
+.env
+.env.*
+*.local.json

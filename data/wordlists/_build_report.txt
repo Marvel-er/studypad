@@ -1,0 +1,14 @@
+[OK] high_school  高中   words=  3743 size=0.45MB
+[OK] cet4         四级   words=  4544 size=0.57MB
+[OK] cet6         六级   words=  3991 size=0.52MB
+[OK] kaoyan       考研   words=  5046 size=0.64MB
+[OK] ielts        雅思   words=  5274 size=0.69MB
+[OK] toefl        托福   words= 10366 size=1.33MB
+[OK] _index.json  unique_words=13354 size=0.17MB
+--- cumulative coverage (known-set) ---
+  high_school  known=  3743
+  cet4         known=  5579
+  cet6         known=  7481
+  kaoyan       known=  7730
+  ielts        known=  9192
+  toefl        known= 13354

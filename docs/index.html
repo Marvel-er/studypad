@@ -1,0 +1,3292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>智能英语学习应用 · 开发文档</title>
+<style>
+:root{
+  --ink:#1f2328; --ink2:#57606a; --ink3:#8b949e;
+  --bg:#ffffff; --panel:#f6f8fa; --border:#d8dee4; --accent:#0b62d6;
+  --code-bg:#f6f8fa; --quote-bg:#f2f7fd;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:20px}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.78 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{display:flex;align-items:flex-start;max-width:1500px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow-y:auto;flex:0 0 318px;
+  border-right:1px solid var(--border);background:var(--panel);padding:20px 0 40px}
+nav .brand{padding:0 20px 14px;font-weight:700;font-size:14px;line-height:1.5;
+  border-bottom:1px solid var(--border);margin-bottom:10px}
+nav .brand s{display:block;text-decoration:none;color:var(--ink3);font-weight:400;font-size:12px;margin-top:4px}
+nav a{display:block;padding:5px 20px;color:var(--ink2);text-decoration:none;font-size:13px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:3px solid transparent}
+nav a:hover{background:#eaeef2;color:var(--ink)}
+nav a.h3{padding-left:38px;font-size:12.5px;color:var(--ink3)}
+nav a.on{color:var(--accent);background:#e7f0fc;border-left-color:var(--accent);font-weight:600}
+main{flex:1 1 auto;min-width:0;padding:44px 60px 120px;max-width:960px}
+h1,h2,h3,h4{line-height:1.35;font-weight:700}
+h1{font-size:29px;margin:0 0 26px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+h2{font-size:22px;margin:52px 0 16px;padding-bottom:9px;border-bottom:1px solid var(--border);scroll-margin-top:20px}
+h3{font-size:17px;margin:32px 0 11px;color:#24292f;scroll-margin-top:20px}
+h4{font-size:15px;margin:22px 0 9px;color:var(--ink2)}
+p{margin:11px 0}
+a{color:var(--accent)}
+ul,ol{padding-left:26px;margin:11px 0}
+li{margin:5px 0}
+code{background:#eff1f3;padding:1.5px 5px;border-radius:4px;font-size:13px;
+  font-family:"Cascadia Code",Consolas,Monaco,monospace}
+pre{background:var(--code-bg);border:1px solid var(--border);border-radius:9px;
+  padding:14px 16px;overflow-x:auto;margin:14px 0}
+pre code{background:none;padding:0;font-size:12.8px;line-height:1.62}
+.highlight{border-radius:9px;border:1px solid var(--border);margin:14px 0;overflow:hidden}
+.highlight pre{border:none;margin:0;border-radius:0}
+blockquote{margin:15px 0;padding:12px 18px;background:var(--quote-bg);
+  border-left:4px solid var(--accent);border-radius:0 8px 8px 0;color:#2b3a4a}
+blockquote p{margin:7px 0}
+blockquote blockquote{background:#e9f1fa;margin:10px 0}
+blockquote pre,blockquote .highlight pre{background:#eef1f4}
+blockquote table{margin:12px 0}
+table{border-collapse:separate;border-spacing:0;width:100%;margin:16px 0;font-size:13.5px;
+  border:1px solid var(--border);border-radius:9px;overflow:hidden}
+th,td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:#f0f3f6;font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#fafbfc}
+hr{border:none;border-top:1px solid var(--border);margin:34px 0}
+img{max-width:100%}
+@media(max-width:1080px){
+  nav{display:none}
+  main{padding:26px 20px 90px}
+}
+
+pre { line-height: 125%; }
+td.linenos .normal { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f0f0f0; }
+.highlight .c { color: #60A0B0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #60A0B0; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #60A0B0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .cpf { color: #60A0B0; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #60A0B0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60A0B0; background-color: #FFF0F0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #C65D09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40A070 } /* Literal.Number */
+.highlight .s { color: #4070A0 } /* Literal.String */
+.highlight .na { color: #4070A0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0E84B5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60ADD5 } /* Name.Constant */
+.highlight .nd { color: #555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #D55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287E } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0E84B5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #BB60D5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #40A070 } /* Literal.Number.Bin */
+.highlight .mf { color: #40A070 } /* Literal.Number.Float */
+.highlight .mh { color: #40A070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40A070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40A070 } /* Literal.Number.Oct */
+.highlight .sa { color: #4070A0 } /* Literal.String.Affix */
+.highlight .sb { color: #4070A0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070A0 } /* Literal.String.Char */
+.highlight .dl { color: #4070A0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #4070A0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070A0 } /* Literal.String.Double */
+.highlight .se { color: #4070A0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070A0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70A0D0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #C65D09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070A0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #06287E } /* Name.Function.Magic */
+.highlight .vc { color: #BB60D5 } /* Name.Variable.Class */
+.highlight .vg { color: #BB60D5 } /* Name.Variable.Global */
+.highlight .vi { color: #BB60D5 } /* Name.Variable.Instance */
+.highlight .vm { color: #BB60D5 } /* Name.Variable.Magic */
+.highlight .il { color: #40A070 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="brand">智能英语学习应用<s>开发文档 v1.0</s></div>
+  <a class="" data-id="目录" href="#目录" title="目录">目录</a>
+<a class="" data-id="1-项目概述" href="#1-项目概述" title="1. 项目概述">1. 项目概述</a>
+<a class="h3" data-id="1-1-一句话定义" href="#1-1-一句话定义" title="1.1 一句话定义">1.1 一句话定义</a>
+<a class="h3" data-id="1-2-解决什么问题" href="#1-2-解决什么问题" title="1.2 解决什么问题">1.2 解决什么问题</a>
+<a class="h3" data-id="1-3-核心功能清单-feature-map" href="#1-3-核心功能清单-feature-map" title="1.3 核心功能清单（Feature Map）">1.3 核心功能清单（Feature Map）</a>
+<a class="h3" data-id="1-4-目标用户与典型场景" href="#1-4-目标用户与典型场景" title="1.4 目标用户与典型场景">1.4 目标用户与典型场景</a>
+<a class="h3" data-id="1-5-术语表" href="#1-5-术语表" title="1.5 术语表">1.5 术语表</a>
+<a class="" data-id="2-需求分析" href="#2-需求分析" title="2. 需求分析">2. 需求分析</a>
+<a class="h3" data-id="2-1-功能需求-fr" href="#2-1-功能需求-fr" title="2.1 功能需求（FR）">2.1 功能需求（FR）</a>
+<a class="h3" data-id="2-2-非功能需求-nfr" href="#2-2-非功能需求-nfr" title="2.2 非功能需求（NFR）">2.2 非功能需求（NFR）</a>
+<a class="h3" data-id="2-3-用户故事示例" href="#2-3-用户故事示例" title="2.3 用户故事示例">2.3 用户故事示例</a>
+<a class="" data-id="3-能力分级体系-核心设计" href="#3-能力分级体系-核心设计" title="3. 能力分级体系（核心设计）">3. 能力分级体系（核心设计）</a>
+<a class="h3" data-id="3-1-六档能力模型" href="#3-1-六档能力模型" title="3.1 六档能力模型">3.1 六档能力模型</a>
+<a class="h3" data-id="3-2-等级画像-level-profile-数据结构" href="#3-2-等级画像-level-profile-数据结构" title="3.2 等级画像（Level Profile）数据结构">3.2 等级画像（Level Profile）数据结构</a>
+<a class="h3" data-id="3-3-标注策略矩阵-同文不同标的示例" href="#3-3-标注策略矩阵-同文不同标的示例" title="3.3 标注策略矩阵（同文不同标的示例）">3.3 标注策略矩阵（同文不同标的示例）</a>
+<a class="h3" data-id="3-4-等级判定的三个信号源" href="#3-4-等级判定的三个信号源" title="3.4 等级判定的三个信号源">3.4 等级判定的三个信号源</a>
+<a class="" data-id="4-系统架构设计" href="#4-系统架构设计" title="4. 系统架构设计">4. 系统架构设计</a>
+<a class="h3" data-id="4-1-总体架构" href="#4-1-总体架构" title="4.1 总体架构">4.1 总体架构</a>
+<a class="h3" data-id="4-2-技术选型与理由" href="#4-2-技术选型与理由" title="4.2 技术选型与理由">4.2 技术选型与理由</a>
+<a class="h3" data-id="4-3-模块划分-后端目录结构" href="#4-3-模块划分-后端目录结构" title="4.3 模块划分（后端目录结构）">4.3 模块划分（后端目录结构）</a>
+<a class="h3" data-id="4-4-插件化扩展点" href="#4-4-插件化扩展点" title="4.4 插件化扩展点">4.4 插件化扩展点</a>
+<a class="" data-id="5-核心流水线设计" href="#5-核心流水线设计" title="5. 核心流水线设计">5. 核心流水线设计</a>
+<a class="h3" data-id="5-1-端到端流程" href="#5-1-端到端流程" title="5.1 端到端流程">5.1 端到端流程</a>
+<a class="h3" data-id="5-2-时序图" href="#5-2-时序图" title="5.2 时序图">5.2 时序图</a>
+<a class="h3" data-id="5-3-关键设计决策" href="#5-3-关键设计决策" title="5.3 关键设计决策">5.3 关键设计决策</a>
+<a class="" data-id="6-关键模块详细设计" href="#6-关键模块详细设计" title="6. 关键模块详细设计">6. 关键模块详细设计</a>
+<a class="h3" data-id="6-1-文档解析层-parse" href="#6-1-文档解析层-parse" title="6.1 文档解析层（Parse）">6.1 文档解析层（Parse）</a>
+<a class="h3" data-id="6-2-图文扫描层" href="#6-2-图文扫描层" title="6.2 图文扫描层">6.2 图文扫描层</a>
+<a class="h3" data-id="6-3-语言分析层-linguistic-analysis" href="#6-3-语言分析层-linguistic-analysis" title="6.3 语言分析层（Linguistic Analysis）">6.3 语言分析层（Linguistic Analysis）</a>
+<a class="h3" data-id="6-4-手账标注引擎-markup-engine" href="#6-4-手账标注引擎-markup-engine" title="6.4 手账标注引擎（Markup Engine）">6.4 手账标注引擎（Markup Engine）</a>
+<a class="h3" data-id="6-5-提示词工程" href="#6-5-提示词工程" title="6.5 提示词工程">6.5 提示词工程</a>
+<a class="" data-id="7-数据模型设计" href="#7-数据模型设计" title="7. 数据模型设计">7. 数据模型设计</a>
+<a class="h3" data-id="7-1-实体关系-简图" href="#7-1-实体关系-简图" title="7.1 实体关系（简图）">7.1 实体关系（简图）</a>
+<a class="h3" data-id="7-2-核心表结构" href="#7-2-核心表结构" title="7.2 核心表结构">7.2 核心表结构</a>
+<a class="h3" data-id="7-3-存储策略" href="#7-3-存储策略" title="7.3 存储策略">7.3 存储策略</a>
+<a class="" data-id="8-api-接口设计" href="#8-api-接口设计" title="8. API 接口设计">8. API 接口设计</a>
+<a class="h3" data-id="8-1-接口清单" href="#8-1-接口清单" title="8.1 接口清单">8.1 接口清单</a>
+<a class="h3" data-id="8-2-关键接口示例" href="#8-2-关键接口示例" title="8.2 关键接口示例">8.2 关键接口示例</a>
+<a class="h3" data-id="8-3-错误码规范" href="#8-3-错误码规范" title="8.3 错误码规范">8.3 错误码规范</a>
+<a class="" data-id="9-大模型-llm-接入方案" href="#9-大模型-llm-接入方案" title="9. 大模型（LLM）接入方案">9. 大模型（LLM）接入方案</a>
+<a class="h3" data-id="9-1-抽象接口" href="#9-1-抽象接口" title="9.1 抽象接口">9.1 抽象接口</a>
+<a class="h3" data-id="9-2-任务-模型路由表" href="#9-2-任务-模型路由表" title="9.2 任务 → 模型路由表">9.2 任务 → 模型路由表</a>
+<a class="h3" data-id="9-3-供应商适配清单" href="#9-3-供应商适配清单" title="9.3 供应商适配清单">9.3 供应商适配清单</a>
+<a class="h3" data-id="9-4-密钥安全" href="#9-4-密钥安全" title="9.4 密钥安全">9.4 密钥安全</a>
+<a class="h3" data-id="9-5-可靠性设计" href="#9-5-可靠性设计" title="9.5 可靠性设计">9.5 可靠性设计</a>
+<a class="h3" data-id="9-6-提示词版本管理" href="#9-6-提示词版本管理" title="9.6 提示词版本管理">9.6 提示词版本管理</a>
+<a class="" data-id="10-前端设计" href="#10-前端设计" title="10. 前端设计">10. 前端设计</a>
+<a class="h3" data-id="10-1-页面结构" href="#10-1-页面结构" title="10.1 页面结构">10.1 页面结构</a>
+<a class="h3" data-id="10-2-手账阅读器-核心页面-布局" href="#10-2-手账阅读器-核心页面-布局" title="10.2 手账阅读器（核心页面）布局">10.2 手账阅读器（核心页面）布局</a>
+<a class="h3" data-id="10-3-关键交互" href="#10-3-关键交互" title="10.3 关键交互">10.3 关键交互</a>
+<a class="h3" data-id="10-4-手账视觉风格-主题" href="#10-4-手账视觉风格-主题" title="10.4 手账视觉风格（主题）">10.4 手账视觉风格（主题）</a>
+<a class="h3" data-id="10-5-响应式" href="#10-5-响应式" title="10.5 响应式">10.5 响应式</a>
+<a class="" data-id="11-手账渲染与一键导出" href="#11-手账渲染与一键导出" title="11. 手账渲染与一键导出">11. 手账渲染与一键导出</a>
+<a class="h3" data-id="11-1-渲染管线" href="#11-1-渲染管线" title="11.1 渲染管线">11.1 渲染管线</a>
+<a class="h3" data-id="11-2-手绘质感实现-涂改-美学" href="#11-2-手绘质感实现-涂改-美学" title="11.2 手绘质感实现（&quot;涂改&quot;美学）">11.2 手绘质感实现（&quot;涂改&quot;美学）</a>
+<a class="h3" data-id="11-3-导出格式矩阵" href="#11-3-导出格式矩阵" title="11.3 导出格式矩阵">11.3 导出格式矩阵</a>
+<a class="h3" data-id="11-4-导出选项" href="#11-4-导出选项" title="11.4 导出选项">11.4 导出选项</a>
+<a class="" data-id="12-安全-合规与版权" href="#12-安全-合规与版权" title="12. 安全、合规与版权">12. 安全、合规与版权</a>
+<a class="h3" data-id="12-1-文件与数据安全" href="#12-1-文件与数据安全" title="12.1 文件与数据安全">12.1 文件与数据安全</a>
+<a class="h3" data-id="12-2-版权提示" href="#12-2-版权提示" title="12.2 版权提示">12.2 版权提示</a>
+<a class="h3" data-id="12-3-内容合规" href="#12-3-内容合规" title="12.3 内容合规">12.3 内容合规</a>
+<a class="h3" data-id="12-4-隐私" href="#12-4-隐私" title="12.4 隐私">12.4 隐私</a>
+<a class="" data-id="13-性能与成本控制" href="#13-性能与成本控制" title="13. 性能与成本控制">13. 性能与成本控制</a>
+<a class="h3" data-id="13-1-性能目标与手段" href="#13-1-性能目标与手段" title="13.1 性能目标与手段">13.1 性能目标与手段</a>
+<a class="h3" data-id="13-2-成本模型-按-2000-词文章估算" href="#13-2-成本模型-按-2000-词文章估算" title="13.2 成本模型（按 2000 词文章估算）">13.2 成本模型（按 2000 词文章估算）</a>
+<a class="h3" data-id="13-3-缓存策略" href="#13-3-缓存策略" title="13.3 缓存策略">13.3 缓存策略</a>
+<a class="" data-id="14-部署与运维" href="#14-部署与运维" title="14. 部署与运维">14. 部署与运维</a>
+<a class="h3" data-id="14-1-单机部署-docker-compose" href="#14-1-单机部署-docker-compose" title="14.1 单机部署（Docker Compose）">14.1 单机部署（Docker Compose）</a>
+<a class="h3" data-id="14-2-环境变量" href="#14-2-环境变量" title="14.2 环境变量">14.2 环境变量</a>
+<a class="h3" data-id="14-3-可观测性" href="#14-3-可观测性" title="14.3 可观测性">14.3 可观测性</a>
+<a class="h3" data-id="14-4-扩展路径" href="#14-4-扩展路径" title="14.4 扩展路径">14.4 扩展路径</a>
+<a class="" data-id="15-开发计划与里程碑" href="#15-开发计划与里程碑" title="15. 开发计划与里程碑">15. 开发计划与里程碑</a>
+<a class="h3" data-id="15-1-阶段划分" href="#15-1-阶段划分" title="15.1 阶段划分">15.1 阶段划分</a>
+<a class="h3" data-id="15-2-任务拆解-wbs-mvp-阶段" href="#15-2-任务拆解-wbs-mvp-阶段" title="15.2 任务拆解（WBS · MVP 阶段）">15.2 任务拆解（WBS · MVP 阶段）</a>
+<a class="h3" data-id="15-3-关键路径" href="#15-3-关键路径" title="15.3 关键路径">15.3 关键路径</a>
+<a class="" data-id="16-测试方案与质量评估" href="#16-测试方案与质量评估" title="16. 测试方案与质量评估">16. 测试方案与质量评估</a>
+<a class="h3" data-id="16-1-测试分层" href="#16-1-测试分层" title="16.1 测试分层">16.1 测试分层</a>
+<a class="h3" data-id="16-2-标注质量评估-最重要" href="#16-2-标注质量评估-最重要" title="16.2 标注质量评估（最重要）">16.2 标注质量评估（最重要）</a>
+<a class="h3" data-id="16-3-llm-回归测试集" href="#16-3-llm-回归测试集" title="16.3 LLM 回归测试集">16.3 LLM 回归测试集</a>
+<a class="h3" data-id="16-4-边界用例清单" href="#16-4-边界用例清单" title="16.4 边界用例清单">16.4 边界用例清单</a>
+<a class="" data-id="17-风险与对策" href="#17-风险与对策" title="17. 风险与对策">17. 风险与对策</a>
+<a class="" data-id="18-附录" href="#18-附录" title="18. 附录">18. 附录</a>
+<a class="h3" data-id="18-1-六档等级速查表" href="#18-1-六档等级速查表" title="18.1 六档等级速查表">18.1 六档等级速查表</a>
+<a class="h3" data-id="18-2-标注类型-json-字典-供前后端共用" href="#18-2-标注类型-json-字典-供前后端共用" title="18.2 标注类型 JSON 字典（供前后端共用）">18.2 标注类型 JSON 字典（供前后端共用）</a>
+<a class="h3" data-id="18-3-开源可复用组件清单" href="#18-3-开源可复用组件清单" title="18.3 开源可复用组件清单">18.3 开源可复用组件清单</a>
+<a class="h3" data-id="18-4-术语与缩写" href="#18-4-术语与缩写" title="18.4 术语与缩写">18.4 术语与缩写</a>
+<a class="h3" data-id="18-5-下一步待确认事项-需产品-需求方拍板" href="#18-5-下一步待确认事项-需产品-需求方拍板" title="18.5 下一步待确认事项（需产品/需求方拍板）">18.5 下一步待确认事项（需产品/需求方拍板）</a>
+</nav>
+<main>
+<h1 id="智能英语学习应用-开发文档">智能英语学习应用 · 开发文档</h1>
+<blockquote>
+<p><strong>项目代号</strong>：StudyPad /「英语手账」
+<strong>文档版本</strong>：v1.0（立项版）
+<strong>文档性质</strong>：需求 + 架构 + 详细设计说明书，可直接作为开发排期与任务拆分的依据
+<strong>最后更新</strong>：2026-10-14</p>
+</blockquote>
+<hr />
+<h2 id="目录">目录</h2>
+<ol>
+<li><a href="#1-%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0">项目概述</a></li>
+<li><a href="#2-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90">需求分析</a></li>
+<li><a href="#3-%E8%83%BD%E5%8A%9B%E5%88%86%E7%BA%A7%E4%BD%93%E7%B3%BB%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1">能力分级体系（核心设计）</a></li>
+<li><a href="#4-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1">系统架构设计</a></li>
+<li><a href="#5-%E6%A0%B8%E5%BF%83%E6%B5%81%E6%B0%B4%E7%BA%BF%E8%AE%BE%E8%AE%A1">核心流水线设计</a></li>
+<li><a href="#6-%E5%85%B3%E9%94%AE%E6%A8%A1%E5%9D%97%E8%AF%A6%E7%BB%86%E8%AE%BE%E8%AE%A1">关键模块详细设计</a></li>
+<li><a href="#7-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1">数据模型设计</a></li>
+<li><a href="#8-api-%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1">API 接口设计</a></li>
+<li><a href="#9-%E5%A4%A7%E6%A8%A1%E5%9E%8Bllm%E6%8E%A5%E5%85%A5%E6%96%B9%E6%A1%88">大模型（LLM）接入方案</a></li>
+<li><a href="#10-%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1">前端设计</a></li>
+<li><a href="#11-%E6%89%8B%E8%B4%A6%E6%B8%B2%E6%9F%93%E4%B8%8E%E4%B8%80%E9%94%AE%E5%AF%BC%E5%87%BA">手账渲染与一键导出</a></li>
+<li><a href="#12-%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84%E4%B8%8E%E7%89%88%E6%9D%83">安全、合规与版权</a></li>
+<li><a href="#13-%E6%80%A7%E8%83%BD%E4%B8%8E%E6%88%90%E6%9C%AC%E6%8E%A7%E5%88%B6">性能与成本控制</a></li>
+<li><a href="#14-%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%BF%90%E7%BB%B4">部署与运维</a></li>
+<li><a href="#15-%E5%BC%80%E5%8F%91%E8%AE%A1%E5%88%92%E4%B8%8E%E9%87%8C%E7%A8%8B%E7%A2%91">开发计划与里程碑</a></li>
+<li><a href="#16-%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88%E4%B8%8E%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0">测试方案与质量评估</a></li>
+<li><a href="#17-%E9%A3%8E%E9%99%A9%E4%B8%8E%E5%AF%B9%E7%AD%96">风险与对策</a></li>
+<li><a href="#18-%E9%99%84%E5%BD%95">附录</a></li>
+</ol>
+<hr />
+<h2 id="1-项目概述">1. 项目概述</h2>
+<h3 id="1-1-一句话定义">1.1 一句话定义</h3>
+<p>用户上传任意格式的英语材料（PDF / 扫描件 / DOCX / MD / TXT / 图片），系统把文档「翻译」成一份<strong>老师批改过的手账</strong>——原文被荧光笔、红圈、波浪线、手写批注重新覆盖，所有标记的<strong>数量、难度、讲解深度都由用户选定的能力水平（高中 / 四级 / 六级 / 考研 / 雅思 / 托福）动态决定</strong>，并支持一键导出为 PDF / 长图 / 打印稿。</p>
+<h3 id="1-2-解决什么问题">1.2 解决什么问题</h3>
+<table>
+<thead>
+<tr>
+<th>现状痛点</th>
+<th>本产品的解法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读外刊/真题时不知道该圈哪些词，划满了等于没划</td>
+<td>按等级自动区分「已掌握词」与「超纲常考词」，只圈后者</td>
+</tr>
+<tr>
+<td>长难句看不懂，查语法要来回切 App</td>
+<td>直接在句子上叠加语法结构标记 + 中文批注</td>
+</tr>
+<tr>
+<td>背了模板句却不知道哪句能用在作文里</td>
+<td>加分句型用专属标记（红色波浪线 + 便利贴）标出并注明用途</td>
+</tr>
+<tr>
+<td>笔记散落在各个平台，复习不方便</td>
+<td>一键导出为可打印的手账 PDF，或生成长图分享</td>
+</tr>
+<tr>
+<td>市面工具要么只查词、要么只翻译，缺少「按水平自适应」</td>
+<td>六档能力模型驱动标注密度与讲解深度，同文不同标</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-3-核心功能清单-feature-map">1.3 核心功能清单（Feature Map）</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>功能</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1</td>
+<td>多格式文件上传与解析（PDF / DOCX / MD / TXT / 图片 / 扫描件）</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>图文智能扫描：正文提取 + 版面还原 + 图表/插图的语义识别</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>能力水平选择（6 档）与切换</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>手账生成引擎：「涂改式」语法标注 + 重点词圈选 + 加分句型标注</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>一键导出（PDF / PNG 长图 / 打印版式 / Word）</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>大模型 API 接入（多厂商适配 + 用户自带 Key）</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>F7</td>
+<td>手账阅读器（缩放、翻页、点击标注查看解析）</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>F8</td>
+<td>生词本 / 句型本 / 错题本，艾宾浩斯复习计划</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>F9</td>
+<td>手动补标与编辑（用户自己加圈、改批注）</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>F10</td>
+<td>历史文档管理、标签与检索</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>F11</td>
+<td>分享链接 / 学习小组</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>F12</td>
+<td>语音朗读、跟读评分</td>
+<td>P2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-4-目标用户与典型场景">1.4 目标用户与典型场景</h3>
+<ul>
+<li><strong>备考学生</strong>（高中/四六级/考研）：上传真题阅读，生成「只圈超纲词」的精读稿。</li>
+<li><strong>雅思托福考生</strong>：上传 Economist / 原版教材，标注高级句型与学术词汇。</li>
+<li><strong>英语老师</strong>：上传课文或试卷，生成标准化的讲解手账发给学生。</li>
+<li><strong>自学者</strong>：随手把手机拍的英文材料（菜单、说明书、论文截图）变成学习手账。</li>
+</ul>
+<h3 id="1-5-术语表">1.5 术语表</h3>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>原始文档（Source）</strong></td>
+<td>用户上传的任意格式文件</td>
+</tr>
+<tr>
+<td><strong>区块（Block）</strong></td>
+<td>文档解析后的最小可标注单元（段落 / 标题 / 图注 / 表格单元格 / 图片）</td>
+</tr>
+<tr>
+<td><strong>手账（Handbook）</strong></td>
+<td>一个文档 + 一个等级 + 一套标注，生成的渲染结果集合</td>
+</tr>
+<tr>
+<td><strong>涂改层（Markup Layer）</strong></td>
+<td>叠加在原文之上的可视化标注容器（SVG 矢量层）</td>
+</tr>
+<tr>
+<td><strong>等级画像（Level Profile）</strong></td>
+<td>某一能力档位的参数集合，驱动标注策略</td>
+</tr>
+<tr>
+<td><strong>标注（Annotation）</strong></td>
+<td>一次具体的标记行为：圈选、荧光、波浪线、批注、印章……</td>
+</tr>
+<tr>
+<td><strong>超纲词（Overflow Word）</strong></td>
+<td>超出当前等级词表范围、且属于该等级高频考点的词</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-需求分析">2. 需求分析</h2>
+<h3 id="2-1-功能需求-fr">2.1 功能需求（FR）</h3>
+<h4>FR-1 文件上传与解析</h4>
+<ul>
+<li><strong>FR-1.1</strong> 支持格式：<code>.pdf</code>（文字层/扫描件）、<code>.docx</code>、<code>.doc</code>、<code>.md</code>、<code>.txt</code>、<code>.png/.jpg/.jpeg/.webp/.heic</code>、<code>.epub</code>（P2）。</li>
+<li><strong>FR-1.2</strong> 单文件 ≤ 100 MB，PDF 页数 ≤ 300 页；支持批量上传（≤ 20 个）。</li>
+<li><strong>FR-1.3</strong> 上传后 3 秒内返回预览（首页缩略图 + 页数 + 预估处理时长）。</li>
+<li><strong>FR-1.4</strong> 解析失败要给出明确原因（加密 PDF / 纯图片无 OCR 权限 / 编码异常）并提供降级路径。</li>
+</ul>
+<p><strong>验收标准</strong>：上传一份 30 页的扫描版雅思阅读，能在 90 秒内完成全部解析与标注，页面文字识别准确率 ≥ 96%（英文印刷体）。</p>
+<h4>FR-2 图文智能扫描</h4>
+<ul>
+<li><strong>FR-2.1</strong> 版面分析：识别标题 / 正文 / 分栏 / 表格 / 图注 / 页眉页脚 / 脚注。</li>
+<li><strong>FR-2.2</strong> 双栏排版必须正确还原阅读顺序（左栏读完再读右栏）。</li>
+<li><strong>FR-2.3</strong> 图片处理：插图调用多模态模型生成一句话描述（&quot;这张图展示了 2000–2020 年全球碳排放趋势，纵轴单位是十亿吨&quot;），并作为图注参与后续语境理解。</li>
+<li><strong>FR-2.4</strong> 表格：转为结构化数据，保留行列表头。</li>
+</ul>
+<h4>FR-3 能力水平选择</h4>
+<ul>
+<li><strong>FR-3.1</strong> 首次使用需选择等级；可在文档详情页随时切换。</li>
+<li><strong>FR-3.2</strong> 切换等级触发「重新标注」，支持增量：已标注结果按等级缓存，切换时优先命中缓存。</li>
+<li><strong>FR-3.3</strong> 提供「自定义等级」（P2）：用户可微调词汇量阈值、标注密度。</li>
+</ul>
+<h4>FR-4 手账生成引擎</h4>
+<ul>
+<li><strong>FR-4.1 语法涂改</strong>：对句子中的目标语法结构，用彩色下划线 + 括弧 + 手写批注标注，注明结构名称与作用。</li>
+<li><strong>FR-4.2 重点词圈选</strong>：用椭圆圈 + 荧光笔标记超纲高频词、熟词僻义、固定搭配；带音标与一句中文释义（悬浮显示）。</li>
+<li><strong>FR-4.3 加分句型</strong>：用红色波浪线标记作文可用句型，右侧便利贴注明「可用于：议论文开头 / 图表描述 / 观点转折」。</li>
+<li><strong>FR-4.4 长难句图解</strong>：超过阈值的句子自动折行 + 缩进展示主干与修饰成分。</li>
+<li><strong>FR-4.5 中式表达纠错</strong>：对用户自行写的作文（P2 输入模式），用「涂改 + 重写」的方式给出地道表达。</li>
+<li><strong>FR-4.6</strong> 标注密度受控：同一段落标记不超过 N 处，避免&quot;划满等于没划&quot;。</li>
+</ul>
+<h4>FR-5 一键导出</h4>
+<ul>
+<li><strong>FR-5.1</strong> 导出格式：PDF（矢量、可搜索文本层）、PNG 长图、打印优化版（A4 双栏 / 留白装订边）、DOCX（可再编辑）。</li>
+<li><strong>FR-5.2</strong> 导出选项：是否含答案、是否含生词表、是否含原文底纹、是否含手写字体。</li>
+<li><strong>FR-5.3</strong> 导出任务异步执行，完成后站内通知 + 下载链接（有效期 7 天）。</li>
+</ul>
+<h4>FR-6 大模型 API 接入</h4>
+<ul>
+<li><strong>FR-6.1</strong> 内置默认模型（平台承担成本，按次计费/会员制）。</li>
+<li><strong>FR-6.2</strong> 支持用户自带 Key（BYOK）：OpenAI、Azure OpenAI、DeepSeek、通义千问、智谱、Anthropic、Gemini、Groq、以及任意 OpenAI 兼容端点（含本地 Ollama / vLLM）。</li>
+<li><strong>FR-6.3</strong> 支持「任务分流」：解析类小任务用便宜模型，语义标注用强模型，图片理解用多模态模型。</li>
+<li><strong>FR-6.4</strong> 提供调用日志、Token 消耗统计、失败重试与降级。</li>
+</ul>
+<h4>FR-7~FR-12</h4>
+<p>阅读器、生词本、手动编辑、历史管理、分享，详见 <a href="#10-%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1">第 10 章</a>。</p>
+<h3 id="2-2-非功能需求-nfr">2.2 非功能需求（NFR）</h3>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>性能</td>
+<td>文字层 PDF 单页标注 ≤ 3 s；扫描件单页 ≤ 6 s；P95 首屏渲染 ≤ 1.5 s</td>
+</tr>
+<tr>
+<td>并发</td>
+<td>单实例支持 50 并发上传、200 并发读取；Worker 水平扩展</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td>核心接口 99.5%；LLM 供应商故障时自动切换备用通道</td>
+</tr>
+<tr>
+<td>可维护性</td>
+<td>前后端分离；解析器、渲染器、LLM 适配器均为插件式可替换</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>单篇 2000 词文章的标注成本目标 ≤ ¥0.15（使用国产中端模型）</td>
+</tr>
+<tr>
+<td>兼容</td>
+<td>Chrome / Edge / Safari 最新两个大版本；移动端响应式（手账以横屏/缩放阅读为主）</td>
+</tr>
+<tr>
+<td>国际化</td>
+<td>界面中英双语；讲解语言可选中文 / 英文 / 双语</td>
+</tr>
+<tr>
+<td>无障碍</td>
+<td>标注不仅靠颜色区分，同时有形状差异（色盲友好）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-3-用户故事示例">2.3 用户故事示例</h3>
+<blockquote>
+<p><strong>US-01</strong>　作为一名备考六级的同学，我希望上传一篇 The Economist 文章后，系统只圈出六级以上的高频词，这样我不用在每个生词上浪费时间。
+<strong>验收</strong>：随机抽 50 个被圈选的词，人工判定&quot;确实超出六级范围&quot;的比例 ≥ 85%。</p>
+</blockquote>
+<blockquote>
+<p><strong>US-02</strong>　作为一名雅思写作 5.5 分的考生，我希望文章里的好句型被单独标出来，并告诉我能用在小作文的哪个部分。
+<strong>验收</strong>：每篇 ≥ 1500 词的文章至少标出 5 个句型，且用途分类准确率 ≥ 80%。</p>
+</blockquote>
+<hr />
+<h2 id="3-能力分级体系-核心设计">3. 能力分级体系（核心设计）</h2>
+<p>这是整个产品的<strong>护城河</strong>。同一篇文章，选「高中」和选「托福」，出来的手账应该是两份完全不同的材料。</p>
+<h3 id="3-1-六档能力模型">3.1 六档能力模型</h3>
+<table>
+<thead>
+<tr>
+<th>等级 ID</th>
+<th>名称</th>
+<th>词汇量基准</th>
+<th>词汇表来源</th>
+<th>语法覆盖范围</th>
+<th>典型材料难度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>high_school</code></td>
+<td>高中</td>
+<td>3500</td>
+<td>课标 3500 / 高考考纲</td>
+<td>时态语态、三大从句、非谓语基础、常见固定搭配</td>
+<td>高考阅读 C/D 篇</td>
+</tr>
+<tr>
+<td><code>cet4</code></td>
+<td>大学四级</td>
+<td>4500</td>
+<td>CET-4 大纲词汇</td>
+<td>非谓语进阶、虚拟语气基础、倒装基础、强调句</td>
+<td>四级仔细阅读</td>
+</tr>
+<tr>
+<td><code>cet6</code></td>
+<td>大学六级</td>
+<td>6000</td>
+<td>CET-6 大纲词汇</td>
+<td>全部基础语法 + 复杂从句嵌套、独立主格</td>
+<td>六级长篇阅读</td>
+</tr>
+<tr>
+<td><code>kaoyan</code></td>
+<td>考研</td>
+<td>5500（+派生）</td>
+<td>考研英语大纲</td>
+<td>长难句拆分、插入语、省略、倒装、比较结构</td>
+<td>考研英语一 Text 1–4</td>
+</tr>
+<tr>
+<td><code>ielts</code></td>
+<td>雅思</td>
+<td>8000（A 类）</td>
+<td>Oxford 5000 + AWL 学术词表</td>
+<td>学术写作句型、图表描述结构、复杂名词化</td>
+<td>雅思阅读 Passage 3</td>
+</tr>
+<tr>
+<td><code>toefl</code></td>
+<td>托福</td>
+<td>10000</td>
+<td>TOEFL 核心 + AWL</td>
+<td>学术长难句、抽象概念表达、逻辑连接</td>
+<td>TOEFL Reading 学术论文</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>说明：词汇量是<strong>近似基准</strong>，实际判定以「词表集合运算 + CEFR 标签 + 语料频次」三者加权为准，见 <a href="#63-%E8%AF%AD%E8%A8%80%E5%88%86%E6%9E%90%E5%B1%82linguistic-analysis">6.3</a>。</p>
+</blockquote>
+<h3 id="3-2-等级画像-level-profile-数据结构">3.2 等级画像（Level Profile）数据结构</h3>
+<p>每个等级对应一份 JSON 画像，是标注引擎的唯一输入源。切换等级 = 换一份 profile，无需改代码。</p>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"level_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cet4"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"display_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"大学英语四级"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"vocab_baseline"</span><span class="p">:</span><span class="w"> </span><span class="mi">4500</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"vocab_sources"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"cet4_official"</span><span class="p">,</span><span class="w"> </span><span class="s2">"cefr_b1_plus"</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"grammar_scope"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"non_finite"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"非谓语动词"</span><span class="p">,</span><span class="w"> </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"depth"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"subjunctive"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"虚拟语气"</span><span class="p">,</span><span class="w"> </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"depth"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inversion"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"倒装"</span><span class="p">,</span><span class="w"> </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complex_nesting"</span><span class="p">,</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"多层从句嵌套"</span><span class="p">,</span><span class="w"> </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"markup_policy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"word_circle_ratio"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.10</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"word_circle_max_per_1000"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"include_known_word_review"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"idiom_highlight"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"rare_meaning_highlight"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"grammar_mark_density"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.35</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"pattern_level"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"basic_writing"</span><span class="p">,</span><span class="w"> </span><span class="s2">"cet4_template"</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"sentence_split_min_words"</span><span class="p">:</span><span class="w"> </span><span class="mi">32</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"explain_language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zh-CN"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"explain_depth"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"pen_palette"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"grammar_underline"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#2563EB"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"word_highlight"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#FDE68A"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"word_circle"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#EF4444"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"pattern_wavy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#DC2626"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"note_sticky"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#FEF3C7"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"correction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#7C3AED"</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<h3 id="3-3-标注策略矩阵-同文不同标的示例">3.3 标注策略矩阵（同文不同标的示例）</h3>
+<p>以句子 <em>&quot;Not until the committee had reviewed all the submissions did they realize how flawed the methodology was.&quot;</em> 为例：</p>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>圈选单词</th>
+<th>语法标注</th>
+<th>批注深度</th>
+<th>加分句型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>高中</td>
+<td><code>committee</code>, <code>submission</code>, <code>flawed</code>, <code>methodology</code></td>
+<td>标「Not until 引导的部分倒装」+ 中文解释</td>
+<td>完整中文讲解 + 还原为正常语序</td>
+<td>否（超纲）</td>
+</tr>
+<tr>
+<td>四级</td>
+<td><code>submission</code>, <code>flawed</code>, <code>methodology</code></td>
+<td>标倒装结构名称 + 一句提示</td>
+<td>中文简释</td>
+<td>是，标「可用于议论文强调」</td>
+</tr>
+<tr>
+<td>六级</td>
+<td><code>flawed</code>, <code>methodology</code></td>
+<td>只标下划线 + 结构名</td>
+<td>英文短语注释</td>
+<td>是，标「高级倒装，写作加分」</td>
+</tr>
+<tr>
+<td>考研</td>
+<td>仅 <code>methodology</code></td>
+<td>标下划线，不解释</td>
+<td>无批注（视为已掌握）</td>
+<td>是 + 仿写提示</td>
+</tr>
+<tr>
+<td>雅思/托福</td>
+<td>无（视为已掌握）</td>
+<td>不做语法标注</td>
+<td>无</td>
+<td>标为「学术写作可用句型」</td>
+</tr>
+</tbody>
+</table>
+<p>这张表就是标注引擎的<strong>行为规格说明（behavior spec）</strong>，后续所有测试用例都从它派生。</p>
+<h3 id="3-4-等级判定的三个信号源">3.4 等级判定的三个信号源</h3>
+<pre><code><div class="highlight"><pre><span></span>最终难度分 = w1 × 词表集合差  +  w2 × CEFR 标签  +  w3 × 语料频次分位
+             (0.45)              (0.35)             (0.20)
+</pre></div>
+</code></pre>
+<ul>
+<li><strong>词表集合差</strong>：单词是否在目标等级词表内（含词形还原后的原形匹配）。</li>
+<li><strong>CEFR 标签</strong>：Oxford 5000 的 A1–C2 分级；C1/C2 词在低等级中必然被圈。</li>
+<li><strong>语料频次分位</strong>：基于 COCA / BNC 的 Zipf 频率（<code>zipf_frequency</code>），频率 &lt; 3.5 视为低频词。</li>
+</ul>
+<hr />
+<h2 id="4-系统架构设计">4. 系统架构设计</h2>
+<h3 id="4-1-总体架构">4.1 总体架构</h3>
+<p>采用<strong>前后端分离 + 异步任务队列 + 插件式适配层</strong>的架构。重活（解析、OCR、LLM 调用、渲染）全部异步化，前端通过 SSE 订阅进度。</p>
+<pre><code><div class="highlight"><pre><span></span>┌─────────────────────────────────────────────────────────────────────┐
+│                          客户端层 (Web)                              │
+│   Next.js 14 + TypeScript + Tailwind + Zustand                      │
+│   上传页 │ 等级选择 │ 手账阅读器 │ 导出中心 │ 生词本 │ 设置(BYOK)      │
+└────────────────────────────┬────────────────────────────────────────┘
+                             │ HTTPS / REST + SSE
+┌────────────────────────────┴────────────────────────────────────────┐
+│                     接入层 (Nginx / Traefik)                          │
+│               TLS 终止 · 限流 · 静态资源 · 反向代理                     │
+└────────────────────────────┬────────────────────────────────────────┘
+                             │
+┌────────────────────────────┴────────────────────────────────────────┐
+│                   应用服务层 (FastAPI, Python 3.11)                   │
+│  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐          │
+│  │ 文档服务   │ │ 任务服务   │ │ 手账服务   │ │ 用户服务   │          │
+│  │ /documents│ │  /jobs    │ │/handbooks │ │ /auth/me  │          │
+│  └───────────┘ └───────────┘ └───────────┘ └───────────┘          │
+│  ┌──────────────────────────────────────────────────────┐          │
+│  │              LLM 适配层 (Provider Adapter)             │          │
+│  │  OpenAI │ DeepSeek │ Qwen │ Zhipu │ Claude │ Gemini   │          │
+│  │  Azure  │ Ollama(本地) │ 任意 OpenAI 兼容端点          │          │
+│  └──────────────────────────────────────────────────────┘          │
+└───────┬──────────────────────────────┬──────────────────┬──────────┘
+        │ 入队                          │ 读写              │ 读写
+┌───────┴────────┐          ┌──────────┴─────────┐  ┌─────┴──────────┐
+│ 消息队列        │          │  对象存储 (S3/COS)  │  │ PostgreSQL 16  │
+│ Redis + Celery │          │  原文件·页面图·导出 │  │  + pgvector    │
+└───────┬────────┘          └────────────────────┘  └────────────────┘
+        │
+┌───────┴────────────────────────────────────────────────────────────┐
+│                        异步 Worker 集群                              │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌───────────┐ │
+│  │ Parse Worker │→│Analyze Worker│→│ Render Worker│→│Export Wkr │ │
+│  │ 解析/OCR/版面 │ │ NLP+LLM 标注  │ │ HTML→PNG/PDF │ │ 打包下载   │ │
+│  └──────────────┘ └──────────────┘ └──────────────┘ └───────────┘ │
+└────────────────────────────────────────────────────────────────────┘
+</pre></div>
+</code></pre>
+<h3 id="4-2-技术选型与理由">4.2 技术选型与理由</h3>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>选型</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前端框架</td>
+<td><strong>Next.js 14（App Router）+ TypeScript</strong></td>
+<td>SSR 利于首屏；类型安全；生态成熟</td>
+</tr>
+<tr>
+<td>样式</td>
+<td>Tailwind CSS + CSS Variables</td>
+<td>快速实现主题化（手账风格换肤）</td>
+</tr>
+<tr>
+<td>状态管理</td>
+<td>Zustand</td>
+<td>轻量，适合阅读器这类局部状态密集场景</td>
+</tr>
+<tr>
+<td>手账画布</td>
+<td><strong>HTML/CSS 为主 + SVG 标注层 + Fabric.js（可编辑模式）</strong></td>
+<td>HTML 便于文本流排版与无障碍；SVG 便于矢量涂改笔画</td>
+</tr>
+<tr>
+<td>后端语言</td>
+<td><strong>Python 3.11 + FastAPI</strong></td>
+<td>NLP/OCR/文档解析生态（PyMuPDF、PaddleOCR、spaCy）碾压 Node</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td><strong>PostgreSQL 16 + pgvector</strong></td>
+<td>一套库解决关系数据 + 向量检索（相似句、同类句型）</td>
+</tr>
+<tr>
+<td>缓存/队列</td>
+<td><strong>Redis 7 + Celery</strong></td>
+<td>成熟稳定；也可换 arq / Dramatiq</td>
+</tr>
+<tr>
+<td>对象存储</td>
+<td>S3 兼容（本地 MinIO / 腾讯云 COS / 阿里云 OSS）</td>
+<td>避免大文件进数据库</td>
+</tr>
+<tr>
+<td>文档解析</td>
+<td>PyMuPDF + pdfplumber + python-docx + markdown-it + PaddleOCR</td>
+<td>覆盖文字层/表格/Office/Markdown/扫描件</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>spaCy（en_core_web_trf）+ stanza + lemminflect</td>
+<td>句法依存、词形还原、词性</td>
+</tr>
+<tr>
+<td>无头渲染</td>
+<td><strong>Playwright（Chromium）</strong></td>
+<td>HTML→PDF 保真度高，支持打印媒体查询</td>
+</tr>
+<tr>
+<td>部署</td>
+<td>Docker Compose（单机）→ K8s（规模）</td>
+<td>平滑演进</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<h3>⚠️ 实现变更（v1.0 之后的落地情况）</h3>
+<p>本表是<strong>设计期的技术选型</strong>，保留原貌作为设计记录。实际首版实现为了能最快跑通
+端到端闭环，做了有意收缩，<strong>当前真实技术栈如下</strong>（详见
+<a href="./%E5%BC%80%E6%BA%90%E5%A4%8D%E7%94%A8%E6%96%B9%E6%A1%88.md">开源复用方案.md</a> 第五节）：</p>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>设计稿</th>
+<th>实际实现</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF 引擎</td>
+<td>PyMuPDF</td>
+<td><strong>pypdfium2</strong>（Apache-2.0 / BSD-3）</td>
+<td>PyMuPDF 是 <strong>AGPL-3.0</strong>，会传染整个服务端，商用不可接受</td>
+</tr>
+<tr>
+<td>OCR</td>
+<td>PaddleOCR</td>
+<td><strong>RapidOCR + onnxruntime</strong>（Apache-2.0 / MIT）</td>
+<td><code>rapidocr-onnxruntime</code> 不支持 Python 3.13；新版 <code>rapidocr</code> 走 onnxruntime，Windows 免 paddlepaddle 直接装</td>
+</tr>
+<tr>
+<td>版面分析</td>
+<td>PyMuPDF dict + 版面模型</td>
+<td><strong>自研 <code>layout.py</code></strong></td>
+<td>pypdfium2 只给字符框；自研后反而让文字层与 OCR 共用同一套重建逻辑</td>
+</tr>
+<tr>
+<td>字号获取</td>
+<td><code>get_fontsize()</code></td>
+<td><strong>行宽 ÷ 等效字符数</strong></td>
+<td><code>get_fontsize()</code> 返回值比例不稳定；字符框高度受字形影响</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>spaCy + stanza + lemminflect</td>
+<td><strong>规则实现 <code>lemmatize.py</code></strong></td>
+<td>零模型依赖、启动快；代价是不规则派生词可能漏匹配</td>
+</tr>
+<tr>
+<td>前端</td>
+<td>Next.js 14 + TS + Tailwind</td>
+<td><strong>单文件 <code>index.html</code></strong></td>
+<td>零构建、零 CDN 依赖，<code>file://</code> 直开可用</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>PostgreSQL + pgvector</td>
+<td><strong>暂未接入</strong></td>
+<td>首版无需持久化；导出即成品</td>
+</tr>
+<tr>
+<td>队列</td>
+<td>Redis + Celery</td>
+<td><strong>暂未接入</strong></td>
+<td>纯规则链路单篇 &lt; 1 秒，同步处理足够</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结论</strong>：设计稿的架构方向不变，但「首版能跑通」优先——
+上表右列全部是可用、且许可干净的方案，后续按需演进即可。</p>
+</blockquote>
+<h3 id="4-3-模块划分-后端目录结构">4.3 模块划分（后端目录结构）</h3>
+<pre><code><div class="highlight"><pre><span></span>backend/
+├── app/
+│   ├── main.py
+│   ├── api/v1/                 # 路由层
+│   │   ├── documents.py
+│   │   ├── jobs.py
+│   │   ├── handbooks.py
+│   │   ├── exports.py
+│   │   ├── vocab.py
+│   │   └── settings.py         # BYOK 密钥管理
+│   ├── core/
+│   │   ├── config.py
+│   │   ├── security.py         # 加密、JWT、密钥保管
+│   │   └── errors.py
+│   ├── parsers/                # 插件式解析器
+│   │   ├── base.py             # BaseParser 抽象类
+│   │   ├── pdf_parser.py
+│   │   ├── docx_parser.py
+│   │   ├── markdown_parser.py
+│   │   ├── text_parser.py
+│   │   ├── image_parser.py     # OCR
+│   │   └── registry.py
+│   ├── nlp/
+│   │   ├── segmenter.py        # 分句、分块
+│   │   ├── lemmatizer.py
+│   │   ├── level_scorer.py     # 难度打分
+│   │   ├── grammar_detector.py # 语法结构识别
+│   │   └── pattern_matcher.py  # 句型模板匹配
+│   ├── llm/
+│   │   ├── base.py             # LLMProvider 抽象
+│   │   ├── providers/          # openai/deepseek/qwen/...
+│   │   ├── router.py           # 任务→模型 路由
+│   │   ├── prompts/            # 提示词模板（版本化）
+│   │   └── schemas.py          # 输出 JSON Schema
+│   ├── markup/
+│   │   ├── engine.py           # 标注编排
+│   │   ├── rules.py            # 密度控制、去重、优先级
+│   │   └── models.py
+│   ├── render/
+│   │   ├── html_builder.py
+│   │   ├── templates/          # 手账版式模板
+│   │   └── exporter.py         # PDF/PNG/DOCX
+│   ├── workers/
+│   │   ├── celery_app.py
+│   │   ├── parse_task.py
+│   │   ├── analyze_task.py
+│   │   ├── render_task.py
+│   │   └── export_task.py
+│   ├── models/                 # SQLAlchemy ORM
+│   └── schemas/                # Pydantic DTO
+├── alembic/                    # 数据库迁移
+├── tests/
+└── pyproject.toml
+</pre></div>
+</code></pre>
+<h3 id="4-4-插件化扩展点">4.4 插件化扩展点</h3>
+<table>
+<thead>
+<tr>
+<th>扩展点</th>
+<th>抽象类</th>
+<th>新增一个实现需要做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档格式</td>
+<td><code>BaseParser</code></td>
+<td>实现 <code>can_handle()</code> + <code>parse()</code> → 输出标准 <code>Block[]</code></td>
+</tr>
+<tr>
+<td>LLM 供应商</td>
+<td><code>BaseLLMProvider</code></td>
+<td>实现 <code>chat()</code> / <code>chat_stream()</code> / <code>vision()</code></td>
+</tr>
+<tr>
+<td>手账版式</td>
+<td><code>templates/*.html.j2</code> + <code>manifest.json</code></td>
+<td>加一个 Jinja2 模板目录</td>
+</tr>
+<tr>
+<td>导出格式</td>
+<td><code>BaseExporter</code></td>
+<td>实现 <code>export(handbook) -&gt; bytes</code></td>
+</tr>
+<tr>
+<td>等级画像</td>
+<td><code>level_profiles/*.json</code></td>
+<td>加一个 JSON 文件</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-核心流水线设计">5. 核心流水线设计</h2>
+<h3 id="5-1-端到端流程">5.1 端到端流程</h3>
+<pre><code><div class="highlight"><pre><span></span>用户上传
+   │
+   ├─ 1. 落盘 &amp; 指纹：计算 SHA-256 去重，命中则复用已有解析结果
+   │
+   ├─ 2. 格式识别 → 选择 Parser
+   │
+   ├─ 3. 【Parse】解析为结构化 Block[]
+   │      · 文字层 PDF：PyMuPDF 直接抽取，保留坐标          ← 实现改用 pypdfium2
+   │      · 扫描 PDF/图片：PaddleOCR（中英）+ 版面分析（LayoutParser/YOLO）  ← 实现用 RapidOCR + 自研 layout.py
+   │      · DOCX/MD/TXT：原生解析
+   │      · 图片块 → 多模态模型生成描述
+   │
+   ├─ 4. 【Normalize】清洗：去页眉页脚、连字符断词合并、双栏重排、去乱码
+   │
+   ├─ 5. 【NLP 预处理】（本地模型，零成本）
+   │      · 分句 → 分词 → 词形还原 → 词性 → 依存句法
+   │      · 难度打分 → 每词/每句一个 level_score
+   │      · 语法结构识别（规则 + 句法树模式）
+   │      · 候选筛选：只把"值得标注"的句子送 LLM
+   │
+   ├─ 6. 【LLM 标注】按等级画像调用
+   │      · 任务 A：词汇标注（词 + 义项 + 是否超纲 + 记忆钩子）
+   │      · 任务 B：语法标注（结构名 + 作用 + 中文批注）
+   │      · 任务 C：句型提取（句型名 + 用途分类 + 仿写示例）
+   │      · 任务 D：长难句图解（主干/修饰拆分）
+   │      · 严格 JSON Schema 输出 + 结果校验 + 失败重试
+   │
+   ├─ 7. 【Markup 编排】密度控制、去重、优先级排序、坐标计算
+   │
+   ├─ 8. 【Render】Block[] + Annotation[] → HTML → Playwright 截图/PDF
+   │
+   └─ 9. 【Persist】落地 handbook，推送完成事件（SSE）
+</pre></div>
+</code></pre>
+<h3 id="5-2-时序图">5.2 时序图</h3>
+<pre><code><div class="highlight"><pre><span></span>用户        前端         API        Redis/Celery      Worker           LLM/OCR
+ │           │            │             │              │                │
+ │─上传文件─▶│──POST─────▶│             │              │                │
+ │           │            │─存对象存储   │              │                │
+ │           │            │─入队 parse──▶│──派发───────▶│                │
+ │           │◀─202 {job}─│             │              │─OCR/解析──────▶│
+ │           │──SSE 订阅──▶│◀───────────进度上报────────│◀───Block[]─────│
+ │           │◀─progress──│             │              │                │
+ │           │            │             │◀─入队 analyze─│                │
+ │           │            │             │──派发────────▶│─NLP 预处理     │
+ │           │            │             │              │─LLM 标注──────▶│
+ │           │            │             │              │◀──JSON 标注────│
+ │           │            │             │◀─入队 render──│                │
+ │           │            │             │──派发────────▶│─HTML→PNG/PDF   │
+ │           │◀─done─────│◀─────────────│              │                │
+ │◀─手账展示──│            │             │              │                │
+</pre></div>
+</code></pre>
+<h3 id="5-3-关键设计决策">5.3 关键设计决策</h3>
+<table>
+<thead>
+<tr>
+<th>决策</th>
+<th>方案</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否整篇送 LLM</td>
+<td><strong>否</strong>，本地 NLP 先筛候选</td>
+<td>省 70%+ token；避免模型注意力稀释</td>
+</tr>
+<tr>
+<td>标注结果缓存键</td>
+<td><code>sha256(file) + level_id + prompt_version</code></td>
+<td>同一文档换等级可秒出；提示词升级可自动失效</td>
+</tr>
+<tr>
+<td>分块策略</td>
+<td>按语义段落切（≤ 800 token），带前后各 1 段上下文</td>
+<td>保持上下文完整性，避免句子被切断</td>
+</tr>
+<tr>
+<td>进度反馈</td>
+<td>SSE（而非 WebSocket）</td>
+<td>单向推送足够，实现简单，穿透代理好</td>
+</tr>
+<tr>
+<td>失败降级</td>
+<td>LLM 超时 → 退化为「纯规则标注」</td>
+<td>保证有产出，不白跑</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-关键模块详细设计">6. 关键模块详细设计</h2>
+<h3 id="6-1-文档解析层-parse">6.1 文档解析层（Parse）</h3>
+<h4>6.1.1 PDF 分流策略</h4>
+<pre><code class="language-python"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">parse_pdf</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">fitz</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">text_len</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="s2">"text"</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">text_len</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>      <span class="c1"># 平均每页少于 100 字符 → 判定为扫描件</span>
+        <span class="k">return</span> <span class="n">parse_scanned_pdf</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>  <span class="c1"># 走 OCR 通道</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">parse_text_pdf</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>     <span class="c1"># 走文字层通道</span>
+</pre></div>
+</code></pre>
+<ul>
+<li><strong>文字层 PDF</strong>：PyMuPDF 抽取 <code>(text, bbox, font, size, block_type)</code>。用字号聚类识别标题层级。保留 bbox 供&quot;原文叠加模式&quot;定位。
+<blockquote>
+<p>⚠️ 实现变更：改用 <strong>pypdfium2</strong>（AGPL 风险），它只提供字符框，因此字号改用
+<strong>行宽 ÷ 等效字符数</strong>，版面聚类由自研 <code>layout.py</code> 负责。见 4.2 节的变更表。</p>
+</blockquote>
+</li>
+<li><strong>扫描件 PDF / 图片</strong>：PaddleOCR（<code>ch</code> + <code>en</code> 混合模型）→ 文本行 + 四边形坐标 → 版面分析模型（或基于坐标的启发式）聚类为段落 / 分栏。
+<blockquote>
+<p>⚠️ 实现变更：OCR 用 <strong>RapidOCR</strong>（Apache-2.0，onnxruntime 后端）；
+版面聚类不依赖模型，用<strong>中缝检测 + 递归切栏 + 行距基准（pitch）分段</strong>的启发式实现，
+与文字层共用同一套 <code>layout.build_blocks()</code>。</p>
+</blockquote>
+</li>
+<li><strong>表格</strong>：pdfplumber <code>extract_tables()</code>；扫描件用 PP-Structure 的表格恢复能力。</li>
+</ul>
+<h4>6.1.2 统一中间表示（IR）</h4>
+<p>所有 Parser 必须输出同一结构，这是插件化的基础：</p>
+<pre><code class="language-python"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"paragraph"</span><span class="p">,</span> <span class="s2">"list"</span><span class="p">,</span> <span class="s2">"table"</span><span class="p">,</span> <span class="s2">"figure"</span><span class="p">,</span> <span class="s2">"caption"</span><span class="p">,</span> <span class="s2">"footnote"</span><span class="p">]</span>
+    <span class="n">order</span><span class="p">:</span> <span class="nb">int</span>                      <span class="c1"># 阅读顺序</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">bbox</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>   <span class="c1"># 归一化坐标 0~1</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>               <span class="c1"># 标题层级</span>
+    <span class="n">image_ref</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>           <span class="c1"># 图片在对象存储中的 key</span>
+    <span class="n">image_desc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>          <span class="c1"># 多模态模型生成的描述</span>
+    <span class="n">table_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span>
+</pre></div>
+</code></pre>
+<h4>6.1.3 清洗规则清单</h4>
+<ol>
+<li>删除重复出现的页眉页脚（跨页文本相似度 &gt; 0.9）。</li>
+<li>合并行尾连字符断词（<code>metho-\ndology</code> → <code>methodology</code>）。</li>
+<li>双栏重排：按 bbox 的 x 中心聚类为栏，栏内按 y 排序。</li>
+<li>去除孤立页码、DOI、版权行。</li>
+<li>软连字符、非断行空格、零宽字符归一化。</li>
+<li>引号/撇号统一为 ASCII 或排版引号（按输出场景）。</li>
+</ol>
+<h3 id="6-2-图文扫描层">6.2 图文扫描层</h3>
+<table>
+<thead>
+<tr>
+<th>内容类型</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正文文本</td>
+<td>抽取 + 清洗</td>
+</tr>
+<tr>
+<td>表格</td>
+<td>结构化，标注时把表头术语一并纳入待标注词</td>
+</tr>
+<tr>
+<td>插图/照片</td>
+<td>多模态模型（GPT-4o / Qwen-VL / Gemini）生成 1–2 句描述；若图中含英文文字，额外 OCR</td>
+</tr>
+<tr>
+<td>图表（柱状/折线/饼图）</td>
+<td>提取类别名与数值标签，生成结构化描述，供&quot;图表作文&quot;句型推荐</td>
+</tr>
+<tr>
+<td>公式</td>
+<td>LaTeX OCR（Pix2Tex）转写（P2）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>图片描述提示词示例</strong></p>
+<pre><code><div class="highlight"><pre><span></span>Describe this image in 2 sentences for an English learner.
+Sentence 1: what it shows (chart type / subject / time range / units).
+Sentence 2: the main trend or takeaway.
+If the image contains English text, transcribe it verbatim after "TEXT:".
+Output plain text, no markdown.
+</pre></div>
+</code></pre>
+</blockquote>
+<h3 id="6-3-语言分析层-linguistic-analysis">6.3 语言分析层（Linguistic Analysis）</h3>
+<h4>6.3.1 处理链</h4>
+<pre><code><div class="highlight"><pre><span></span>raw text
+  → 分句（spaCy sentencizer，处理缩写 "Dr." "U.S." 不误切）
+  → 分词 + 词性 + 依存句法（en_core_web_trf）
+  → 词形还原（lemminflect，处理不规则变化）
+  → 词组识别（名词短语 NP、动词短语 VP、介词短语 PP）
+  → 难度打分（见 3.4）
+  → 语法结构识别
+  → 候选筛选
+</pre></div>
+</code></pre>
+<h4>6.3.2 语法结构识别（规则 + 句法树模式）</h4>
+<p>不依赖 LLM 就能识别的结构（成本为零，准确率高），只有识别不出或需要讲解时才交给 LLM：</p>
+<table>
+<thead>
+<tr>
+<th>结构</th>
+<th>识别信号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定语从句</td>
+<td>依存树中存在 <code>relcl</code> 关系 + 关系代词（which/that/who/whose/where）</td>
+</tr>
+<tr>
+<td>状语从句</td>
+<td><code>advcl</code> + 从属连词表（although/because/while/if...）</td>
+</tr>
+<tr>
+<td>名词性从句</td>
+<td><code>ccomp</code>/<code>xcomp</code>/<code>acl</code> 且从句作主语/宾语/表语</td>
+</tr>
+<tr>
+<td>非谓语</td>
+<td>动词的 <code>VBG</code>/<code>VBN</code>/<code>VB</code> 形态出现在非谓语位置</td>
+</tr>
+<tr>
+<td>虚拟语气</td>
+<td>句式模板：<code>If + had + VBN</code>、<code>wish + past</code>、<code>were to</code>、<code>should have VBN</code></td>
+</tr>
+<tr>
+<td>倒装</td>
+<td>句首为否定副词（Not until/Never/Hardly/Seldom）+ 助动词前置</td>
+</tr>
+<tr>
+<td>强调句</td>
+<td><code>It is/was ... that ...</code> 模板</td>
+</tr>
+<tr>
+<td>独立主格</td>
+<td>名词/代词 + 分词，且无连词连接两个谓语</td>
+</tr>
+<tr>
+<td>插入语</td>
+<td>逗号/破折号包裹的 <code>parataxis</code> 或 <code>appos</code></td>
+</tr>
+<tr>
+<td>比较结构</td>
+<td><code>as...as</code>、<code>more...than</code>、<code>the more...the more</code></td>
+</tr>
+</tbody>
+</table>
+<h4>6.3.3 候选筛选（省 token 的关键）</h4>
+<p>对每个句子计算 <code>annotation_value</code>，只有高于阈值的才进 LLM 队列：</p>
+<pre><code class="language-python"><div class="highlight"><pre><span></span><span class="n">annotation_value</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="mf">0.30</span> <span class="o">*</span> <span class="n">overflow_word_ratio</span>      <span class="c1"># 超纲词占比</span>
+  <span class="o">+</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">sentence_length</span><span class="p">)</span><span class="o">/</span><span class="n">log</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>   <span class="c1"># 句长（对数压缩）</span>
+  <span class="o">+</span> <span class="mf">0.20</span> <span class="o">*</span> <span class="n">grammar_structure_score</span>  <span class="c1"># 命中目标语法结构的加权分</span>
+  <span class="o">+</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="n">pattern_match_score</span>      <span class="c1"># 命中句型模板</span>
+  <span class="o">+</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="n">is_topic_sentence</span>        <span class="c1"># 是否段落主题句</span>
+<span class="p">)</span>
+<span class="c1"># 阈值随等级浮动：等级越低阈值越低（低水平学生需要更多标注）</span>
+<span class="n">threshold</span> <span class="o">=</span> <span class="n">base_threshold</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>   <span class="c1"># high_school 0.25 → toefl 0.55</span>
+</pre></div>
+</code></pre>
+<p>实测预期：一篇 2000 词文章筛出 25–40 个待标注句，占全文 35%–50%，token 消耗降低 60% 以上。</p>
+<h3 id="6-4-手账标注引擎-markup-engine">6.4 手账标注引擎（Markup Engine）</h3>
+<h4>6.4.1 标注类型字典</h4>
+<table>
+<thead>
+<tr>
+<th>类型 ID</th>
+<th>视觉呈现</th>
+<th>语义</th>
+<th>色值（默认）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>word_highlight</code></td>
+<td>荧光笔色块（半透明，边缘略不齐）</td>
+<td>重点词 / 高频考点词</td>
+<td><code>#FDE68A</code></td>
+</tr>
+<tr>
+<td><code>word_circle</code></td>
+<td>手绘椭圆圈（路径加噪点）</td>
+<td>超纲必背词</td>
+<td><code>#EF4444</code></td>
+</tr>
+<tr>
+<td><code>rare_meaning</code></td>
+<td>荧光笔 + 右上角小三角</td>
+<td>熟词僻义</td>
+<td><code>#FCD34D</code></td>
+</tr>
+<tr>
+<td><code>collocation</code></td>
+<td>虚线方框</td>
+<td>固定搭配 / 短语动词</td>
+<td><code>#10B981</code></td>
+</tr>
+<tr>
+<td><code>grammar_underline</code></td>
+<td>彩色直线下划线</td>
+<td>语法结构</td>
+<td>按结构类型分配</td>
+</tr>
+<tr>
+<td><code>grammar_bracket</code></td>
+<td>方括号 <code>[ ]</code> + 竖线</td>
+<td>从句 / 插入语范围</td>
+<td>同色</td>
+</tr>
+<tr>
+<td><code>sentence_pattern</code></td>
+<td>红色波浪线</td>
+<td>作文加分句型</td>
+<td><code>#DC2626</code></td>
+</tr>
+<tr>
+<td><code>long_sentence_split</code></td>
+<td>折行 + 缩进 + 层级线</td>
+<td>长难句主干/修饰</td>
+<td><code>#6B7280</code></td>
+</tr>
+<tr>
+<td><code>correction</code></td>
+<td>删除线 + 上方重写（红笔）</td>
+<td>中式表达纠正</td>
+<td><code>#7C3AED</code></td>
+</tr>
+<tr>
+<td><code>margin_note</code></td>
+<td>右侧边栏手写批注</td>
+<td>讲解、结构名、翻译</td>
+<td><code>#1F2937</code></td>
+</tr>
+<tr>
+<td><code>sticky_note</code></td>
+<td>便利贴（微旋转 + 阴影）</td>
+<td>句型用途、记忆技巧</td>
+<td><code>#FEF3C7</code></td>
+</tr>
+<tr>
+<td><code>stamp</code></td>
+<td>印章图形</td>
+<td><code>★高频</code> / <code>✎作文可用</code> / <code>⚠易错</code></td>
+<td><code>#B91C1C</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>无障碍要求</strong>：色盲用户仅靠颜色无法区分 → 每种类型同时具备<strong>唯一的形状特征</strong>（波浪线 vs 直线 vs 虚框）和<strong>图标印章</strong>。</p>
+</blockquote>
+<h4>6.4.2 语法结构配色规则</h4>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"relative_clause"</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#2563EB"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"定语从句"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"adverbial_clause"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#059669"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"状语从句"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"nominal_clause"</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#7C3AED"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"名词性从句"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"non_finite"</span><span class="p">:</span><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#EA580C"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"非谓语动词"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"subjunctive"</span><span class="p">:</span><span class="w">       </span><span class="p">{</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#DB2777"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"虚拟语气"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"inversion"</span><span class="p">:</span><span class="w">         </span><span class="p">{</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#0891B2"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"倒装"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"emphatic"</span><span class="p">:</span><span class="w">          </span><span class="p">{</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#CA8A04"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"强调句"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"comparison"</span><span class="p">:</span><span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#4D7C0F"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"比较结构"</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<h4>6.4.3 密度控制算法</h4>
+<p>防止&quot;划满等于没划&quot;，这是产品体验成败的关键：</p>
+<pre><code class="language-python"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">apply_density_policy</span><span class="p">(</span><span class="n">annotations</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">paragraph</span><span class="p">):</span>
+    <span class="c1"># 1. 按优先级排序</span>
+    <span class="n">prio</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"sentence_pattern"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>   <span class="c1"># 作文加分句型永远保留</span>
+        <span class="s2">"word_circle"</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+        <span class="s2">"grammar_underline"</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+        <span class="s2">"word_highlight"</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span>
+        <span class="s2">"rare_meaning"</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">annotations</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">prio</span><span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">type</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># 2. 单词类总量上限（按等级）</span>
+    <span class="n">word_cap</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">markup_policy</span><span class="p">[</span><span class="s2">"word_circle_max_per_1000"</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span>
+    <span class="c1"># 3. 单段上限 = ceil(段落句数 × grammar_mark_density) 且 ≤ 6</span>
+    <span class="n">para_cap</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">paragraph</span><span class="o">.</span><span class="n">sentences</span><span class="p">)</span> <span class="o">*</span> <span class="n">profile</span><span class="o">.</span><span class="n">markup_policy</span><span class="p">[</span><span class="s2">"grammar_mark_density"</span><span class="p">]),</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="c1"># 4. 同句内相邻标注不重叠：若重叠，保留高优先级，低优先级迁移到边栏批注</span>
+    <span class="c1"># 5. 返回裁剪后的结果</span>
+</pre></div>
+</code></pre>
+<h4>6.4.4 标注输出 Schema（LLM 必须严格遵守）</h4>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"block_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b_012"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"grammar_underline"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"target_text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"did they realize"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"start_offset"</span><span class="p">:</span><span class="w"> </span><span class="mi">88</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"end_offset"</span><span class="p">:</span><span class="w"> </span><span class="mi">103</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"grammar_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inversion"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"部分倒装"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"explain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not until 置于句首时，主句要用部分倒装：助动词 did 提到主语 they 之前。正常语序为 they did not realize..."</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.94</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"word_circle"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"target_text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"methodology"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"lemma"</span><span class="p">:</span><span class="w"> </span><span class="s2">"methodology"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"pos"</span><span class="p">:</span><span class="w"> </span><span class="s2">"noun"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"phonetic"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/ˌmeθəˈdɒlədʒi/"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"gloss_zh"</span><span class="p">:</span><span class="w"> </span><span class="s2">"方法论；研究方法"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"is_overflow"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"level_tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C1"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"memory_hook"</span><span class="p">:</span><span class="w"> </span><span class="s2">"method（方法）+ ology（学科）→ 方法论"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.97</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sentence_pattern"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"target_text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not until ... did ..."</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"pattern_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not until 部分倒装"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"usage"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"议论文强调"</span><span class="p">,</span><span class="w"> </span><span class="s2">"图表作文转折"</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"imitation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not until we understand the data can we draw a sound conclusion."</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.91</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<blockquote>
+<p><strong>实现要点</strong>：<code>start_offset</code> / <code>end_offset</code> 必须由后端在原文中二次定位校验（<code>text[start:end] == target_text</code>），不匹配则用模糊匹配（difflib）修复或丢弃该条。<strong>绝不信任模型的偏移量</strong>。</p>
+</blockquote>
+<h4>6.4.5 去重与合并</h4>
+<ul>
+<li>同一 <code>(type, start, end)</code> 重复 → 保留 <code>confidence</code> 最高者。</li>
+<li>相邻且同类型的标注间隔 &lt; 2 字符 → 合并。</li>
+<li>单词标注与语法标注在同一 span 上共存时，视觉上错开（语法下划线画在单词下方，圈选用椭圆外扩 2px）。</li>
+</ul>
+<h3 id="6-5-提示词工程">6.5 提示词工程</h3>
+<p>提示词<strong>版本化</strong>存放于 <code>llm/prompts/{task}/v{n}.jinja</code>，变更即换版本号，缓存键自动失效。</p>
+<h4>6.5.1 系统提示词（词汇标注任务 · 骨架）</h4>
+<pre><code><div class="highlight"><pre><span></span>You are an English teacher preparing a marked-up study handbook for a Chinese
+student whose target level is {{ level.display_name }} (vocabulary baseline:
+{{ level.vocab_baseline }} words).
+
+RULES:
+1. Mark ONLY words the student is unlikely to know at this level. Words within
+   the {{ level.vocab_baseline }}-word baseline must NOT be marked, unless they
+   are used in a rare/idiomatic sense.
+2. For each marked word return: exact surface form, lemma, POS, IPA phonetic,
+   a concise Simplified-Chinese gloss (&lt;= 15 characters), whether it is
+   "overflow" (beyond target level), and a memory hook if one exists.
+3. Maximum {{ level.markup_policy.word_circle_max_per_1000 }} marked words per
+   1000 words of text.
+4. Never mark proper nouns, numbers, or the same lemma twice in one paragraph.
+5. Output STRICT JSON conforming to the provided schema. No prose, no markdown
+   fences.
+
+CONTEXT: The text is from {{ source_hint }}. Domain: {{ domain }}.
+</pre></div>
+</code></pre>
+<h4>6.5.2 Few-shot 示例</h4>
+<p>每个任务在提示词中内置 2–3 个<strong>已标注的黄金样例</strong>（gold examples），显式展示&quot;该标什么 / 不该标什么&quot;。样例按等级切换（高中样例与托福样例不同）。</p>
+<h4>6.5.3 输出约束手段（三重保险）</h4>
+<ol>
+<li><strong>结构化输出</strong>：优先用厂商原生能力（OpenAI <code>response_format: json_schema</code>、Anthropic tool use、Qwen <code>response_format</code>）。</li>
+<li><strong>Schema 校验</strong>：Pydantic 校验，失败则把错误信息拼回提示词重试（最多 2 次）。</li>
+<li><strong>兜底解析</strong>：正则提取第一个 <code>{...}</code> 块；再失败则降级为规则标注。</li>
+</ol>
+<h4>6.5.4 成本优化清单</h4>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>预期节省</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本地 NLP 预筛候选句</td>
+<td>~60%</td>
+</tr>
+<tr>
+<td>结果缓存（doc+level+prompt 版本）</td>
+<td>重复文档 100%</td>
+</tr>
+<tr>
+<td>小模型做分句/词性/翻译，大模型只做语义判断</td>
+<td>~35%</td>
+</tr>
+<tr>
+<td>批量合并请求（一次送 3–5 个段落）</td>
+<td>~20%（减少 system prompt 重复）</td>
+</tr>
+<tr>
+<td>提示词精简（去冗余指令、用缩写标签）</td>
+<td>~15%</td>
+</tr>
+<tr>
+<td>用户 BYOK（用户自付）</td>
+<td>平台侧 100%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-数据模型设计">7. 数据模型设计</h2>
+<h3 id="7-1-实体关系-简图">7.1 实体关系（简图）</h3>
+<pre><code><div class="highlight"><pre><span></span>users ─┬─&lt; documents ─┬─&lt; document_blocks
+       │              ├─&lt; analysis_jobs &gt;─ handbooks ─┬─&lt; annotations
+       │              └─&lt; exports                      └─&lt; handbook_pages
+       ├─&lt; vocab_items ─&lt; review_records
+       ├─&lt; user_llm_keys
+       └─&lt; usage_logs
+level_profiles (全局配置表)
+grammar_structures (语法结构字典)
+sentence_patterns (句型模板库)
+</pre></div>
+</code></pre>
+<h3 id="7-2-核心表结构">7.2 核心表结构</h3>
+<pre><code class="language-sql"><div class="highlight"><pre><span></span><span class="c1">-- 用户</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">              </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">email</span><span class="w">           </span><span class="n">CITEXT</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">password_hash</span><span class="w">   </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">display_name</span><span class="w">    </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">target_level</span><span class="w">    </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'cet4'</span><span class="p">,</span>
+<span class="w">    </span><span class="n">plan</span><span class="w">            </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'free'</span><span class="p">,</span><span class="w">   </span><span class="c1">-- free/pro</span>
+<span class="w">    </span><span class="n">quota_remaining</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w">      </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">last_login_at</span><span class="w">   </span><span class="n">TIMESTAMPTZ</span>
+<span class="p">);</span>
+
+<span class="c1">-- 文档</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">documents</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">            </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w">       </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">users</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">title</span><span class="w">         </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">source_type</span><span class="w">   </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">          </span><span class="c1">-- pdf/docx/md/txt/image</span>
+<span class="w">    </span><span class="n">storage_key</span><span class="w">   </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">                 </span><span class="c1">-- 对象存储 key</span>
+<span class="w">    </span><span class="n">file_sha256</span><span class="w">   </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">             </span><span class="c1">-- 去重指纹</span>
+<span class="w">    </span><span class="n">page_count</span><span class="w">    </span><span class="nb">INT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">word_count</span><span class="w">    </span><span class="nb">INT</span><span class="p">,</span>
+<span class="w">    </span><span class="k">language</span><span class="w">      </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'en'</span><span class="p">,</span>
+<span class="w">    </span><span class="n">parse_status</span><span class="w">  </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'pending'</span><span class="p">,</span>
+<span class="w">    </span><span class="n">parse_error</span><span class="w">   </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w">    </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">()</span>
+<span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_documents_user</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">documents</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="k">DESC</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_documents_sha</span><span class="w">  </span><span class="k">ON</span><span class="w"> </span><span class="n">documents</span><span class="p">(</span><span class="n">file_sha256</span><span class="p">);</span>
+
+<span class="c1">-- 文档区块</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">document_blocks</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">          </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">document_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">documents</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">order_index</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">block_type</span><span class="w">  </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="nb">text</span><span class="w">        </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">page_no</span><span class="w">     </span><span class="nb">INT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">bbox</span><span class="w">        </span><span class="n">FLOAT8</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+<span class="w">    </span><span class="n">image_key</span><span class="w">   </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">image_desc</span><span class="w">  </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">table_data</span><span class="w">  </span><span class="n">JSONB</span><span class="p">,</span>
+<span class="w">    </span><span class="n">token_count</span><span class="w"> </span><span class="nb">INT</span>
+<span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_blocks_doc</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">document_blocks</span><span class="p">(</span><span class="n">document_id</span><span class="p">,</span><span class="w"> </span><span class="n">order_index</span><span class="p">);</span>
+
+<span class="c1">-- 等级画像（配置化，便于运营调整）</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">level_profiles</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">level_id</span><span class="w">     </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">display_name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">config</span><span class="w">       </span><span class="n">JSONB</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="k">version</span><span class="w">      </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">updated_at</span><span class="w">   </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">()</span>
+<span class="p">);</span>
+
+<span class="c1">-- 分析任务</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">analysis_jobs</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">             </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">document_id</span><span class="w">    </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">documents</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w">        </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">users</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">level_id</span><span class="w">       </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">prompt_version</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">stage</span><span class="w">          </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">           </span><span class="c1">-- parse/analyze/render/export</span>
+<span class="w">    </span><span class="n">status</span><span class="w">         </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">           </span><span class="c1">-- queued/running/succeeded/failed</span>
+<span class="w">    </span><span class="n">progress</span><span class="w">       </span><span class="nb">SMALLINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">message</span><span class="w">        </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">error</span><span class="w">          </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">tokens_in</span><span class="w">      </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">tokens_out</span><span class="w">     </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">cost_cents</span><span class="w">     </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">started_at</span><span class="w">     </span><span class="n">TIMESTAMPTZ</span><span class="p">,</span>
+<span class="w">    </span><span class="n">finished_at</span><span class="w">    </span><span class="n">TIMESTAMPTZ</span>
+<span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_jobs_doc_level</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">analysis_jobs</span><span class="p">(</span><span class="n">document_id</span><span class="p">,</span><span class="w"> </span><span class="n">level_id</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
+
+<span class="c1">-- 手账</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">handbooks</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">           </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">document_id</span><span class="w">  </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">documents</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w">      </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">users</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">level_id</span><span class="w">     </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">title</span><span class="w">        </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">theme</span><span class="w">        </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'ruled_paper'</span><span class="p">,</span><span class="w">  </span><span class="c1">-- 横线纸/方格纸/答题卡</span>
+<span class="w">    </span><span class="n">layout_mode</span><span class="w">  </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'overlay'</span><span class="p">,</span><span class="w">      </span><span class="c1">-- overlay(原文叠加)/reflow(手账重排)</span>
+<span class="w">    </span><span class="n">stats</span><span class="w">        </span><span class="n">JSONB</span><span class="p">,</span><span class="w">                              </span><span class="c1">-- {words:32, patterns:7, ...}</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w">   </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">(),</span>
+<span class="w">    </span><span class="k">UNIQUE</span><span class="p">(</span><span class="n">document_id</span><span class="p">,</span><span class="w"> </span><span class="n">level_id</span><span class="p">,</span><span class="w"> </span><span class="n">theme</span><span class="p">,</span><span class="w"> </span><span class="n">layout_mode</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="c1">-- 标注</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">annotations</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">          </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">handbook_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">handbooks</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">block_id</span><span class="w">    </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">document_blocks</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="k">type</span><span class="w">        </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">start_offset</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">end_offset</span><span class="w">   </span><span class="nb">INT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">payload</span><span class="w">     </span><span class="n">JSONB</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">          </span><span class="c1">-- 音标/释义/讲解/用途/颜色等</span>
+<span class="w">    </span><span class="n">priority</span><span class="w">    </span><span class="nb">SMALLINT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+<span class="w">    </span><span class="k">source</span><span class="w">      </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'llm'</span><span class="p">,</span><span class="w"> </span><span class="c1">-- llm/rule/user</span>
+<span class="w">    </span><span class="n">confidence</span><span class="w">  </span><span class="nb">REAL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w">  </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">()</span>
+<span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_ann_handbook</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">annotations</span><span class="p">(</span><span class="n">handbook_id</span><span class="p">,</span><span class="w"> </span><span class="n">block_id</span><span class="p">,</span><span class="w"> </span><span class="n">start_offset</span><span class="p">);</span>
+
+<span class="c1">-- 生词本</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">vocab_items</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">            </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w">       </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">users</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">lemma</span><span class="w">         </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">surface</span><span class="w">       </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span>
+<span class="w">    </span><span class="n">phonetic</span><span class="w">      </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span>
+<span class="w">    </span><span class="n">gloss_zh</span><span class="w">      </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">level_tag</span><span class="w">     </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+<span class="w">    </span><span class="n">source_doc_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">documents</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">context_sent</span><span class="w">  </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ease</span><span class="w">          </span><span class="nb">REAL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span><span class="w">           </span><span class="c1">-- SM-2 参数</span>
+<span class="w">    </span><span class="n">interval_days</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">repetitions</span><span class="w">   </span><span class="nb">INT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">due_at</span><span class="w">        </span><span class="nb">DATE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">mastery</span><span class="w">       </span><span class="nb">SMALLINT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w">    </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">(),</span>
+<span class="w">    </span><span class="k">UNIQUE</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">lemma</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_vocab_due</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">vocab_items</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">due_at</span><span class="p">);</span>
+
+<span class="c1">-- 用户自带模型密钥（加密存储）</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">user_llm_keys</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">           </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w">      </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">users</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">CASCADE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">provider</span><span class="w">     </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">label</span><span class="w">        </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">base_url</span><span class="w">     </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">key_cipher</span><span class="w">   </span><span class="n">BYTEA</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">       </span><span class="c1">-- AES-256-GCM 加密</span>
+<span class="w">    </span><span class="n">key_last4</span><span class="w">    </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+<span class="w">    </span><span class="n">model_map</span><span class="w">    </span><span class="n">JSONB</span><span class="p">,</span><span class="w">                </span><span class="c1">-- {"annotate":"...","vision":"...","fast":"..."}</span>
+<span class="w">    </span><span class="n">is_default</span><span class="w">   </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">    </span><span class="n">verified_at</span><span class="w">  </span><span class="n">TIMESTAMPTZ</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w">   </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">()</span>
+<span class="p">);</span>
+
+<span class="c1">-- 句型模板库（辅助匹配 + 向量检索相似句）</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">sentence_patterns</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">           </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">name</span><span class="w">         </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="k">structure</span><span class="w">    </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">        </span><span class="c1">-- "Not until + 时间状语 + 助动词 + 主语 + 谓语"</span>
+<span class="w">    </span><span class="n">regex_hint</span><span class="w">   </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">usage_tags</span><span class="w">   </span><span class="nb">TEXT</span><span class="p">[],</span>
+<span class="w">    </span><span class="n">min_level</span><span class="w">    </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span>
+<span class="w">    </span><span class="n">example</span><span class="w">      </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">embedding</span><span class="w">    </span><span class="n">VECTOR</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_pattern_vec</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">sentence_patterns</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="n">ivfflat</span><span class="w"> </span><span class="p">(</span><span class="n">embedding</span><span class="w"> </span><span class="n">vector_cosine_ops</span><span class="p">);</span>
+
+<span class="c1">-- LLM 调用日志</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">usage_logs</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w">           </span><span class="n">BIGSERIAL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w">      </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">users</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">job_id</span><span class="w">       </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">analysis_jobs</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">provider</span><span class="w">     </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span>
+<span class="w">    </span><span class="n">model</span><span class="w">        </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span>
+<span class="w">    </span><span class="n">task</span><span class="w">         </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span>
+<span class="w">    </span><span class="n">tokens_in</span><span class="w">    </span><span class="nb">INT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">tokens_out</span><span class="w">   </span><span class="nb">INT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">latency_ms</span><span class="w">   </span><span class="nb">INT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ok</span><span class="w">           </span><span class="nb">BOOLEAN</span><span class="p">,</span>
+<span class="w">    </span><span class="n">error_code</span><span class="w">   </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w">   </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">()</span>
+<span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_usage_user_time</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">usage_logs</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="k">DESC</span><span class="p">);</span>
+</pre></div>
+</code></pre>
+<h3 id="7-3-存储策略">7.3 存储策略</h3>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>位置</th>
+<th>生命周期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原始文件</td>
+<td>对象存储 <code>sources/{user}/{doc_id}/</code></td>
+<td>永久（用户可删）</td>
+</tr>
+<tr>
+<td>页面缩略图</td>
+<td>对象存储 <code>thumbs/{doc_id}/{page}.webp</code></td>
+<td>永久</td>
+</tr>
+<tr>
+<td>渲染结果 PNG/PDF</td>
+<td>对象存储 <code>exports/{handbook_id}/</code></td>
+<td>导出后 7 天回收</td>
+</tr>
+<tr>
+<td>结构化 Block / 标注</td>
+<td>PostgreSQL</td>
+<td>永久</td>
+</tr>
+<tr>
+<td>任务中间态</td>
+<td>Redis（TTL 24h）</td>
+<td>24 小时</td>
+</tr>
+<tr>
+<td>向量（句型/相似句）</td>
+<td>pgvector</td>
+<td>永久</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-api-接口设计">8. API 接口设计</h2>
+<p>Base URL：<code>/api/v1</code>　认证：<code>Authorization: Bearer &lt;JWT&gt;</code></p>
+<h3 id="8-1-接口清单">8.1 接口清单</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/documents</code></td>
+<td>上传文件（multipart），返回 <code>document_id</code> + <code>job_id</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/documents</code></td>
+<td>我的文档列表（分页、标签筛选）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/documents/{id}</code></td>
+<td>文档详情（含 Block 摘要）</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/documents/{id}</code></td>
+<td>删除文档及其所有产物</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/documents/{id}/analyze</code></td>
+<td>触发标注，body: <code>{level_id, layout_mode, theme, options}</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/jobs/{job_id}</code></td>
+<td>查询任务状态（轮询兜底）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/jobs/{job_id}/stream</code></td>
+<td><strong>SSE</strong> 订阅实时进度</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/handbooks/{id}</code></td>
+<td>获取手账（Block + Annotations 完整数据）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/handbooks/{id}/preview?page=1</code></td>
+<td>单页预览图（WebP）</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/annotations/{id}</code></td>
+<td>用户手动修改标注（改文字/删除/改色）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/annotations</code></td>
+<td>用户手动新增标注</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/handbooks/{id}/export</code></td>
+<td>发起导出，body: <code>{format, options}</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/exports/{id}</code></td>
+<td>导出任务状态</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/exports/{id}/download</code></td>
+<td>下载（签名 URL，302）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/vocab</code></td>
+<td>生词本（支持 <code>?due=today&amp;level=cet4</code>）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/vocab/{id}/review</code></td>
+<td>提交复习结果（<code>quality: 0-5</code>），返回下次到期日</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/level-profiles</code></td>
+<td>获取六档等级画像（前端展示用）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/me</code></td>
+<td>当前用户信息与配额</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/me/llm-keys</code></td>
+<td>新增 BYOK 密钥</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/me/llm-keys</code></td>
+<td>列出密钥（脱敏）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/me/llm-keys/{id}/verify</code></td>
+<td>连通性测试</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/me/llm-keys/{id}</code></td>
+<td>删除密钥</td>
+</tr>
+</tbody>
+</table>
+<h3 id="8-2-关键接口示例">8.2 关键接口示例</h3>
+<h4>上传并生成手账</h4>
+<pre><code class="language-http"><div class="highlight"><pre><span></span><span class="nf">POST</span> <span class="nn">/api/v1/documents</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">multipart/form-data; boundary=----X</span>
+
+------X
+Content-Disposition: form-data; name="file"; filename="the-economist.pdf"
+Content-Type: application/pdf
+&lt;binary&gt;
+------X
+Content-Disposition: form-data; name="level_id"
+
+cet6
+------X--
+</pre></div>
+</code></pre>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"document_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10241</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"job_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">88012</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"the-economist"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"page_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"word_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2140</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"estimated_seconds"</span><span class="p">:</span><span class="w"> </span><span class="mi">75</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"stream_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/api/v1/jobs/88012/stream"</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<h4>SSE 进度流</h4>
+<pre><code class="language-http"><div class="highlight"><pre><span></span><span class="nf">GET</span> <span class="nn">/api/v1/jobs/88012/stream</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">text/event-stream</span>
+</pre></div>
+</code></pre>
+<pre><code><div class="highlight"><pre><span></span>event: progress
+data: {"stage":"parse","progress":20,"message":"正在识别第 3/8 页"}
+
+event: progress
+data: {"stage":"analyze","progress":62,"message":"正在标注语法与重点词"}
+
+event: progress
+data: {"stage":"render","progress":90,"message":"正在排版手账"}
+
+event: done
+data: {"handbook_id":3311,"stats":{"words":47,"grammar":12,"patterns":8,"sentences":31}}
+
+event: error
+data: {"code":"LLM_TIMEOUT","message":"模型响应超时，已降级为规则标注","handbook_id":3311}
+</pre></div>
+</code></pre>
+<h4>获取手账</h4>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3311</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"document_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10241</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"level_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cet6"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"level_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"大学英语六级"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"theme"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ruled_paper"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"layout_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"overlay"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"stats"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"words"</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span><span class="w"> </span><span class="nt">"grammar"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"patterns"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nt">"long_sentences"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">90233</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paragraph"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"order_index"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not until the committee had reviewed all the submissions did they realize how flawed the methodology was."</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"annotations"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">551</span><span class="p">,</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"grammar_underline"</span><span class="p">,</span><span class="w"> </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="mi">88</span><span class="p">,</span><span class="w"> </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="mi">103</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"grammar_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inversion"</span><span class="p">,</span><span class="w"> </span><span class="nt">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"部分倒装"</span><span class="p">,</span>
+<span class="w">                     </span><span class="nt">"explain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not until 置于句首引起部分倒装……"</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#0891B2"</span><span class="p">}},</span>
+<span class="w">        </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">552</span><span class="p">,</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"word_circle"</span><span class="p">,</span><span class="w"> </span><span class="nt">"start"</span><span class="p">:</span><span class="w"> </span><span class="mi">145</span><span class="p">,</span><span class="w"> </span><span class="nt">"end"</span><span class="p">:</span><span class="w"> </span><span class="mi">156</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"lemma"</span><span class="p">:</span><span class="w"> </span><span class="s2">"methodology"</span><span class="p">,</span><span class="w"> </span><span class="nt">"phonetic"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/ˌmeθəˈdɒlədʒi/"</span><span class="p">,</span>
+<span class="w">                     </span><span class="nt">"gloss_zh"</span><span class="p">:</span><span class="w"> </span><span class="s2">"方法论；研究方法"</span><span class="p">,</span><span class="w"> </span><span class="nt">"level_tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"C1"</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#EF4444"</span><span class="p">}}</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<h4>发起导出</h4>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="err">POST</span><span class="w"> </span><span class="err">/api/v</span><span class="mi">1</span><span class="err">/ha</span><span class="kc">n</span><span class="err">dbooks/</span><span class="mi">3311</span><span class="err">/expor</span><span class="kc">t</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pdf"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"include_vocab_list"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"include_answers"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"paper"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a4"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"columns"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"margin_binding"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"handwriting_font"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"print_friendly"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"export_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7741</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"queued"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"estimated_seconds"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<h3 id="8-3-错误码规范">8.3 错误码规范</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP</th>
+<th>code</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>400</td>
+<td><code>INVALID_FILE_TYPE</code></td>
+<td>不支持的文件格式</td>
+</tr>
+<tr>
+<td>400</td>
+<td><code>FILE_TOO_LARGE</code></td>
+<td>超出大小限制</td>
+</tr>
+<tr>
+<td>402</td>
+<td><code>QUOTA_EXCEEDED</code></td>
+<td>额度用尽，需升级或配置自有 Key</td>
+</tr>
+<tr>
+<td>409</td>
+<td><code>JOB_ALREADY_RUNNING</code></td>
+<td>同一文档同等级任务进行中</td>
+</tr>
+<tr>
+<td>413</td>
+<td><code>PDF_PAGE_LIMIT</code></td>
+<td>页数超限</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>ENCRYPTED_PDF</code></td>
+<td>PDF 有密码，无法解析</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RATE_LIMITED</code></td>
+<td>触发限流</td>
+</tr>
+<tr>
+<td>502</td>
+<td><code>LLM_UPSTREAM_ERROR</code></td>
+<td>模型服务异常</td>
+</tr>
+<tr>
+<td>504</td>
+<td><code>LLM_TIMEOUT</code></td>
+<td>模型超时（已自动降级）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-大模型-llm-接入方案">9. 大模型（LLM）接入方案</h2>
+<h3 id="9-1-抽象接口">9.1 抽象接口</h3>
+<pre><code class="language-python"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BaseLLMProvider</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Message</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                   <span class="n">json_schema</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+                   <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4096</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LLMResult</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">vision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</code></pre>
+<h3 id="9-2-任务-模型路由表">9.2 任务 → 模型路由表</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>能力要求</th>
+<th>推荐配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分句 / 词性 / 词形还原</td>
+<td>无（本地）</td>
+<td>spaCy 本地模型，成本 0</td>
+</tr>
+<tr>
+<td>简单翻译（词义）</td>
+<td>低</td>
+<td><code>fast</code> 档（如 Qwen-Turbo / DeepSeek-V3 / gpt-4o-mini）</td>
+</tr>
+<tr>
+<td>语法标注与讲解</td>
+<td>高（需语言教学理解）</td>
+<td><code>annotate</code> 档（如 DeepSeek-V3 / GPT-4o / Claude Sonnet / Qwen-Max）</td>
+</tr>
+<tr>
+<td>句型提取与用途分类</td>
+<td>高</td>
+<td><code>annotate</code> 档</td>
+</tr>
+<tr>
+<td>图片 / 图表理解</td>
+<td>多模态</td>
+<td><code>vision</code> 档（GPT-4o / Qwen-VL-Max / Gemini）</td>
+</tr>
+<tr>
+<td>长难句图解</td>
+<td>中高</td>
+<td><code>annotate</code> 档</td>
+</tr>
+</tbody>
+</table>
+<p>用户 BYOK 时可在设置里为每个任务档位指定具体模型：</p>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"fast"</span><span class="p">:</span><span class="w">     </span><span class="s2">"deepseek-chat"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"annotate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"deepseek-reasoner"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"vision"</span><span class="p">:</span><span class="w">   </span><span class="s2">"qwen-vl-max"</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<h3 id="9-3-供应商适配清单">9.3 供应商适配清单</h3>
+<table>
+<thead>
+<tr>
+<th>供应商</th>
+<th>接入方式</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI</td>
+<td>官方 SDK / OpenAI 兼容</td>
+<td><code>response_format: json_schema</code> 支持结构化输出</td>
+</tr>
+<tr>
+<td>Azure OpenAI</td>
+<td>同 OpenAI，改 <code>api-version</code> 与 endpoint</td>
+<td>企业合规友好</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>OpenAI 兼容</td>
+<td>性价比高，中文讲解质量好，国内直连</td>
+</tr>
+<tr>
+<td>通义千问（DashScope）</td>
+<td>OpenAI 兼容模式</td>
+<td>有 VL 多模态</td>
+</tr>
+<tr>
+<td>智谱 GLM</td>
+<td>OpenAI 兼容</td>
+<td>有 GLM-4V</td>
+</tr>
+<tr>
+<td>Anthropic Claude</td>
+<td>官方 SDK（tool use 做结构化）</td>
+<td>长文本与教学讲解强</td>
+</tr>
+<tr>
+<td>Google Gemini</td>
+<td>官方 SDK</td>
+<td>多模态强，长上下文</td>
+</tr>
+<tr>
+<td>Groq</td>
+<td>OpenAI 兼容</td>
+<td>极低延迟，适合 fast 档</td>
+</tr>
+<tr>
+<td>Ollama / vLLM（本地）</td>
+<td>OpenAI 兼容（<code>http://localhost:11434/v1</code>）</td>
+<td>完全离线、零成本，适合隐私敏感用户</td>
+</tr>
+<tr>
+<td>任意 OpenAI 兼容端点</td>
+<td>用户填 <code>base_url</code> + <code>api_key</code></td>
+<td>覆盖自建网关、One-API 中转</td>
+</tr>
+</tbody>
+</table>
+<h3 id="9-4-密钥安全">9.4 密钥安全</h3>
+<ul>
+<li>用户密钥使用 <strong>AES-256-GCM</strong> 加密后存库，主密钥来自环境变量 / KMS，<strong>不落盘明文</strong>。</li>
+<li>日志中一律脱敏（只保留后 4 位）。</li>
+<li>每个请求独立构造 Provider 实例，密钥不进入全局变量、不写入日志、不返回前端。</li>
+<li>支持&quot;使用一次后不保存&quot;模式。</li>
+</ul>
+<h3 id="9-5-可靠性设计">9.5 可靠性设计</h3>
+<pre><code><div class="highlight"><pre><span></span>调用 LLM
+  ├─ 超时：connect 5s / read 60s（长文分段）
+  ├─ 重试：指数退避 3 次（仅对 429/5xx/超时）
+  ├─ 降级链：主模型 → 备用模型 → 备用供应商 → 纯规则标注
+  ├─ 熔断：某供应商 5 分钟内失败率 &gt; 50% → 临时剔除 10 分钟
+  └─ 幂等：同一 (job_id, block_id, task) 结果落库缓存，重试不重复计费
+</pre></div>
+</code></pre>
+<h3 id="9-6-提示词版本管理">9.6 提示词版本管理</h3>
+<ul>
+<li>目录：<code>llm/prompts/{task}/v{n}.jinja</code>，<code>manifest.yaml</code> 记录当前生效版本。</li>
+<li>每次发布提示词必须跑<strong>回归测试集</strong>（见 16.3），通过率下降超过 3% 则拒绝发布。</li>
+<li>缓存键包含 <code>prompt_version</code>，提示词更新后旧缓存自动失效。</li>
+</ul>
+<hr />
+<h2 id="10-前端设计">10. 前端设计</h2>
+<h3 id="10-1-页面结构">10.1 页面结构</h3>
+<pre><code><div class="highlight"><pre><span></span>/                        落地页（产品介绍 + 登录）
+/app/upload              上传页（拖拽区 + 等级选择 + 解析进度）
+/app/library             我的文档库（卡片网格 + 标签筛选）
+/app/handbook/[id]       手账阅读器（核心页面）
+/app/vocab               生词本（列表 + 复习卡片 + 记忆曲线）
+/app/exports             导出中心
+/app/settings            设置（等级偏好、BYOK、主题、导出默认值）
+</pre></div>
+</code></pre>
+<h3 id="10-2-手账阅读器-核心页面-布局">10.2 手账阅读器（核心页面）布局</h3>
+<pre><code><div class="highlight"><pre><span></span>┌──────────────────────────────────────────────────────────────────┐
+│  ← 返回   《The Economist》· 六级 ▾    [切换等级]  [导出 ▾]  [编辑]│
+├────────────┬─────────────────────────────────────┬───────────────┤
+│            │                                     │  右侧批注栏    │
+│  页面缩略图 │        手账主画布                    │ ┌───────────┐ │
+│   ▢ 1      │  ┌───────────────────────────────┐  │ │★ 高频考点  │ │
+│   ■ 2      │  │ Not until the committee had  │  │ │方法论      │ │
+│   ▢ 3      │  │ reviewed all the ⭕submissions │  │ │/ˌmeθəˈ.../ │ │
+│   ▢ 4      │  │ did they realize how flawed  │  │ │C1 · 六级+  │ │
+│            │  │ the ⭕methodology was.        │  │ └───────────┘ │
+│            │  │ ╰────── 部分倒装 ──────╯      │  │ ┌───────────┐ │
+│            │  └───────────────────────────────┘  │ │✎ 作文可用  │ │
+│            │                                     │ │Not until...│
+│  ─────────  │  [缩放 100% ▾] [模式:原文/手账]     │ └───────────┘ │
+│  标注统计   │  ● 词 47  ● 语法 12  ● 句型 8       │               │
+└────────────┴─────────────────────────────────────┴───────────────┘
+</pre></div>
+</code></pre>
+<h3 id="10-3-关键交互">10.3 关键交互</h3>
+<table>
+<thead>
+<tr>
+<th>交互</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>点击圈选单词</td>
+<td>右侧批注栏滑出词卡：音标、释义、例句、加入生词本、发音按钮</td>
+</tr>
+<tr>
+<td>点击语法下划线</td>
+<td>弹出气泡：结构名 + 展开讲解 + 语法点收藏</td>
+</tr>
+<tr>
+<td>切换等级</td>
+<td>顶部下拉选择 → 有缓存秒出，无缓存走 SSE 进度 → 画布淡入淡出过渡</td>
+</tr>
+<tr>
+<td>模式切换</td>
+<td>「原文叠加」（保持原版式，红笔批改感）/「手账重排」（横线纸 + 边栏）</td>
+</tr>
+<tr>
+<td>悬浮标注</td>
+<td>高亮对应 span，显示 tooltip</td>
+</tr>
+<tr>
+<td>手动编辑</td>
+<td>进入编辑模式，选中文字 → 弹出标注工具栏（圈/荧光/波浪/批注）</td>
+</tr>
+<tr>
+<td>快捷键</td>
+<td><code>←/→</code> 翻页，<code>+/-</code> 缩放，<code>L</code> 显示/隐藏生词列表，<code>E</code> 导出</td>
+</tr>
+</tbody>
+</table>
+<h3 id="10-4-手账视觉风格-主题">10.4 手账视觉风格（主题）</h3>
+<table>
+<thead>
+<tr>
+<th>主题 ID</th>
+<th>描述</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ruled_paper</code></td>
+<td>米色横线纸 + 手写体 + 蓝色墨水</td>
+<td>默认，最像手账</td>
+</tr>
+<tr>
+<td><code>grid_paper</code></td>
+<td>方格纸 + 网格辅助线</td>
+<td>笔记党</td>
+</tr>
+<tr>
+<td><code>exam_paper</code></td>
+<td>白纸 + 答题卡式排版 + 红色批改</td>
+<td>应试备考</td>
+</tr>
+<tr>
+<td><code>dark_ink</code></td>
+<td>浅灰底 + 高对比标注</td>
+<td>夜间阅读</td>
+</tr>
+<tr>
+<td><code>minimal</code></td>
+<td>无底纹，只有标注</td>
+<td>打印省墨</td>
+</tr>
+</tbody>
+</table>
+<p>字体：正文用 <code>LXGW WenKai</code>（霞鹜文楷，开源中文手写风）/ <code>Caveat</code>（英文手写）；标题用 <code>Kalam</code>。所有字体本地自托管（避免 CDN 依赖与 FOIT）。</p>
+<h3 id="10-5-响应式">10.5 响应式</h3>
+<ul>
+<li>≥ 1280px：三栏（缩略图 / 画布 / 批注）</li>
+<li>768–1279px：两栏（画布 / 批注抽屉）</li>
+<li>&lt; 768px：单栏，画布全屏，批注为底部弹层；手账以「横向滚动 + 双指缩放」阅读</li>
+</ul>
+<hr />
+<h2 id="11-手账渲染与一键导出">11. 手账渲染与一键导出</h2>
+<h3 id="11-1-渲染管线">11.1 渲染管线</h3>
+<pre><code><div class="highlight"><pre><span></span>handbook (blocks + annotations)
+   │
+   ├─ 1. 构建 DOM 树
+   │     · 每个 Block → 一个 &lt;section class="block"&gt;
+   │     · 文本按 annotation 的 offset 切分为 &lt;span&gt; 片段
+   │     · 语法批注 → CSS 伪元素画下划线；词圈 → 内联 SVG 椭圆
+   │
+   ├─ 2. 注入主题样式（CSS Variables + 模板）
+   │
+   ├─ 3. 分页计算（服务端渲染时用 Playwright 的打印分页；前端预览用 CSS 分页）
+   │
+   ├─ 4. Playwright 渲染
+   │     · PDF：page.pdf({ format:'A4', printBackground:true, margin })
+   │     · PNG：page.screenshot({ fullPage:true, type:'png' })
+   │
+   └─ 5. 后处理：PDF 加书签目录、加水印（免费用户）、上传对象存储
+</pre></div>
+</code></pre>
+<h3 id="11-2-手绘质感实现-涂改-美学">11.2 手绘质感实现（&quot;涂改&quot;美学）</h3>
+<p>纯 CSS/SVG 也能做出手写感，无需图片素材：</p>
+<table>
+<thead>
+<tr>
+<th>效果</th>
+<th>实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>荧光笔</td>
+<td><code>background: linear-gradient(180deg, transparent 45%, var(--hl) 45%, var(--hl) 85%, transparent 85%)</code> + <code>border-radius</code> 微随机</td>
+</tr>
+<tr>
+<td>手绘圆圈</td>
+<td>SVG <code>&lt;ellipse&gt;</code> + <code>stroke-linecap:round</code> + <code>filter: url(#roughen)</code>（feTurbulence 位移滤镜）</td>
+</tr>
+<tr>
+<td>波浪线</td>
+<td>SVG <code>&lt;path&gt;</code> 生成正弦波，振幅 ±1.5px，周期 8px</td>
+</tr>
+<tr>
+<td>手写下划线</td>
+<td>SVG 直线 + 尾部轻微上扬 + 透明度 0.85</td>
+</tr>
+<tr>
+<td>便利贴</td>
+<td><code>rotate(-1.2deg)</code> + <code>box-shadow</code> + 顶部胶带伪元素</td>
+</tr>
+<tr>
+<td>涂改修正</td>
+<td><code>&lt;del&gt;</code> 加 <code>text-decoration-thickness</code> + 上方 <code>&lt;span&gt;</code> 绝对定位红色文字</td>
+</tr>
+</tbody>
+</table>
+<p>SVG 通过 <code>rough.js</code>（前端库）或服务端 Python <code>svgwrite</code> + 抖动算法生成，保证每次渲染的&quot;随机感&quot;一致（用 <code>block_id</code> 作为随机种子）。</p>
+<h3 id="11-3-导出格式矩阵">11.3 导出格式矩阵</h3>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>实现</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PDF（矢量）</strong></td>
+<td>Playwright <code>page.pdf()</code></td>
+<td>保留文本层，可搜索、可选词；体积小；打印最佳</td>
+</tr>
+<tr>
+<td><strong>PNG 长图</strong></td>
+<td>Playwright <code>screenshot(fullPage)</code></td>
+<td>便于分享到微信/小红书；限制宽度 1080px</td>
+</tr>
+<tr>
+<td><strong>打印优化版</strong></td>
+<td>专用 CSS <code>@media print</code></td>
+<td>去背景色、放大字号、加装订边距、黑白友好</td>
+</tr>
+<tr>
+<td><strong>DOCX</strong></td>
+<td><code>python-docx</code> 重排 + 标注转为彩色文字与批注</td>
+<td>老师二次编辑</td>
+</tr>
+<tr>
+<td><strong>Anki 卡片</strong>（P2）</td>
+<td>生成 <code>.apkg</code></td>
+<td>生词本导出到 Anki 复习</td>
+</tr>
+</tbody>
+</table>
+<h3 id="11-4-导出选项">11.4 导出选项</h3>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pdf"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"include_source_text"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"include_margin_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"include_vocab_list"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"include_grammar_summary"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"include_pattern_summary"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"include_translation"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"handwriting_font"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"paper"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a4"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"columns"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"margin_binding"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"watermark"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"page_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<hr />
+<h2 id="12-安全-合规与版权">12. 安全、合规与版权</h2>
+<h3 id="12-1-文件与数据安全">12.1 文件与数据安全</h3>
+<table>
+<thead>
+<tr>
+<th>风险</th>
+<th>措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>恶意文件上传</td>
+<td>类型白名单 + Magic Number 校验 + 大小限制；解析在<strong>独立沙箱容器</strong>内进行，禁网、限内存/CPU、超时强杀</td>
+</tr>
+<tr>
+<td>路径穿越</td>
+<td>存储 key 由服务端生成（UUID），绝不用用户文件名</td>
+</tr>
+<tr>
+<td>XSS（文档内容注入）</td>
+<td>渲染前对文本做 HTML 转义；Markdown 用白名单渲染器；CSP 头</td>
+</tr>
+<tr>
+<td>SSRF（BYOK 的 base_url）</td>
+<td>禁止访问内网段（私有 IP 黑名单）；仅允许 https</td>
+</tr>
+<tr>
+<td>密钥泄露</td>
+<td>AES-256 加密存储；日志脱敏；不返回前端</td>
+</tr>
+<tr>
+<td>越权访问</td>
+<td>所有资源查询强制带 <code>user_id</code> 条件；对象存储用带签名的临时 URL</td>
+</tr>
+<tr>
+<td>数据删除</td>
+<td>用户删文档 → 软删 + 30 天后物理清理（含对象存储）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-2-版权提示">12.2 版权提示</h3>
+<ul>
+<li>上传页显著提示：<strong>&quot;请仅上传您有权使用的材料，本工具仅用于个人学习。&quot;</strong></li>
+<li>平台不存储、不传播受版权保护的公开内容；用户上传内容默认私有。</li>
+<li>分享功能（P2）默认关闭，开启时提示用户自行确认版权责任。</li>
+<li>免费用户导出 PDF 可加水印（可选开关）。</li>
+</ul>
+<h3 id="12-3-内容合规">12.3 内容合规</h3>
+<ul>
+<li>接入内容审核（文本 + 图片），拦截违规内容。</li>
+<li>生成内容（批注、例句）做二次审核抽样。</li>
+<li>面向未成年人的功能需符合相关法律法规要求。</li>
+</ul>
+<h3 id="12-4-隐私">12.4 隐私</h3>
+<ul>
+<li>明确隐私政策：上传文档<strong>不用于模型训练</strong>、<strong>不对外共享</strong>。</li>
+<li>提供&quot;仅本地处理&quot;模式（配合 Ollama，数据不出本机）。</li>
+</ul>
+<hr />
+<h2 id="13-性能与成本控制">13. 性能与成本控制</h2>
+<h3 id="13-1-性能目标与手段">13.1 性能目标与手段</h3>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>目标</th>
+<th>手段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上传→返回</td>
+<td>&lt; 3 s</td>
+<td>只存文件 + 建任务，不阻塞</td>
+</tr>
+<tr>
+<td>文字层 PDF 解析</td>
+<td>30 页 &lt; 10 s</td>
+<td>pypdfium2 逐页抽字符框；避免逐页 OCR</td>
+</tr>
+<tr>
+<td>OCR</td>
+<td>单页 &lt; 4 s</td>
+<td>RapidOCR（onnxruntime CPU 多线程）；渲染时限制最长边 ≤ 2600px；首次加载模型约 20 s（之后常驻）</td>
+</tr>
+<tr>
+<td>LLM 标注</td>
+<td>2000 词 &lt; 60 s</td>
+<td>并发 5 个分段请求；流式收集</td>
+</tr>
+<tr>
+<td>渲染</td>
+<td>单页 &lt; 1.5 s</td>
+<td>Playwright 常驻浏览器实例（复用 context）</td>
+</tr>
+<tr>
+<td>首屏</td>
+<td>P95 &lt; 1.5 s</td>
+<td>Next.js SSR + 图片 CDN + 骨架屏</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-2-成本模型-按-2000-词文章估算">13.2 成本模型（按 2000 词文章估算）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>用量</th>
+<th>单价</th>
+<th>成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OCR（仅扫描件）</td>
+<td>8 页</td>
+<td>¥0.015/页</td>
+<td>¥0.12</td>
+</tr>
+<tr>
+<td>fast 模型（词义）</td>
+<td>60K in / 8K out</td>
+<td>¥0.5/M in, ¥2/M out</td>
+<td>¥0.05</td>
+</tr>
+<tr>
+<td>annotate 模型（语法/句型）</td>
+<td>45K in / 12K out</td>
+<td>¥2/M in, ¥8/M out</td>
+<td>¥0.19</td>
+</tr>
+<tr>
+<td>vision 模型（若有图）</td>
+<td>3 张图</td>
+<td>¥0.05/张</td>
+<td>¥0.15</td>
+</tr>
+<tr>
+<td>渲染 + 存储</td>
+<td>—</td>
+<td>—</td>
+<td>¥0.01</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td></td>
+<td></td>
+<td><strong>≈ ¥0.52</strong></td>
+</tr>
+</tbody>
+</table>
+<p>优化后目标（预筛 + 缓存 + 批量 + 提示词精简）压到 <strong>≤ ¥0.20</strong>。定价建议：会员制（¥19/月，含 100 篇）或按量（¥0.5/篇），BYOK 用户免模型费只收 ¥0.1/篇的平台费。</p>
+<h3 id="13-3-缓存策略">13.3 缓存策略</h3>
+<table>
+<thead>
+<tr>
+<th>缓存对象</th>
+<th>键</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档解析结果</td>
+<td><code>sha256(file)</code></td>
+<td>永久（可复用）</td>
+</tr>
+<tr>
+<td>标注结果</td>
+<td><code>sha256(file):level:prompt_version</code></td>
+<td>永久</td>
+</tr>
+<tr>
+<td>渲染页面图</td>
+<td><code>handbook_id:page:theme:mode</code></td>
+<td>30 天</td>
+</tr>
+<tr>
+<td>等级画像</td>
+<td><code>level_id:version</code></td>
+<td>内存，进程内</td>
+</tr>
+<tr>
+<td>词表集合</td>
+<td><code>level_id</code></td>
+<td>内存 + 启动预热</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="14-部署与运维">14. 部署与运维</h2>
+<h3 id="14-1-单机部署-docker-compose">14.1 单机部署（Docker Compose）</h3>
+<pre><code class="language-yaml"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">web</span><span class="p">:</span><span class="w">        </span><span class="c1"># Next.js</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./frontend</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"3000:3000"</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">api</span><span class="p">:</span><span class="w">        </span><span class="c1"># FastAPI</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./backend</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"8000:8000"</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.env</span>
+<span class="w">  </span><span class="nt">worker-parse</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./backend</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">celery -A app.workers.celery_app worker -Q parse -c 2</span>
+<span class="w">  </span><span class="nt">worker-analyze</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./backend</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">celery -A app.workers.celery_app worker -Q analyze -c 4</span>
+<span class="w">  </span><span class="nt">worker-render</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./backend</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">celery -A app.workers.celery_app worker -Q render,export -c 2</span>
+<span class="w">    </span><span class="c1"># 需 Playwright 依赖</span>
+<span class="w">  </span><span class="nt">beat</span><span class="p">:</span><span class="w">       </span><span class="c1"># 定时任务：清理过期导出、生成复习计划</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./backend</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">celery -A app.workers.celery_app beat</span>
+<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pgvector/pgvector:pg16</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"pgdata:/var/lib/postgresql/data"</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">redis</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis:7-alpine</span>
+<span class="w">  </span><span class="nt">minio</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio/minio</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server /data --console-address ":9001"</span>
+<span class="w">  </span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:alpine</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"80:80"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"443:443"</span><span class="p p-Indicator">]</span>
+<span class="nt">volumes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> pgdata</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</pre></div>
+</code></pre>
+<h3 id="14-2-环境变量">14.2 环境变量</h3>
+<pre><code><div class="highlight"><pre><span></span># 应用
+APP_ENV=production
+SECRET_KEY=***
+JWT_EXPIRE_HOURS=168
+
+# 数据库 / 存储
+DATABASE_URL=postgresql+asyncpg://user:pass@postgres:5432/studypad
+REDIS_URL=redis://redis:6379/0
+S3_ENDPOINT=http://minio:9000
+S3_BUCKET=studypad
+S3_ACCESS_KEY=***
+S3_SECRET_KEY=***
+
+# LLM（平台默认）
+DEFAULT_PROVIDER=deepseek
+OPENAI_API_KEY=***
+DEEPSEEK_API_KEY=***
+DASHSCOPE_API_KEY=***
+ANTHROPIC_API_KEY=***
+
+# 安全
+KEY_ENCRYPTION_SECRET=***        # BYOK 密钥加密主密钥
+RENDER_SANDBOX=1
+</pre></div>
+</code></pre>
+<h3 id="14-3-可观测性">14.3 可观测性</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>日志</td>
+<td>结构化 JSON（structlog）→ Loki</td>
+</tr>
+<tr>
+<td>指标</td>
+<td>Prometheus：任务队列长度、各阶段耗时、LLM 失败率、token 消耗</td>
+</tr>
+<tr>
+<td>链路</td>
+<td>OpenTelemetry：一次上传的完整 span 链</td>
+</tr>
+<tr>
+<td>告警</td>
+<td>队列积压 &gt; 50、LLM 失败率 &gt; 20%、P95 延迟 &gt; 阈值</td>
+</tr>
+<tr>
+<td>错误追踪</td>
+<td>Sentry（前后端）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="14-4-扩展路径">14.4 扩展路径</h3>
+<ul>
+<li>Worker 按队列独立扩容（analyze 队列是瓶颈，优先加机器）。</li>
+<li>数据库读写分离；pgvector 独立实例。</li>
+<li>渲染可换成独立的 Playwright 微服务池。</li>
+<li>多区域部署时 LLM 走就近节点。</li>
+</ul>
+<hr />
+<h2 id="15-开发计划与里程碑">15. 开发计划与里程碑</h2>
+<h3 id="15-1-阶段划分">15.1 阶段划分</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>目标</th>
+<th>主要交付物</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>M0 技术预研</strong>（3 天）</td>
+<td>验证核心链路可行性</td>
+<td>PDF 解析 PoC、LLM 标注 JSON 稳定性 PoC、Playwright 渲染 PoC</td>
+</tr>
+<tr>
+<td><strong>M1 MVP</strong>（3 周）</td>
+<td>闭环跑通：上传 PDF → 选等级 → 生成手账 → 导出 PDF</td>
+<td>文字层 PDF + MD + TXT 支持；4 档等级；语法+词汇+句型标注；PDF/PNG 导出；BYOK</td>
+</tr>
+<tr>
+<td><strong>M2 V1.0</strong>（3 周）</td>
+<td>体验完善 + 覆盖全部格式</td>
+<td>扫描件 OCR、DOCX、图片；6 档等级全开；阅读器交互；生词本 + 复习</td>
+</tr>
+<tr>
+<td><strong>M3 V1.5</strong>（2 周）</td>
+<td>效率与成本</td>
+<td>缓存体系、预筛优化、多供应商容灾、手动编辑标注、导出 DOCX</td>
+</tr>
+<tr>
+<td><strong>M4 V2.0</strong>（3 周）</td>
+<td>增长功能</td>
+<td>分享、学习小组、Anki 导出、语音朗读、自定义等级</td>
+</tr>
+</tbody>
+</table>
+<h3 id="15-2-任务拆解-wbs-mvp-阶段">15.2 任务拆解（WBS · MVP 阶段）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>任务</th>
+<th>依赖</th>
+<th>估时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>项目脚手架（前端 + 后端 + Docker）</td>
+<td>—</td>
+<td>1d</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据模型 + Alembic 迁移</td>
+<td>1</td>
+<td>1d</td>
+</tr>
+<tr>
+<td>3</td>
+<td>用户认证（注册/登录/JWT）</td>
+<td>2</td>
+<td>1d</td>
+</tr>
+<tr>
+<td>4</td>
+<td>文件上传 + 对象存储对接</td>
+<td>1</td>
+<td>1d</td>
+</tr>
+<tr>
+<td>5</td>
+<td>PDF/TXT/MD 解析器 + Block IR</td>
+<td>2</td>
+<td>3d</td>
+</tr>
+<tr>
+<td>6</td>
+<td>清洗与双栏重排</td>
+<td>5</td>
+<td>2d</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Celery 任务编排 + SSE 进度</td>
+<td>4</td>
+<td>2d</td>
+</tr>
+<tr>
+<td>8</td>
+<td>spaCy 处理链 + 难度打分</td>
+<td>5</td>
+<td>3d</td>
+</tr>
+<tr>
+<td>9</td>
+<td>等级画像 JSON × 4</td>
+<td>8</td>
+<td>1d</td>
+</tr>
+<tr>
+<td>10</td>
+<td>LLM 适配层 + 3 家 Provider</td>
+<td>1</td>
+<td>2d</td>
+</tr>
+<tr>
+<td>11</td>
+<td>提示词 v1 + JSON Schema 校验</td>
+<td>10</td>
+<td>3d</td>
+</tr>
+<tr>
+<td>12</td>
+<td>词汇/语法/句型三类标注任务</td>
+<td>9,11</td>
+<td>4d</td>
+</tr>
+<tr>
+<td>13</td>
+<td>标注编排（密度控制/去重/偏移校验）</td>
+<td>12</td>
+<td>2d</td>
+</tr>
+<tr>
+<td>14</td>
+<td>手账 HTML 模板 + 主题 CSS</td>
+<td>13</td>
+<td>3d</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Playwright 渲染 + PDF/PNG 导出</td>
+<td>14</td>
+<td>2d</td>
+</tr>
+<tr>
+<td>16</td>
+<td>手账阅读器前端</td>
+<td>14</td>
+<td>4d</td>
+</tr>
+<tr>
+<td>17</td>
+<td>上传页 + 等级选择 + 进度</td>
+<td>7</td>
+<td>2d</td>
+</tr>
+<tr>
+<td>18</td>
+<td>导出中心</td>
+<td>15</td>
+<td>1d</td>
+</tr>
+<tr>
+<td>19</td>
+<td>BYOK 设置页 + 密钥加密</td>
+<td>10</td>
+<td>2d</td>
+</tr>
+<tr>
+<td>20</td>
+<td>联调 + 修 bug + 埋点</td>
+<td>all</td>
+<td>3d</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>合计约 <strong>43 人日</strong>；2 名全栈 + 1 名算法，约 3 周可交付 MVP。</p>
+</blockquote>
+<h3 id="15-3-关键路径">15.3 关键路径</h3>
+<p><code>解析器(5,6) → NLP(8) → 提示词(11) → 标注(12,13) → 渲染(14) → 阅读器(16)</code></p>
+<p>NLP 与提示词是风险最高的两环，建议 <strong>M0 阶段就把 PoC 做掉</strong>。</p>
+<hr />
+<h2 id="16-测试方案与质量评估">16. 测试方案与质量评估</h2>
+<h3 id="16-1-测试分层">16.1 测试分层</h3>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>范围</th>
+<th>工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单元测试</td>
+<td>Parser、NLP、密度控制、偏移校验</td>
+<td>pytest</td>
+</tr>
+<tr>
+<td>集成测试</td>
+<td>上传→解析→标注→渲染全链路（mock LLM）</td>
+<td>pytest + testcontainers</td>
+</tr>
+<tr>
+<td>契约测试</td>
+<td>LLM 返回 JSON 是否符合 Schema</td>
+<td>jsonschema + 录制回放</td>
+</tr>
+<tr>
+<td>E2E</td>
+<td>浏览器完整流程</td>
+<td>Playwright</td>
+</tr>
+<tr>
+<td>性能测试</td>
+<td>并发上传 50、SSE 长连接</td>
+<td>Locust</td>
+</tr>
+<tr>
+<td>视觉回归</td>
+<td>手账渲染截图逐像素比对</td>
+<td>Playwright <code>toHaveScreenshot</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="16-2-标注质量评估-最重要">16.2 标注质量评估（最重要）</h3>
+<p><strong>建黄金数据集</strong>：请 2 名英语教师对 20 篇不同难度文章（覆盖 6 个等级）做人工标注，形成 ground truth。</p>
+<p>评估指标：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义</th>
+<th>目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>词汇圈选精确率</td>
+<td>圈对的词 / 圈出的词</td>
+<td>≥ 0.85</td>
+</tr>
+<tr>
+<td>词汇圈选召回率</td>
+<td>圈对的词 / 应圈的词</td>
+<td>≥ 0.80</td>
+</tr>
+<tr>
+<td>语法标注准确率</td>
+<td>结构判定正确 / 总标注</td>
+<td>≥ 0.88</td>
+</tr>
+<tr>
+<td>语法讲解可用性</td>
+<td>人工 5 分制评分均值</td>
+<td>≥ 4.0</td>
+</tr>
+<tr>
+<td>句型用途分类</td>
+<td>分类正确比例</td>
+<td>≥ 0.80</td>
+</tr>
+<tr>
+<td>标注密度符合度</td>
+<td>与画像要求一致的段落比例</td>
+<td>≥ 0.95</td>
+</tr>
+<tr>
+<td>偏移定位正确率</td>
+<td><code>text[start:end] == target</code></td>
+<td>= 1.00（硬约束）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="16-3-llm-回归测试集">16.3 LLM 回归测试集</h3>
+<ul>
+<li>固定 50 篇文章 × 6 等级 = 300 个用例。</li>
+<li>每次改提示词 / 换模型 → 全量跑，输出指标对比表。</li>
+<li>通过率下降 &gt; 3% 阻断发布。</li>
+<li>同时记录 token 消耗，防止&quot;为了准确率疯狂加提示词&quot;。</li>
+</ul>
+<h3 id="16-4-边界用例清单">16.4 边界用例清单</h3>
+<ul>
+<li>加密 PDF、损坏 PDF、0 字节文件</li>
+<li>纯图片 PDF（无文字层）</li>
+<li>双栏/三栏排版</li>
+<li>中英混排</li>
+<li>超长单句（&gt; 200 词）</li>
+<li>特殊字符、emoji、数学符号、LaTeX 残留</li>
+<li>表格跨页</li>
+<li>页眉页脚含章节名（易被误判为正文）</li>
+<li>用户切换等级时任务并发冲突</li>
+</ul>
+<hr />
+<h2 id="17-风险与对策">17. 风险与对策</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>风险</th>
+<th>影响</th>
+<th>概率</th>
+<th>对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>LLM 返回 JSON 不规范导致解析失败</td>
+<td>高</td>
+<td>中</td>
+<td>三重输出约束 + 兜底正则 + 规则降级；重试策略</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>标注偏移量漂移（模型给的 offset 不准）</td>
+<td>高</td>
+<td>高</td>
+<td><strong>后端二次定位校验</strong>，diff 模糊匹配修复，失败丢弃</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>标注过密，体验变差</td>
+<td>高</td>
+<td>中</td>
+<td>密度控制算法 + 黄金数据集验证 + 用户反馈开关（&quot;标记太多/太少&quot;）</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>等级词表质量不足，圈错词</td>
+<td>高</td>
+<td>中</td>
+<td>多源词表融合（CET 官方 + Oxford + COCA 频次）+ 人工抽检</td>
+</tr>
+<tr>
+<td>R5</td>
+<td>OCR 对扫描件识别率低</td>
+<td>中</td>
+<td>中</td>
+<td>RapidOCR 中英混合模型 + 图像预处理（去噪/纠偏/二值化）+ 用户手动修正入口。<strong>已实装</strong>：整行识别失败的碎片由 <code>layout.is_garbled()</code> 判定并丢弃，解析结果里报告丢弃行数</td>
+</tr>
+<tr>
+<td>R6</td>
+<td>大模型成本失控</td>
+<td>高</td>
+<td>中</td>
+<td>预筛、缓存、批量、BYOK、配额限流、成本告警</td>
+</tr>
+<tr>
+<td>R7</td>
+<td>版权争议</td>
+<td>中</td>
+<td>中</td>
+<td>显著提示 + 默认私有 + 不提供公开内容库</td>
+</tr>
+<tr>
+<td>R8</td>
+<td>渲染保真度不足（PDF 分页错乱）</td>
+<td>中</td>
+<td>中</td>
+<td>Playwright 打印 CSS 精细化 + 视觉回归测试</td>
+</tr>
+<tr>
+<td>R9</td>
+<td>供应商 API 不稳定/限流</td>
+<td>中</td>
+<td>高</td>
+<td>多供应商容灾 + 熔断 + 降级</td>
+</tr>
+<tr>
+<td>R10</td>
+<td>长文档超上下文窗口</td>
+<td>中</td>
+<td>中</td>
+<td>分段处理 + 地图-归约式汇总</td>
+</tr>
+<tr>
+<td>R11</td>
+<td>用户上传违规内容</td>
+<td>中</td>
+<td>低</td>
+<td>内容审核 + 举报机制</td>
+</tr>
+<tr>
+<td>R12</td>
+<td>手写字体版权</td>
+<td>低</td>
+<td>低</td>
+<td>只用 OFL 开源字体（LXGW WenKai / Caveat / Kalam）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="18-附录">18. 附录</h2>
+<h3 id="18-1-六档等级速查表">18.1 六档等级速查表</h3>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>词量</th>
+<th>标注词密度</th>
+<th>语法标注深度</th>
+<th>句型来源</th>
+<th>讲解语言</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>高中</td>
+<td>3500</td>
+<td>18/千词</td>
+<td>4（最详细）</td>
+<td>高考范文</td>
+<td>中文</td>
+</tr>
+<tr>
+<td>四级</td>
+<td>4500</td>
+<td>12/千词</td>
+<td>3</td>
+<td>四级模板</td>
+<td>中文</td>
+</tr>
+<tr>
+<td>六级</td>
+<td>6000</td>
+<td>9/千词</td>
+<td>2</td>
+<td>六级高分句</td>
+<td>中文为主</td>
+</tr>
+<tr>
+<td>考研</td>
+<td>5500</td>
+<td>8/千词</td>
+<td>2</td>
+<td>考研真题句式</td>
+<td>中文简释</td>
+</tr>
+<tr>
+<td>雅思</td>
+<td>8000</td>
+<td>6/千词</td>
+<td>2</td>
+<td>学术写作句型</td>
+<td>中英双语</td>
+</tr>
+<tr>
+<td>托福</td>
+<td>10000</td>
+<td>4/千词</td>
+<td>1（最精简）</td>
+<td>学术论文句式</td>
+<td>英文为主</td>
+</tr>
+</tbody>
+</table>
+<h3 id="18-2-标注类型-json-字典-供前后端共用">18.2 标注类型 JSON 字典（供前后端共用）</h3>
+<pre><code class="language-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"word_highlight"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"highlight"</span><span class="p">,</span><span class="w">  </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#FDE68A"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"block"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"word_circle"</span><span class="p">:</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"svg_ellipse"</span><span class="p">,</span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">  </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#EF4444"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"oval"</span><span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"rare_meaning"</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"highlight"</span><span class="p">,</span><span class="w">  </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#FCD34D"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"block+triangle"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"collocation"</span><span class="p">:</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dashed_box"</span><span class="p">,</span><span class="w"> </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">  </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#10B981"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dashed_rect"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"grammar_underline"</span><span class="p">:{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"svg_line"</span><span class="p">,</span><span class="w">  </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">  </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#2563EB"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"solid_line"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"grammar_bracket"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bracket"</span><span class="p">,</span><span class="w">    </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">  </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#2563EB"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bracket"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"sentence_pattern"</span><span class="p">:{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"svg_wavy"</span><span class="p">,</span><span class="w">   </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">  </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#DC2626"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wavy_line"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"long_sentence_split"</span><span class="p">:{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"indent"</span><span class="p">,</span><span class="w">  </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#6B7280"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"indent_tree"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"correction"</span><span class="p">:</span><span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"strike_rewrite"</span><span class="p">,</span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#7C3AED"</span><span class="p">,</span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"strikethrough"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"margin_note"</span><span class="p">:</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aside"</span><span class="p">,</span><span class="w">      </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#1F2937"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"sticky_note"</span><span class="p">:</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sticky"</span><span class="p">,</span><span class="w">     </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">  </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#FEF3C7"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"note"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"stamp"</span><span class="p">:</span><span class="w">           </span><span class="p">{</span><span class="w"> </span><span class="nt">"render"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stamp"</span><span class="p">,</span><span class="w">      </span><span class="nt">"svg"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">  </span><span class="nt">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#B91C1C"</span><span class="p">,</span><span class="w"> </span><span class="nt">"a11y_shape"</span><span class="p">:</span><span class="w"> </span><span class="s2">"icon"</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</code></pre>
+<h3 id="18-3-开源可复用组件清单">18.3 开源可复用组件清单</h3>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>项目</th>
+<th>许可</th>
+<th>首版是否采用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF 解析</td>
+<td>PyMuPDF / pdfplumber</td>
+<td>AGPL / MIT</td>
+<td>❌ 未用（AGPL 风险）</td>
+</tr>
+<tr>
+<td>PDF 解析</td>
+<td><strong>pypdfium2</strong></td>
+<td>Apache-2.0 / BSD-3</td>
+<td>✅ <strong>已采用</strong></td>
+</tr>
+<tr>
+<td>OCR</td>
+<td>PaddleOCR / <strong>RapidOCR</strong></td>
+<td>Apache-2.0</td>
+<td>✅ 采用 RapidOCR</td>
+</tr>
+<tr>
+<td>版面分析</td>
+<td>PP-Structure / LayoutParser</td>
+<td>Apache-2.0</td>
+<td>❌ 未用，改为自研 <code>layout.py</code></td>
+</tr>
+<tr>
+<td>图像处理</td>
+<td>Pillow</td>
+<td>MIT-CMU</td>
+<td>✅ <strong>已采用</strong></td>
+</tr>
+<tr>
+<td>ONNX 推理</td>
+<td>onnxruntime</td>
+<td>MIT</td>
+<td>✅ <strong>已采用</strong>（OCR 后端）</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>spaCy / stanza / lemminflect</td>
+<td>MIT / Apache</td>
+<td>❌ 未用，改为规则实现 <code>lemmatize.py</code></td>
+</tr>
+<tr>
+<td>句法可视化</td>
+<td>displaCy</td>
+<td>MIT</td>
+<td>⏸ 预留</td>
+</tr>
+<tr>
+<td>手绘风 SVG</td>
+<td>rough.js / roughpy</td>
+<td>MIT</td>
+<td>❌ 未用，CSS/SVG 现画（零图片素材）</td>
+</tr>
+<tr>
+<td>无头渲染</td>
+<td>Playwright</td>
+<td>Apache-2.0</td>
+<td>❌ 未用，浏览器打印替代</td>
+</tr>
+<tr>
+<td>中文手写字体</td>
+<td>LXGW WenKai（霞鹜文楷）</td>
+<td>OFL-1.1</td>
+<td>✅ <strong>已采用</strong>（手账观感的关键）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>许可结论</strong>：首版所有直接依赖均为 MIT / Apache-2.0 / BSD / OFL，
+<strong>无任何 GPL / AGPL 传染风险</strong>。详见 <a href="./%E5%BC%80%E6%BA%90%E5%A4%8D%E7%94%A8%E6%96%B9%E6%A1%88.md">开源复用方案.md</a>。
+| 英文字体 | Caveat / Kalam | OFL-1.1 |
+| 间隔重复 | fsrs / supermemo2 | MIT |</p>
+</blockquote>
+<h3 id="18-4-术语与缩写">18.4 术语与缩写</h3>
+<table>
+<thead>
+<tr>
+<th>缩写</th>
+<th>全称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CEFR</td>
+<td>Common European Framework of Reference（欧标语言能力等级 A1–C2）</td>
+</tr>
+<tr>
+<td>AWL</td>
+<td>Academic Word List（学术词汇表）</td>
+</tr>
+<tr>
+<td>IR</td>
+<td>Intermediate Representation（统一中间表示）</td>
+</tr>
+<tr>
+<td>BYOK</td>
+<td>Bring Your Own Key（用户自带模型密钥）</td>
+</tr>
+<tr>
+<td>SSE</td>
+<td>Server-Sent Events（服务端推送）</td>
+</tr>
+<tr>
+<td>SM-2 / FSRS</td>
+<td>间隔重复算法</td>
+</tr>
+</tbody>
+</table>
+<h3 id="18-5-下一步待确认事项-需产品-需求方拍板">18.5 下一步待确认事项（需产品/需求方拍板）</h3>
+<ol>
+<li><strong>等级体系</strong>是 6 档还是需要增加「小学 / 商务英语 / GRE」？</li>
+<li>是否需要<strong>用户自己写作文→系统涂改纠错</strong>的输入模式（FR-4.5）？影响显著。</li>
+<li>商业化模式：会员制 / 按量付费 / 一次性买断？</li>
+<li>是否需要<strong>移动端 App</strong>（原生）还是先做响应式 Web？</li>
+<li>是否需要<strong>教师端</strong>（批量生成、班级管理）？</li>
+<li>部署形态：公有云 SaaS / 私有化部署 / 两者都要？</li>
+<li>是否需要中文文档的英语学习支持（即反向：中文材料里的英文）？</li>
+</ol>
+<hr />
+<p><strong>文档结束</strong>　·　如有修订请更新版本号并记录变更日志。</p>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>日期</th>
+<th>变更</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.0</td>
+<td>2026-10-14</td>
+<td>初稿，覆盖需求、架构、详细设计、计划与测试</td>
+</tr>
+</tbody>
+</table>
+
+</main>
+</div>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+  var target = links.map(function(a){ return document.getElementById(a.dataset.id); });
+  var ticking = false;
+  function sync(){
+    ticking = false;
+    var y = window.scrollY + 96, best = 0;
+    for (var i = 0; i < target.length; i++) {
+      if (target[i] && target[i].offsetTop <= y) best = i;
+    }
+    links.forEach(function(a, i){ a.classList.toggle('on', i === best); });
+  }
+  window.addEventListener('scroll', function(){
+    if (!ticking) { ticking = true; requestAnimationFrame(sync); }
+  }, { passive: true });
+  sync();
+})();
+</script>
+</body>
+</html>
